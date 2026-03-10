@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;500;700&family=Birthstone&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "League Spartan", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-signature: "Birthstone", cursive;
+  
+  --color-forix-blue: #14385C;
+  --color-forix-green: #3D7072;
+  --color-forix-gray: #171516;
+  --color-forix-mint: #D8E1E0;
+  --color-forix-white: #F4F2F1;
+  --color-forix-ghost: #EDECEA;
+
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-forix-white text-forix-gray font-sans antialiased selection:bg-forix-green selection:text-white;
+  }
+}
+
+.font-signature {
+  font-family: var(--font-signature);
+  @apply text-forix-blue;
+}
+
+.section-spacing {
+  @apply py-20 md:py-32;
+}
+
+.container-custom {
+  @apply max-w-7xl mx-auto px-6 md:px-12;
+}
+
+.btn-primary {
+  @apply bg-forix-blue text-forix-white px-8 py-4 font-medium tracking-wider uppercase text-sm transition-all duration-300 hover:bg-forix-green hover:shadow-lg;
+}
+
+.btn-outline {
+  @apply border border-forix-blue text-forix-blue px-8 py-4 font-medium tracking-wider uppercase text-sm transition-all duration-300 hover:bg-forix-blue hover:text-forix-white;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
