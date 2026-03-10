@@ -2728,18 +2728,18 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
             <button onClick={() => setCurrentView('articulos')} className="text-forix-green text-xs font-bold uppercase tracking-widest flex items-center gap-2">Ver Todo <ArrowRight size={14} /></button>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { title: "El Costo de la Indiferencia", desc: "Fugas invisibles de rentabilidad por falta de estándares." },
-              { title: "Neuro-Hospitalidad 2026", desc: "Tendencias de consumo premium y el cerebro del cliente." },
-              { title: "Protocolos de Alto Impacto", desc: "Diseño de experiencias memorables que fidelizan al cliente." }
-            ].map((article, i) => (
+            {ARTICLES.slice(0, 3).map((article, i) => (
               <motion.div
                 key={i}
-                onClick={() => setCurrentView('articulos')}
+                onClick={() => setCurrentView(getArticleView(article.slug))}
                 className="group relative p-10 border border-forix-mint/30 transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden flex flex-col h-full"
               >
+                <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-forix-green mb-4 block">{article.category}</span>
                 <h4 className="text-2xl md:text-[28px] font-bold text-forix-blue group-hover:text-forix-white mb-6 leading-tight transition-colors duration-500">{article.title}</h4>
-                <p className="text-base md:text-lg text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-6 transition-colors duration-500">{article.desc}</p>
+                <p className="text-base md:text-lg text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-6 transition-colors duration-500">{article.summary}</p>
+                <div className="mt-auto flex items-center gap-2 text-forix-green group-hover:text-forix-mint text-xs font-bold uppercase tracking-widest transition-colors duration-500">
+                  Leer artículo <ArrowRight size={12} />
+                </div>
                 <div className="absolute top-0 right-0 w-1 h-0 bg-forix-green group-hover:h-full transition-all duration-700" />
               </motion.div>
             ))}
