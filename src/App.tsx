@@ -5,6 +5,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView, useAnimation, useScroll, useTransform } from 'motion/react';
+import articleOneMarkdown from '../articulo_1.md?raw';
+import articleTwoMarkdown from '../articulo_2.md?raw';
+import articleThreeMarkdown from '../articulo_3.1.md?raw';
 import {
   ArrowRight,
   ChevronRight,
@@ -32,6 +35,12 @@ type ArticleSection = {
   bullets?: string[];
 };
 
+type ArticleBlock =
+  | { type: 'paragraph'; text: string }
+  | { type: 'heading'; level: 2 | 3; text: string }
+  | { type: 'list'; items: string[] }
+  | { type: 'hr' };
+
 type ArticleData = {
   slug: string;
   category: string;
@@ -39,10 +48,11 @@ type ArticleData = {
   subtitle: string;
   summary: string;
   readingTime: string;
-  lede: string;
-  quote: string;
-  sections: ArticleSection[];
-  closingQuestion: string;
+  lede?: string;
+  quote?: string;
+  sections?: ArticleSection[];
+  closingQuestion?: string;
+  blocks?: ArticleBlock[];
 };
 
 const getArticleView = (slug: string) => `articulo:${slug}`;
@@ -229,6 +239,135 @@ const ARTICLES: ArticleData[] = [
     ],
     closingQuestion: 'Cual es la primera regla estupida que va a eliminar hoy mismo para empezar a fabricar fanaticos?'
   }
+];
+
+const slugify = (value: string) =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const countWords = (value: string) => value.trim().split(/\s+/).filter(Boolean).length;
+
+const formatReadingTime = (value: string) => `${Math.max(1, Math.ceil(countWords(value) / 180))} min lectura`;
+
+const renderInlineMarkdown = (value: string) =>
+  value.split(/(\*\*.*?\*\*)/g).filter(Boolean).map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+
+    return <React.Fragment key={index}>{part}</React.Fragment>;
+  });
+
+const parseArticleMarkdown = (markdown: string, options?: { subtitleOnNextLine?: boolean }): ArticleData => {
+  const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+  const blocks: ArticleBlock[] = [];
+  const paragraphLines: string[] = [];
+  const listItems: string[] = [];
+  let title = '';
+  let subtitle = '';
+
+  const flushParagraph = () => {
+    if (!paragraphLines.length) return;
+    blocks.push({ type: 'paragraph', text: paragraphLines.join(' ') });
+    paragraphLines.length = 0;
+  };
+
+  const flushList = () => {
+    if (!listItems.length) return;
+    blocks.push({ type: 'list', items: [...listItems] });
+    listItems.length = 0;
+  };
+
+  for (const rawLine of lines) {
+    const trimmed = rawLine.trim();
+
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+      continue;
+    }
+
+    if (trimmed === '---') {
+      flushParagraph();
+      flushList();
+      blocks.push({ type: 'hr' });
+      continue;
+    }
+
+    if (trimmed.startsWith('* ') || trimmed.startsWith('• ')) {
+      flushParagraph();
+      listItems.push(trimmed.slice(2).trim());
+      continue;
+    }
+
+    if (trimmed.startsWith('### ')) {
+      flushParagraph();
+      flushList();
+      blocks.push({ type: 'heading', level: 3, text: trimmed.slice(4).trim() });
+      continue;
+    }
+
+    if (trimmed.startsWith('## ')) {
+      flushParagraph();
+      flushList();
+      const headingText = trimmed.slice(3).trim();
+
+      if (!subtitle) {
+        subtitle = headingText;
+      } else {
+        blocks.push({ type: 'heading', level: 2, text: headingText });
+      }
+      continue;
+    }
+
+    if (trimmed.startsWith('# ')) {
+      flushParagraph();
+      flushList();
+      title = trimmed.slice(2).trim();
+      continue;
+    }
+
+    if (options?.subtitleOnNextLine && title && !subtitle && !blocks.length && !paragraphLines.length) {
+      subtitle = trimmed;
+      continue;
+    }
+
+    paragraphLines.push(trimmed);
+  }
+
+  flushParagraph();
+  flushList();
+
+  const firstParagraph = blocks.find((block) => block.type === 'paragraph');
+  const textForTiming = [
+    title,
+    subtitle,
+    ...blocks.flatMap((block) => {
+      if (block.type === 'paragraph' || block.type === 'heading') return [block.text];
+      if (block.type === 'list') return block.items;
+      return [];
+    })
+  ].join(' ');
+
+  return {
+    slug: slugify(title || 'articulo'),
+    category: 'Articulo',
+    title,
+    subtitle,
+    summary: firstParagraph?.type === 'paragraph' ? firstParagraph.text : subtitle,
+    readingTime: formatReadingTime(textForTiming),
+    blocks
+  };
+};
+
+const MARKDOWN_ARTICLES: ArticleData[] = [
+  parseArticleMarkdown(articleOneMarkdown, { subtitleOnNextLine: true }),
+  parseArticleMarkdown(articleTwoMarkdown),
+  parseArticleMarkdown(articleThreeMarkdown, { subtitleOnNextLine: true })
 ];
 
 // --- Reusable Components [C-01 to C-08] ---
@@ -428,7 +567,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
         <div className="container-custom flex justify-between items-center">
           {/* Logo Left */}
           <div className="flex items-center cursor-pointer shrink-0" onClick={() => setCurrentView('home')}>
-            <img src="/logo_navbar.png" className="h-8 md:h-10 w-auto" alt="FORIX GROUP" />
+            <img src="/logo_navbar.png" className="h-6 md:h-7 w-auto" alt="FORIX GROUP" />
           </div>
 
           {/* Floating Menu Widget (Right) */}
@@ -648,7 +787,23 @@ const Hero = () => {
   );
 };
 
-const AnimatedHero = ({ title, subtitle, description, bgClass, rectClass, backgroundImage }: { title: string, subtitle: string, description: string, bgClass: string, rectClass: string, backgroundImage?: string }) => {
+const AnimatedHero = ({
+  title,
+  subtitle,
+  description,
+  bgClass,
+  rectClass,
+  backgroundImage,
+  titleClassName = "text-6xl md:text-8xl lg:text-9xl"
+}: {
+  title: string,
+  subtitle: string,
+  description: string,
+  bgClass: string,
+  rectClass: string,
+  backgroundImage?: string,
+  titleClassName?: string
+}) => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -673,7 +828,7 @@ const AnimatedHero = ({ title, subtitle, description, bgClass, rectClass, backgr
         {/* Background Image if provided */}
         {backgroundImage && (
           <div
-            className="absolute inset-0 z-0 opacity-20 filter grayscale"
+            className="absolute inset-0 z-0"
             style={{
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: 'cover',
@@ -683,15 +838,8 @@ const AnimatedHero = ({ title, subtitle, description, bgClass, rectClass, backgr
           />
         )}
 
-        {/* Precise Background Pattern Overlay */}
-        <div
-          className="absolute inset-0 z-0 opacity-40"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='50' viewBox='0 0 30 50'%3E%3Cpath d='M14 5 L16 5 L15 25 L14 5 M14 45 L16 45 L15 25 L14 45' fill='%23D8E1E0'/%3E%3Cpath d='M29 30 L31 30 L30 50 L29 30 M29 0 L31 0 L30 20 L29 0' fill='%23D8E1E0'/%3E%3C/svg%3E")`,
-            backgroundSize: '30px 50px',
-            backgroundRepeat: 'repeat'
-          }}
-        />
+        {/* Dark overlay for contrast */}
+        <div className="absolute inset-0 z-0 bg-black/40" />
 
         {/* Animated Rectangles Background - Equal Sized Columns */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 flex">
@@ -720,7 +868,7 @@ const AnimatedHero = ({ title, subtitle, description, bgClass, rectClass, backgr
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.85] tracking-tighter uppercase"
+                className={`${titleClassName} font-bold leading-[0.85] tracking-tighter uppercase`}
               >
                 {title}
               </motion.h1>
@@ -814,24 +962,17 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
       <div className="sticky top-0 h-[70vh] w-full flex flex-col justify-center overflow-hidden">
         {/* New Hero Background Image */}
         <div
-          className="absolute inset-0 z-0 opacity-20 filter grayscale"
+          className="absolute inset-0 z-0"
           style={{
-            backgroundImage: 'url("/hero_services.jpg")',
+            backgroundImage: 'url("/hero_servicios.jpg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed'
           }}
         />
 
-        {/* Precise Background Pattern Overlay - Recreating the user's image pattern exactly */}
-        <div
-          className="absolute inset-0 z-0 opacity-40"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='50' viewBox='0 0 30 50'%3E%3Cpath d='M14 5 L16 5 L15 25 L14 5 M14 45 L16 45 L15 25 L14 45' fill='%23D8E1E0'/%3E%3Cpath d='M29 30 L31 30 L30 50 L29 30 M29 0 L31 0 L30 20 L29 0' fill='%23D8E1E0'/%3E%3C/svg%3E")`,
-            backgroundSize: '30px 50px',
-            backgroundRepeat: 'repeat'
-          }}
-        />
+        {/* Dark overlay for text legibility */}
+        <div className="absolute inset-0 z-0 bg-black/50" />
 
         {/* Animated Black Rectangles Background - Equal Sized Columns */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 flex">
@@ -954,7 +1095,7 @@ const Services = () => {
   const pillars = [
     {
       name: "FORIX BUSINESS",
-      logo: "/logo_business.png",
+      logo: "/forix_business_nobg.png",
       subtitle: "The Masterplan",
       lema: "Arquitectura de la distinción",
       items: [
@@ -974,7 +1115,7 @@ const Services = () => {
     },
     {
       name: "FORIX LEARNING",
-      logo: "/logo_learning.png",
+      logo: "/forix_learning_nobg.png",
       subtitle: "The Academy",
       lema: "Maestría en el arte de servir",
       items: [
@@ -1400,7 +1541,7 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
       readingTime: "10 min lectura"
     }
   ];
-  const articles = ARTICLES;
+  const articles = MARKDOWN_ARTICLES;
 
   return (
     <>
@@ -1410,6 +1551,7 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
         description="Análisis crítico y perspectivas estratégicas sobre el futuro de la hospitalidad y la neurociencia aplicada."
         bgClass="bg-forix-blue"
         rectClass="bg-forix-gray"
+        backgroundImage="/hero_articulos.jpg"
       />
       <section id="articulos" className="section-spacing bg-forix-gray">
         <div className="container-custom">
@@ -1444,6 +1586,7 @@ const ArticleDetailView = ({ article, setCurrentView }: { article: ArticleData, 
         description={article.subtitle}
         bgClass="bg-forix-blue"
         rectClass="bg-forix-gray"
+        titleClassName="text-4xl md:text-6xl lg:text-7xl"
       />
 
       <section className="bg-forix-white py-24">
@@ -1463,10 +1606,6 @@ const ArticleDetailView = ({ article, setCurrentView }: { article: ArticleData, 
                 <p className="text-2xl font-bold text-forix-blue leading-tight mb-4">{article.title}</p>
                 <p className="text-sm text-forix-gray/70 font-light leading-relaxed">{article.readingTime}</p>
               </div>
-              <div className="border border-forix-blue/10 p-8 bg-forix-ghost/40">
-                <p className="text-[10px] uppercase tracking-[0.25em] text-forix-green mb-4">Pregunta Final</p>
-                <p className="text-base text-forix-blue font-medium leading-relaxed">{article.closingQuestion}</p>
-              </div>
             </aside>
 
             <article className="max-w-4xl">
@@ -1474,41 +1613,49 @@ const ArticleDetailView = ({ article, setCurrentView }: { article: ArticleData, 
                 <p className="text-xs uppercase tracking-[0.3em] text-forix-green mb-5">{article.readingTime}</p>
                 <h1 className="text-4xl md:text-6xl font-bold text-forix-blue tracking-tight leading-[0.95] mb-6">{article.title}</h1>
                 <p className="text-xl md:text-2xl text-forix-gray/70 font-light leading-relaxed mb-8">{article.subtitle}</p>
-                <p className="text-lg md:text-xl text-forix-gray leading-relaxed font-light">{article.lede}</p>
               </header>
 
-              <div className="border-l-2 border-forix-green pl-8 py-3 mb-14">
-                <p className="text-2xl md:text-3xl font-light text-forix-blue italic leading-relaxed">{article.quote}</p>
-              </div>
-
               <div className="space-y-14">
-                {article.sections.map((section, index) => (
-                  <section key={section.heading} className="border-b border-forix-blue/8 pb-12 last:border-b-0 last:pb-0">
-                    <div className="flex items-start gap-5 mb-6">
-                      <span className="text-sm font-bold tracking-[0.3em] text-forix-green pt-1">{String(index + 1).padStart(2, '0')}</span>
-                      <h2 className="text-3xl md:text-4xl font-bold text-forix-blue tracking-tight">{section.heading}</h2>
-                    </div>
+                {article.blocks?.map((block, index) => {
+                  if (block.type === 'hr') {
+                    return <div key={index} className="h-px bg-forix-mint/30" />;
+                  }
 
-                    <div className="space-y-6">
-                      {section.paragraphs.map((paragraph, paragraphIndex) => (
-                        <p key={paragraphIndex} className="text-lg text-forix-gray leading-relaxed font-light">
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
+                  if (block.type === 'heading') {
+                    if (block.level === 3) {
+                      return (
+                        <h3 key={index} className="text-xl md:text-2xl font-bold text-forix-green tracking-[0.08em] uppercase">
+                          {block.text}
+                        </h3>
+                      );
+                    }
 
-                    {section.bullets && (
-                      <div className="mt-8 grid gap-4">
-                        {section.bullets.map((bullet, bulletIndex) => (
-                          <div key={bulletIndex} className="flex items-start gap-4 border border-forix-mint/20 bg-forix-ghost/20 p-5">
+                    return (
+                      <h2 key={index} className="text-3xl md:text-4xl font-bold text-forix-blue tracking-tight">
+                        {block.text}
+                      </h2>
+                    );
+                  }
+
+                  if (block.type === 'list') {
+                    return (
+                      <div key={index} className="grid gap-4">
+                        {block.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="flex items-start gap-4 border border-forix-mint/20 bg-forix-ghost/20 p-5">
                             <span className="mt-2 h-2 w-2 bg-forix-green shrink-0" />
-                            <p className="text-base text-forix-blue/85 leading-relaxed">{bullet}</p>
+                            <p className="text-base text-forix-blue/85 leading-relaxed">{renderInlineMarkdown(item)}</p>
                           </div>
                         ))}
                       </div>
-                    )}
-                  </section>
-                ))}
+                    );
+                  }
+
+                  return (
+                    <p key={index} className="text-lg text-forix-gray leading-relaxed font-light">
+                      {renderInlineMarkdown(block.text)}
+                    </p>
+                  );
+                })}
               </div>
             </article>
           </div>
@@ -1757,7 +1904,7 @@ const Footer = () => {
     <footer className="bg-forix-white py-12 border-t border-forix-mint">
       <div className="container-custom flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex items-center">
-          <img src="/logo_navbar.png" className="h-8 w-auto" alt="FORIX GROUP" />
+          <img src="/logo_navbar.png" className="h-6 w-auto" alt="FORIX GROUP" />
         </div>
 
         <div className="flex gap-8 items-center">
@@ -1967,13 +2114,13 @@ const GeometricRadial = () => (
 
 const ForixBusinessTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/logo_business.png" className="h-10 md:h-12 lg:h-16 w-auto" alt="FORIX BUSINESS" />
+    <img src="/forix_business_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto" alt="FORIX BUSINESS" />
   </div>
 );
 
 const ForixLearningTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/logo_learning.png" className="h-10 md:h-12 lg:h-16 w-auto" alt="FORIX LEARNING" />
+    <img src="/forix_learning_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto" alt="FORIX LEARNING" />
   </div>
 );
 
@@ -2429,7 +2576,7 @@ const ImmersivePhotoSection = () => {
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
               className="relative col-start-1 row-start-1 row-span-8 group overflow-hidden border border-white/10"
             >
-              <img src="/gallery/FORIX BUSSINES.png" alt="Forix business exterior" className={collageImageClass} />
+              <img src="/forix_business_nobg.png" alt="Forix business exterior" className={collageImageClass} />
               <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white/50 uppercase tracking-widest">
                 {techLabels[0].coord}
               </div>
@@ -2511,7 +2658,7 @@ const ImmersivePhotoSection = () => {
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
               className="relative col-start-5 row-start-9 row-span-4 group overflow-hidden border border-white/10"
             >
-              <img src="/gallery/FORIX LEARNING.png" alt="Forix brand on laptop" className={collageImageClass} />
+              <img src="/forix_learning_nobg.png" alt="Forix brand on laptop" className={collageImageClass} />
               <div className="absolute bottom-4 right-4 font-mono text-[10px] text-white/50">
                 {techLabels[3].iso}
               </div>
@@ -2537,7 +2684,7 @@ const ImmersivePhotoSection = () => {
 
           <div className="grid md:hidden grid-cols-2 grid-rows-6 gap-[4px] p-[4px] w-full h-screen max-w-full">
             <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative row-span-2 group overflow-hidden border border-white/10">
-              <img src="/gallery/FORIX BUSSINES.png" alt="Forix business exterior" className={collageImageClass} />
+              <img src="/forix_business_nobg.png" alt="Forix business exterior" className={collageImageClass} />
             </motion.div>
             <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
               <img src="/gallery/SSS00108_VSCO.JPG" alt="Forix presentation laptop" className={collageImageClass} />
@@ -2558,7 +2705,7 @@ const ImmersivePhotoSection = () => {
               <img src="/gallery/FORIX LAB.JPG" alt="Forix phone experience" className={collageImageClass} />
             </motion.div>
             <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
-              <img src="/gallery/FORIX LEARNING.png" alt="Forix brand on laptop" className={collageImageClass} />
+              <img src="/forix_learning_nobg.png" alt="Forix brand on laptop" className={collageImageClass} />
             </motion.div>
           </div>
         </div>
@@ -2728,7 +2875,7 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
             <button onClick={() => setCurrentView('articulos')} className="text-forix-green text-xs font-bold uppercase tracking-widest flex items-center gap-2">Ver Todo <ArrowRight size={14} /></button>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {ARTICLES.slice(0, 3).map((article, i) => (
+            {MARKDOWN_ARTICLES.slice(0, 3).map((article, i) => (
               <motion.div
                 key={i}
                 onClick={() => setCurrentView(getArticleView(article.slug))}
@@ -2768,7 +2915,7 @@ export default function App() {
 
   const renderView = () => {
     if (currentView.startsWith('articulo:')) {
-      const article = ARTICLES.find((entry) => getArticleView(entry.slug) === currentView);
+      const article = MARKDOWN_ARTICLES.find((entry) => getArticleView(entry.slug) === currentView);
       if (article) {
         return <ArticleDetailView article={article} setCurrentView={setCurrentView} />;
       }
