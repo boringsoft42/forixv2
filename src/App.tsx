@@ -26,7 +26,14 @@ import {
   Instagram,
   Facebook,
   Pencil,
-  Plus
+  Plus,
+  ScanEye,
+  AudioLines,
+  BookOpen,
+  Fingerprint,
+  Compass,
+  PenTool,
+  Activity
 } from 'lucide-react';
 
 type ArticleSection = {
@@ -565,9 +572,12 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
       {/* Top Bar with Logo */}
       <nav className={`fixed top-0 left-0 w-full z-[60] transition-all duration-500 ${isScrolled ? 'py-2 bg-forix-white/90 backdrop-blur-md border-b border-forix-mint/20' : 'py-5 bg-transparent'}`}>
         <div className="container-custom flex justify-between items-center">
-          {/* Logo Left */}
-          <div className="flex items-center cursor-pointer shrink-0" onClick={() => setCurrentView('home')}>
-            <img src="/logo_navbar.png" className="h-6 md:h-7 w-auto" alt="FORIX GROUP" />
+          {/* Logo Left - hidden on home page when not scrolled */}
+          <div
+            className={`flex items-center cursor-pointer shrink-0 transition-opacity duration-500 ${currentView === 'home' && !isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            onClick={() => setCurrentView('home')}
+          >
+            <img src="/logo_navbar.png" className="h-5 md:h-6 w-auto" alt="FORIX GROUP" />
           </div>
 
           {/* Floating Menu Widget (Right) */}
@@ -579,7 +589,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className={`${isScrolled ? 'bg-forix-blue/95 backdrop-blur-md shadow-2xl border border-white/10' : 'bg-transparent'} rounded-none cursor-pointer group transition-all duration-500 flex flex-col overflow-hidden ${isScrolled ? 'p-1.5 px-3 py-2' : 'p-3 md:p-5 min-w-[160px] md:min-w-[220px]'}`}
+                  className={`${isScrolled ? 'bg-forix-blue/95 backdrop-blur-md shadow-2xl border border-white/10' : 'bg-transparent border border-white/15'} rounded-none cursor-pointer group transition-all duration-500 flex flex-col overflow-hidden ${isScrolled ? 'p-1.5 px-3 py-2' : 'p-4 md:p-6 min-w-[180px] md:min-w-[250px]'}`}
                   onClick={() => setIsExpanded(true)}
                 >
                   <div className={`flex items-center w-full ${isScrolled ? 'justify-end gap-3' : 'justify-between gap-4 mb-5 pb-4 border-b border-white/10'}`}>
@@ -607,7 +617,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                     ) : (
                       <>
                         <span
-                          className="text-forix-white/80 font-sans uppercase tracking-[0.25em] font-medium whitespace-nowrap text-[9px] md:text-[10px] group-hover:text-forix-green transition-colors duration-300"
+                          className="text-forix-white/90 font-sans uppercase tracking-[0.25em] font-semibold whitespace-nowrap text-[10px] md:text-xs group-hover:text-forix-green transition-colors duration-300"
                           onClick={() => setIsExpanded(true)}
                         >
                           Menú
@@ -616,7 +626,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                           className="text-forix-white/80 group-hover:text-forix-green transition-transform duration-500 group-hover:rotate-90 flex items-center justify-center"
                           onClick={() => setIsExpanded(true)}
                         >
-                          <Plus size={14} strokeWidth={1.5} />
+                          <Plus size={16} strokeWidth={2} />
                         </div>
                       </>
                     )}
@@ -632,7 +642,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                             e.stopPropagation();
                             handleLinkClick(link.id);
                           }}
-                          className="text-forix-white/50 hover:text-forix-white text-left text-sm font-light tracking-wide transition-all duration-300 flex items-center gap-2 group/link"
+                          className="text-forix-white/60 hover:text-forix-white text-left text-sm md:text-base font-normal tracking-wide transition-all duration-300 flex items-center gap-2 group/link"
                         >
                           <span className="w-1 h-1 rounded-full bg-forix-green opacity-0 group-hover/link:opacity-100 transition-opacity duration-300" />
                           <span className="group-hover/link:translate-x-1 transition-transform duration-300">{link.name}</span>
@@ -647,7 +657,8 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                   initial={{ opacity: 0, scale: 0.95, transformOrigin: 'top right' }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="absolute top-0 right-0 bg-forix-blue/90 backdrop-blur-md p-6 md:p-8 rounded-none shadow-2xl min-w-[240px] md:min-w-[300px] border border-white/10 z-[70]"
+                  className="fixed top-4 right-4 md:top-6 md:right-6 p-8 md:p-10 rounded-none shadow-2xl min-w-[300px] md:min-w-[360px] border border-white/10 z-[70]"
+                  style={{ backgroundColor: 'rgba(61, 112, 114, 0.95)', backdropFilter: 'blur(12px)' }}
                 >
                   <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-4 flex-1">
@@ -679,7 +690,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05, ease: "easeOut" }}
                         onClick={() => handleLinkClick(link.id)}
-                        className={`text-left text-xl md:text-2xl font-sans font-light tracking-tighter transition-all duration-500 hover:translate-x-2 group flex items-center gap-2.5 ${currentView === link.id ? 'text-forix-white' : 'text-forix-white/50 hover:text-forix-white'}`}
+                        className={`text-left text-2xl md:text-3xl font-sans font-light tracking-tighter transition-all duration-500 hover:translate-x-2 group flex items-center gap-2.5 ${currentView === link.id ? 'text-white font-normal' : 'text-white/70 hover:text-white'}`}
                       >
                         <span className={`w-1 h-1 rounded-none bg-forix-green transition-all duration-500 scale-0 group-hover:scale-100 ${currentView === link.id ? 'scale-100' : ''}`} />
                         {link.name}
@@ -700,15 +711,8 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                       <div className="absolute inset-0 bg-gradient-to-r from-forix-green/0 via-forix-green/5 to-forix-green/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                     </button>
 
-                    <div className="flex justify-between items-center px-1">
-                      <div className="flex gap-2.5">
-                        <a href="https://www.facebook.com/profile.php?id=61587846722543" target="_blank" rel="noopener noreferrer">
-                          <Facebook size={12} className="text-white/20 hover:text-white/60 cursor-pointer transition-colors" />
-                        </a>
-                        <Linkedin size={12} className="text-white/20 hover:text-white/60 cursor-pointer transition-colors" />
-                        <Instagram size={12} className="text-white/20 hover:text-white/60 cursor-pointer transition-colors" />
-                      </div>
-                      <span className="text-[7px] text-white/20 uppercase tracking-widest">© 2026</span>
+                    <div className="flex justify-end items-center px-1">
+                      <span className="text-[7px] text-white/30 uppercase tracking-widest">© 2026</span>
                     </div>
                   </div>
                 </motion.div>
@@ -729,14 +733,13 @@ const HeroLogo = () => (
 
 const Hero = () => {
   return (
-    <section id="home" className="relative min-h-[70vh] flex flex-col justify-end bg-[#050505] px-6 md:px-12 lg:px-24 overflow-hidden pt-32 pb-16 md:pb-24">
+    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center bg-[#050505] px-6 md:px-12 lg:px-24 overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 z-0 opacity-50 mix-blend-luminosity"
         style={{
           backgroundImage: 'url("/hero_main.jpg")',
           backgroundSize: 'cover',
-
           backgroundPosition: 'center',
         }}
       />
@@ -744,44 +747,42 @@ const Hero = () => {
       {/* Overlay oscuro minimalista */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/90 via-[#050505]/40 to-[#050505]/90 pointer-events-none z-0" />
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
-        {/* Left Side: Logo & Button */}
-        <div className="flex flex-col items-start gap-4 md:gap-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, x: -20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-          >
-            <HeroLogo />
-          </motion.div>
-
-          <motion.button
-            onClick={() => {
-              const el = document.getElementById('contacto');
-              el?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="text-forix-white hover:text-forix-green transition-colors duration-300 text-[10px] md:text-xs tracking-[0.25em] uppercase flex items-center gap-2 cursor-pointer"
-          >
-            Inicia Tu Diagnóstico <ArrowRight size={12} />
-          </motion.button>
-        </div>
-
-        {/* Right Side: Phrase */}
+      {/* Content - Centered */}
+      <div className="relative z-10 flex flex-col items-center gap-8">
+        {/* Logo centered */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="border-r border-forix-mint/30 pr-6 text-right self-end"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
         >
-          <p className="text-forix-mint text-xs md:text-sm font-light leading-relaxed tracking-[0.2em] uppercase max-w-xl">
+          <HeroLogo />
+        </motion.div>
+
+        {/* Subtitle centered */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4 }}
+        >
+          <p className="text-forix-mint text-base md:text-xl font-light leading-relaxed tracking-[0.2em] uppercase text-center max-w-2xl">
             Consultora boutique especializada en<br />
             hospitalidad & customer experience
           </p>
         </motion.div>
+
+        {/* CTA Button */}
+        <motion.button
+          onClick={() => {
+            const el = document.getElementById('contacto');
+            el?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="text-forix-white hover:text-forix-green transition-colors duration-300 text-sm md:text-base tracking-[0.25em] uppercase flex items-center gap-3 cursor-pointer border border-white/20 hover:border-forix-green/40 px-6 py-3"
+        >
+          Inicia Tu Diagnóstico <ArrowRight size={18} />
+        </motion.button>
       </div>
     </section>
   );
@@ -892,7 +893,7 @@ const AnimatedHero = ({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
-                className="text-lg md:text-xl font-light leading-relaxed max-w-sm"
+                className="text-xl md:text-2xl font-light leading-relaxed max-w-md"
               >
                 {description}
               </motion.p>
@@ -1014,7 +1015,7 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
                 className="flex items-center gap-3 mb-6"
               >
                 <div className="w-2 h-2 bg-forix-mint rounded-full" />
-                <span className="text-forix-mint text-[10px] font-bold tracking-[0.4em] uppercase">
+                <span className="text-forix-mint text-xs md:text-sm font-bold tracking-[0.4em] uppercase">
                   {subtitle}
                 </span>
               </motion.div>
@@ -1023,7 +1024,7 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
-                className="text-forix-mint/70 text-lg md:text-xl font-light leading-relaxed max-w-sm"
+                className="text-forix-mint/70 text-xl md:text-2xl font-light leading-relaxed max-w-md"
               >
                 {description}
               </motion.p>
@@ -1039,7 +1040,7 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
   );
 };
 
-const StackedServiceItem = ({ title, desc, index }: { title: string, desc: string, index: number, key?: React.Key }) => {
+const StackedServiceItem = ({ title, desc, index, icon: Icon }: { title: string, desc: string, index: number, key?: React.Key, icon?: React.ComponentType<{ size?: number, strokeWidth?: number, className?: string }> }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -1066,6 +1067,11 @@ const StackedServiceItem = ({ title, desc, index }: { title: string, desc: strin
         className="container-custom grid md:grid-cols-12 gap-12 items-start"
       >
         <div className="md:col-span-5">
+          {Icon && (
+            <div className="mb-6">
+              <Icon size={28} strokeWidth={1} className="text-white" />
+            </div>
+          )}
           <motion.h4
             style={{ color: titleColor }}
             className="text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter"
@@ -1079,7 +1085,7 @@ const StackedServiceItem = ({ title, desc, index }: { title: string, desc: strin
               <motion.p
                 key={i}
                 style={{ color: descColor }}
-                className="text-base md:text-lg font-light leading-relaxed"
+                className="text-xl md:text-2xl font-light leading-relaxed"
               >
                 {sentence}{i < arr.length - 1 ? '.' : ''}
               </motion.p>
@@ -1101,14 +1107,17 @@ const Services = () => {
       items: [
         {
           title: "Neuro Mapping Misterioso",
+          icon: ScanEye,
           desc: "Auditoría de guante blanco. A través de una inmersión encubierta de alta precisión, decodificamos cada micro-momento de la verdad en su establecimiento. No evaluamos tareas, mapeamos la respuesta emocional y el cumplimiento estético de su promesa de marca. Es el espejo más honesto y sofisticado para quienes exigen la perfección absoluta en cada detalle."
         },
         {
           title: "Diseño sensorial y auditoría de calidad",
+          icon: AudioLines,
           desc: "Curamos la música, los aromas y la iluminación de tu negocio para que el ambiente 'venda' por sí solo. Creamos una atmósfera donde el cliente se sienta cómodo, valorado y dispuesto a invertir más tiempo y dinero."
         },
         {
           title: "Protocolos de Servicio & Hospitalidad",
+          icon: BookOpen,
           desc: "Escribimos el guión exclusivo de tu empresa. Definimos cómo saluda tu equipo, cómo resuelve problemas y cómo cuenta la historia de tu marca a través de pequeños detalles que emocionan."
         }
       ]
@@ -1121,14 +1130,17 @@ const Services = () => {
       items: [
         {
           title: "Certificación en ADN de anfitriones",
+          icon: Fingerprint,
           desc: "Un entrenamiento intensivo donde el personal deja de ser 'empleado' para convertirse en 'anfitrión'. Enseñamos el arte de leer al cliente, el lenguaje corporal de la excelencia y cómo crear momentos que la gente nunca olvide."
         },
         {
           title: "Mentorías para líderes de excelencia",
+          icon: Compass,
           desc: "Acompañamiento estratégico para los que toman las decisiones. Trabajamos en cómo inspirar al equipo (Marca Empleadora) y cómo supervisar la calidad sin ser un jefe tradicional, sino un mentor de cultura."
         },
         {
           title: "Talleres de diseño y manuales de autor",
+          icon: PenTool,
           desc: "Sesiones dinámicas de trabajo (Workshops) donde definimos los pequeños detalles que hacen grande a la marca. El resultado es un Manual de Servicio que no termina en un estante, sino que es la guía viva de trabajo diario."
         }
       ]
@@ -1141,6 +1153,7 @@ const Services = () => {
       items: [
         {
           title: "Ecosistema de métricas y emociones",
+          icon: Activity,
           desc: "Implementamos frameworks avanzados de CX (NPS, CSAT, CES) potenciados por Inteligencia Artificial para analizar el sentimiento real detrás de cada reseña y comentario. Sabemos lo que sus clientes dicen, pero sobre todo, entendemos lo que sienten."
         }
       ]
@@ -1167,7 +1180,7 @@ const Services = () => {
                     <h2 className="text-forix-mint text-xs font-bold tracking-[0.5em] uppercase mb-4">{pillar.subtitle}</h2>
                     <img src={pillar.logo} className="h-10 md:h-12 lg:h-14 w-auto mb-2" alt={pillar.name} />
                   </div>
-                  <p className="font-signature text-3xl md:text-4xl italic">"{pillar.lema}"</p>
+                  <p className="font-signature text-3xl md:text-4xl italic text-forix-green">"{pillar.lema}"</p>
                 </div>
               </div>
             </div>
@@ -1179,6 +1192,7 @@ const Services = () => {
                   key={iIdx}
                   title={item.title}
                   desc={item.desc}
+                  icon={item.icon}
                   index={iIdx + 1}
                 />
               ))}
@@ -1379,7 +1393,7 @@ const About = () => {
               </h3>
 
               <div className="space-y-8">
-                <p className="text-lg md:text-xl text-forix-gray font-light leading-relaxed max-w-xl">
+                <p className="text-xl md:text-2xl text-forix-gray font-light leading-relaxed max-w-xl">
                   Un estratega comprometido con la excelencia humana, <span className="font-medium text-forix-blue">FORIX GROUP</span> asegura un acceso directo a un pensamiento especializado, eliminando la burocracia para proporcionar una consultoría de primera clase.
                 </p>
               </div>
@@ -1462,52 +1476,52 @@ const About = () => {
                 </p>
 
                 <div className="space-y-6">
-                  <p className="text-lg text-forix-gray font-light leading-relaxed">
+                  <p className="text-xl md:text-2xl text-forix-gray font-light leading-relaxed">
                     En <span className="font-medium text-forix-blue">FORIX GROUP</span>, fusionamos neurociencia aplicada con la alta hospitalidad para transformar organizaciones en símbolos de excelencia.
                   </p>
-                  <p className="text-lg text-forix-gray font-light leading-relaxed">
+                  <p className="text-xl md:text-2xl text-forix-gray font-light leading-relaxed">
                     Somos un ecosistema boutique de transformación humana y empresarial enfocado en hospitalidad, restauración, turismo y negocios experienciales. Diseñamos nuestro propio método como parte de nuestro compromiso empresarial.
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Método FORIX - Redesigned to match Image 1 */}
-              <div className="pt-12">
-                <div className="text-center mb-16">
-                  <h4 className="text-black text-2xl font-bold uppercase tracking-tight mb-2">Método FORIX</h4>
-                  <p className="text-black font-bold text-xl tracking-widest">4i * X</p>
-                </div>
+          {/* Método FORIX - Full width centered */}
+          <div className="py-24 flex flex-col items-center justify-center min-h-[70vh]">
+            <div className="text-center mb-16">
+              <h4 className="text-black text-4xl md:text-5xl font-bold uppercase tracking-tight mb-3">Método FORIX</h4>
+              <p className="text-black font-bold text-3xl md:text-4xl tracking-widest">4i * X</p>
+            </div>
 
-                <div className="relative max-w-2xl mx-auto">
-                  <div className="flex justify-between items-end relative">
-                    {[
-                      { name: "Investigación" },
-                      { name: "Innovación" },
-                      { name: "Inmersión" },
-                      { name: "Iteración" }
-                    ].map((step, i) => (
-                      <div key={i} className="flex items-center gap-3 relative z-10 group cursor-default">
-                        <div className="w-8 h-32 md:w-10 md:h-48">
-                          {/* Technological Hourglass shape using clipPath */}
-                          <div
-                            className="w-full h-full bg-black transition-all duration-500 group-hover:bg-forix-blue group-hover:scale-105"
-                            style={{ clipPath: 'polygon(0% 0%, 100% 0%, 55% 50%, 100% 100%, 0% 100%, 45% 50%)' }}
-                          />
-                        </div>
-                        <span className="text-[11px] md:text-sm font-light text-forix-gray transition-colors duration-300 group-hover:text-black">{step.name}</span>
-                      </div>
-                    ))}
+            <div className="relative max-w-4xl mx-auto w-full px-6">
+              <div className="flex justify-between items-end relative">
+                {[
+                  { name: "Investigación" },
+                  { name: "Innovación" },
+                  { name: "Inmersión" },
+                  { name: "Iteración" }
+                ].map((step, i) => (
+                  <div key={i} className="flex items-center gap-3 relative z-10 group cursor-default">
+                    <div className="w-10 h-36 md:w-12 md:h-52">
+                      {/* Technological Hourglass shape using clipPath */}
+                      <div
+                        className="w-full h-full bg-black transition-all duration-500 group-hover:bg-forix-blue group-hover:scale-105"
+                        style={{ clipPath: 'polygon(0% 0%, 100% 0%, 55% 50%, 100% 100%, 0% 100%, 45% 50%)' }}
+                      />
+                    </div>
+                    <span className="text-base md:text-lg font-light text-forix-gray transition-colors duration-300 group-hover:text-black">{step.name}</span>
                   </div>
+                ))}
+              </div>
 
-                  {/* Dotted Line from Image 1 */}
-                  <div className="w-full h-[1px] border-t border-dotted border-black/50 mt-4" />
+              {/* Dotted Line */}
+              <div className="w-full h-[1px] border-t border-dotted border-black/50 mt-4" />
 
-                  {/* Bottom Labels from Image 1 */}
-                  <div className="flex justify-center gap-16 mt-4">
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-black font-medium">EXPERIENCIA</span>
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-black font-medium">EXCELENCIA</span>
-                  </div>
-                </div>
+              {/* Bottom Labels */}
+              <div className="flex justify-center gap-20 mt-6">
+                <span className="text-base md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXPERIENCIA</span>
+                <span className="text-base md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXCELENCIA</span>
               </div>
             </div>
           </div>
@@ -2172,7 +2186,7 @@ const PillarCard = ({ title, desc, icon: Icon, customHeader, onClick, image }: {
           )}
         </div>
       )}
-      <div className="text-xs md:text-sm font-light leading-relaxed opacity-60 group-hover:opacity-90 transition-opacity duration-500 tracking-wider min-h-[60px] md:min-h-[80px]">{desc}</div>
+      <div className="text-sm md:text-base font-light leading-relaxed opacity-60 group-hover:opacity-90 transition-opacity duration-500 tracking-wider min-h-[60px] md:min-h-[80px]">{desc}</div>
     </div>
 
     {/* Bauhaus Accent */}
@@ -2339,7 +2353,7 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
               </h2>
 
               <div className="relative w-full flex flex-col items-center">
-                <p className="text-forix-mint/70 text-lg md:text-xl font-light leading-relaxed max-w-2xl mt-12">
+                <p className="text-forix-mint/70 text-xl md:text-2xl font-light leading-relaxed max-w-2xl mt-12">
                   Somos una consultora boutique que fusiona la neurociencia aplicada con la gestión de experiencia (CXM) para generar conciencia empresarial.
                 </p>
               </div>
@@ -2801,7 +2815,7 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
                 </div>
 
                 <div className="relative z-10 w-12 h-[1px] bg-forix-green/40 mb-8 group-hover:w-24 group-hover:bg-forix-mint transition-all duration-700" />
-                <div className="relative z-10 text-[10px] md:text-xs uppercase tracking-[0.4em] text-forix-mint/60 group-hover:text-forix-white transition-colors duration-700 font-medium leading-relaxed max-w-[200px]">
+                <div className="relative z-10 text-xs md:text-sm uppercase tracking-[0.35em] text-forix-mint/60 group-hover:text-forix-white transition-colors duration-700 font-medium leading-relaxed max-w-[220px]">
                   {metric.label}
                 </div>
               </motion.div>
