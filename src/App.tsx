@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 import { motion, AnimatePresence, useInView, useAnimation, useScroll, useTransform } from 'motion/react';
 import articleOneMarkdown from '../articulo_1.md?raw';
 import articleTwoMarkdown from '../articulo_2.md?raw';
@@ -1773,6 +1774,10 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
   };
 
   const saveDiagnostic = () => {
+    const answersText = questions.map((q, i) =>
+      `P${i + 1}: ${q.title}\nR: ${answers[i] ?? 'Sin respuesta'}`
+    ).join('\n\n');
+
     const entry = {
       id: Date.now(),
       date: new Date().toISOString(),
@@ -1788,6 +1793,39 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
     const existing = JSON.parse(localStorage.getItem('forix_diagnostics') || '[]');
     existing.push(entry);
     localStorage.setItem('forix_diagnostics', JSON.stringify(existing));
+
+    // Send via EmailJS
+    // CONFIGURAR: Reemplaza estos 3 valores con los tuyos de https://www.emailjs.com
+    const EMAILJS_SERVICE_ID = 'TU_SERVICE_ID';
+    const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';
+    const EMAILJS_PUBLIC_KEY = 'TU_PUBLIC_KEY';
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      from_name: contactName,
+      phone: contactPhone,
+      date: new Date().toLocaleString('es-BO'),
+      answers: answersText,
+      message: `Nuevo diagnóstico completado por ${contactName} (${contactPhone}).\n\n${answersText}`,
+    }, EMAILJS_PUBLIC_KEY).catch(() => {
+      // Silently fail - data is still saved in localStorage
+    });
+
+    // Send to Google Sheets (optional)
+    // CONFIGURAR: Reemplaza con tu URL de Google Apps Script
+    const GOOGLE_SHEETS_URL = '';
+    if (GOOGLE_SHEETS_URL) {
+      fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: contactName,
+          phone: contactPhone,
+          date: new Date().toISOString(),
+          ...Object.fromEntries(questions.map((q, i) => [`p${i + 1}`, String(answers[i] ?? '')]))
+        })
+      }).catch(() => {});
+    }
 
     setStep(step + 1);
     setShowConfetti(true);
