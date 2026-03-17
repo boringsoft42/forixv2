@@ -33,7 +33,10 @@ import {
   Fingerprint,
   Compass,
   PenTool,
-  Activity
+  Activity,
+  BarChart3,
+  GraduationCap,
+  Briefcase
 } from 'lucide-react';
 
 type ArticleSection = {
@@ -544,16 +547,16 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
 
   const navLinks = [
     { name: "Home", id: "home" },
-    { name: "Servicios", id: "servicios" },
-    { name: "Nosotros", id: "nosotros" },
-    { name: "Artículos", id: "articulos" },
-    { name: "Contacto", id: "contacto" }
+    { name: "Soluciones", id: "servicios" },
+    { name: "Método FORIX", id: "nosotros" },
+    { name: "CX Tools", id: "articulos" },
+    { name: "Sesión Estratégica", id: "contacto" }
   ];
 
   const directLinks = [
-    { name: "Servicios", id: "servicios" },
-    { name: "Nosotros", id: "nosotros" },
-    { name: "Contacto", id: "contacto" }
+    { name: "Soluciones", id: "servicios" },
+    { name: "Método FORIX", id: "nosotros" },
+    { name: "Sesión Estratégica", id: "contacto" }
   ];
 
   const handleLinkClick = (id: string) => {
@@ -577,7 +580,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
             className={`flex items-center cursor-pointer shrink-0 transition-opacity duration-500 ${currentView === 'home' && !isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             onClick={() => setCurrentView('home')}
           >
-            <img src="/logo_navbar.png" className="h-5 md:h-6 w-auto" alt="FORIX GROUP" />
+            <img src="/logo_navbar.png" className="h-4 md:h-6 w-auto" alt="FORIX GROUP" />
           </div>
 
           {/* Floating Menu Widget (Right) */}
@@ -589,7 +592,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className={`${isScrolled ? 'bg-forix-blue/95 backdrop-blur-md shadow-2xl border border-white/10' : 'bg-transparent border border-white/15'} rounded-none cursor-pointer group transition-all duration-500 flex flex-col overflow-hidden ${isScrolled ? 'p-1.5 px-3 py-2' : 'p-4 md:p-6 min-w-[180px] md:min-w-[250px]'}`}
+                  className={`fixed top-4 right-4 md:top-6 md:right-6 z-[70] ${isScrolled ? 'bg-forix-blue/95 backdrop-blur-md shadow-2xl border border-white/10' : 'bg-transparent border border-white/15'} rounded-none cursor-pointer group transition-all duration-500 flex flex-col overflow-hidden ${isScrolled ? 'p-1.5 px-3 py-2' : 'p-4 md:p-6 min-w-[180px] md:min-w-[250px]'}`}
                   onClick={() => setIsExpanded(true)}
                 >
                   <div className={`flex items-center w-full ${isScrolled ? 'justify-end gap-3' : 'justify-between gap-4 mb-5 pb-4 border-b border-white/10'}`}>
@@ -727,7 +730,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
 
 const HeroLogo = () => (
   <div className="flex items-center select-none">
-    <img src="/logo_hero.png" className="w-[100vw] max-w-4xl h-auto" alt="FORIX GROUP" />
+    <img src="/logo_hero.png" className="w-[100vw] max-w-4xl h-auto px-6 md:px-0" alt="FORIX GROUP" />
   </div>
 );
 
@@ -795,7 +798,9 @@ const AnimatedHero = ({
   bgClass,
   rectClass,
   backgroundImage,
-  titleClassName = "text-6xl md:text-8xl lg:text-9xl"
+  titleClassName = "text-6xl md:text-8xl lg:text-9xl",
+  textEndColor = "#D8E1E0",
+  subtitleEndColor = "#D8E1E0"
 }: {
   title: string,
   subtitle: string,
@@ -803,7 +808,9 @@ const AnimatedHero = ({
   bgClass: string,
   rectClass: string,
   backgroundImage?: string,
-  titleClassName?: string
+  titleClassName?: string,
+  textEndColor?: string,
+  subtitleEndColor?: string
 }) => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -816,9 +823,9 @@ const AnimatedHero = ({
   const y2 = useTransform(scrollYProgress, [0.15, 0.85], ["100%", "0%"]);
   const y3 = useTransform(scrollYProgress, [0.3, 1], ["100%", "0%"]);
 
-  // Transform text color to maintain contrast - from white to blue/gray as the background lightens
-  const textColor = useTransform(scrollYProgress, [0.3, 0.7], ["#F4F2F1", "#14385C"]);
-  const subtitleColor = useTransform(scrollYProgress, [0.3, 0.7], ["#D8E1E0", "#3D7072"]);
+  // Transform text color to maintain contrast
+  const textColor = useTransform(scrollYProgress, [0.3, 0.7], ["#F4F2F1", textEndColor]);
+  const subtitleColor = useTransform(scrollYProgress, [0.3, 0.7], ["#D8E1E0", subtitleEndColor]);
 
   return (
     <section
@@ -950,17 +957,22 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
     offset: ["start start", "end end"]
   });
 
-  // Staggered animation for 3 black rectangles of equal size to rise and cover the background
+  // Staggered animation for 3 white rectangles of equal size to rise and cover the background
   const y1 = useTransform(scrollYProgress, [0, 0.7], ["100%", "0%"]);
   const y2 = useTransform(scrollYProgress, [0.15, 0.85], ["100%", "0%"]);
   const y3 = useTransform(scrollYProgress, [0.3, 1], ["100%", "0%"]);
+
+  // Text color transitions from white to blue as white rects come up
+  const titleColor = useTransform(scrollYProgress, [0.3, 0.7], ["#F4F2F1", "#14385C"]);
+  const subtitleColor = useTransform(scrollYProgress, [0.3, 0.7], ["#D8E1E0", "#3D7072"]);
+  const descColor = useTransform(scrollYProgress, [0.3, 0.7], ["rgba(216,225,224,0.7)", "#14385C"]);
 
   return (
     <section
       ref={containerRef}
       className="relative h-[150vh] bg-[#14385C]"
     >
-      <div className="sticky top-0 h-[70vh] w-full flex flex-col justify-center overflow-hidden">
+      <div className="sticky top-0 h-[85vh] w-full flex flex-col justify-end pb-24 overflow-hidden">
         {/* New Hero Background Image */}
         <div
           className="absolute inset-0 z-0"
@@ -975,22 +987,22 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
         {/* Dark overlay for text legibility */}
         <div className="absolute inset-0 z-0 bg-black/50" />
 
-        {/* Animated Black Rectangles Background - Equal Sized Columns */}
+        {/* Animated White Rectangles Background - Equal Sized Columns */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 flex">
           {/* Rectangle 1 */}
           <motion.div
             style={{ y: y1 }}
-            className="w-1/3 h-[120%] bg-black border-r border-white/5"
+            className="w-1/3 h-[120%] bg-forix-white border-r border-forix-blue/5"
           />
           {/* Rectangle 2 */}
           <motion.div
             style={{ y: y2 }}
-            className="w-1/3 h-[120%] bg-black border-r border-white/5"
+            className="w-1/3 h-[120%] bg-forix-white border-r border-forix-blue/5"
           />
           {/* Rectangle 3 */}
           <motion.div
             style={{ y: y3 }}
-            className="w-1/3 h-[120%] bg-black"
+            className="w-1/3 h-[120%] bg-forix-white"
           />
         </div>
 
@@ -998,10 +1010,11 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
             <div className="lg:col-span-8">
               <motion.h1
+                style={{ color: titleColor }}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="text-forix-white text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.85] tracking-tighter uppercase"
+                className="text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.85] tracking-tighter uppercase"
               >
                 {title}
               </motion.h1>
@@ -1014,17 +1027,18 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
                 transition={{ duration: 1, delay: 0.5 }}
                 className="flex items-center gap-3 mb-6"
               >
-                <div className="w-2 h-2 bg-forix-mint rounded-full" />
-                <span className="text-forix-mint text-xs md:text-sm font-bold tracking-[0.4em] uppercase">
+                <motion.div style={{ backgroundColor: subtitleColor }} className="w-2 h-2 rounded-full" />
+                <motion.span style={{ color: subtitleColor }} className="text-xs md:text-sm font-bold tracking-[0.4em] uppercase">
                   {subtitle}
-                </span>
+                </motion.span>
               </motion.div>
 
               <motion.p
+                style={{ color: descColor }}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
-                className="text-forix-mint/70 text-xl md:text-2xl font-light leading-relaxed max-w-md"
+                className="text-xl md:text-2xl font-light leading-relaxed max-w-md"
               >
                 {description}
               </motion.p>
@@ -1047,9 +1061,7 @@ const StackedServiceItem = ({ title, desc, index, icon: Icon }: { title: string,
     offset: ["start start", "end start"]
   });
 
-  // Fade color to forix-gray as it scrolls out to "lose relevance"
-  const titleColor = useTransform(scrollYProgress, [0, 0.4], ["#F4F2F1", "#171516"]);
-  const descColor = useTransform(scrollYProgress, [0, 0.4], ["rgba(216, 225, 224, 0.7)", "#171516"]);
+  // Fade as it scrolls out to "lose relevance"
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.4]);
 
   return (
@@ -1059,7 +1071,7 @@ const StackedServiceItem = ({ title, desc, index, icon: Icon }: { title: string,
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="sticky top-0 min-h-[70vh] md:min-h-[60vh] flex flex-col justify-center bg-[#0a0a0a] border-t border-white/10 py-20 px-6 md:px-12 lg:px-24"
+      className="sticky top-0 min-h-[70vh] md:min-h-[60vh] flex flex-col justify-center bg-forix-white border-t border-forix-blue/10 py-20 px-6 md:px-12 lg:px-24"
       style={{ top: `${index * 20}px` }}
     >
       <motion.div
@@ -1069,26 +1081,22 @@ const StackedServiceItem = ({ title, desc, index, icon: Icon }: { title: string,
         <div className="md:col-span-5">
           {Icon && (
             <div className="mb-6">
-              <Icon size={28} strokeWidth={1} className="text-white" />
+              <Icon size={28} strokeWidth={1} className="text-forix-blue" />
             </div>
           )}
-          <motion.h4
-            style={{ color: titleColor }}
-            className="text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter"
-          >
+          <h4 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter text-forix-blue">
             {title}
-          </motion.h4>
+          </h4>
         </div>
         <div className="md:col-span-7">
           <div className="max-w-2xl space-y-6">
             {desc.split('. ').map((sentence, i, arr) => (
-              <motion.p
+              <p
                 key={i}
-                style={{ color: descColor }}
-                className="text-xl md:text-2xl font-light leading-relaxed"
+                className="text-xl md:text-2xl font-light leading-relaxed text-forix-gray"
               >
                 {sentence}{i < arr.length - 1 ? '.' : ''}
-              </motion.p>
+              </p>
             ))}
           </div>
         </div>
@@ -1106,7 +1114,7 @@ const Services = () => {
       lema: "Arquitectura de la distinción",
       items: [
         {
-          title: "Neuro Mapping Misterioso",
+          title: "Mistery Shopping",
           icon: ScanEye,
           desc: "Auditoría de guante blanco. A través de una inmersión encubierta de alta precisión, decodificamos cada micro-momento de la verdad en su establecimiento. No evaluamos tareas, mapeamos la respuesta emocional y el cumplimiento estético de su promesa de marca. Es el espejo más honesto y sofisticado para quienes exigen la perfección absoluta en cada detalle."
         },
@@ -1154,7 +1162,7 @@ const Services = () => {
         {
           title: "Ecosistema de métricas y emociones",
           icon: Activity,
-          desc: "Implementamos frameworks avanzados de CX (NPS, CSAT, CES) potenciados por Inteligencia Artificial para analizar el sentimiento real detrás de cada reseña y comentario. Sabemos lo que sus clientes dicen, pero sobre todo, entendemos lo que sienten."
+          desc: "96 de cada 100 clientes insatisfechos nunca presentan una queja; simplemente se retiran en silencio. Esta \"hemorragia silenciosa\" erosiona las ganancias y frena el crecimiento real, ya que la contabilidad tradicional solo registra el dinero que entra, no el que se pierde por quienes no vuelven."
         }
       ]
     }
@@ -1162,9 +1170,9 @@ const Services = () => {
   const collageImageClass = "w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700";
 
   return (
-    <div className="bg-[#0a0a0a]">
+    <div className="bg-forix-white">
       <ServicesHero
-        title="Nuestros Servicios"
+        title="Soluciones"
         subtitle="Excelencia Estratégica"
         description="Arquitectura de distinción y auditoría de alta precisión para elevar el estándar de su organización."
       />
@@ -1173,11 +1181,11 @@ const Services = () => {
         {pillars.map((pillar, pIdx) => (
           <div key={pIdx} className="relative">
             {/* Pillar Header */}
-            <div className="sticky top-0 z-20 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5 py-12 px-6 md:px-12 lg:px-24">
+            <div className="sticky top-0 z-20 bg-forix-white/90 backdrop-blur-md border-b border-forix-blue/10 py-12 px-6 md:px-12 lg:px-24">
               <div className="container-custom">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                   <div>
-                    <h2 className="text-forix-mint text-xs font-bold tracking-[0.5em] uppercase mb-4">{pillar.subtitle}</h2>
+                    <h2 className="text-forix-green text-xs font-bold tracking-[0.5em] uppercase mb-4">{pillar.subtitle}</h2>
                     <img src={pillar.logo} className="h-10 md:h-12 lg:h-14 w-auto mb-2" alt={pillar.name} />
                   </div>
                   <p className="font-signature text-3xl md:text-4xl italic text-forix-green">"{pillar.lema}"</p>
@@ -1353,17 +1361,13 @@ const AnimatedText = ({ segments }: { segments: { text: string, bold?: boolean, 
             {item.word}
           </span>
         ) : (
-          <span key={wordIndex} className="inline-block">
-            {Array.from(item.word).map((char, charIndex) => (
-              <motion.span
-                variants={child}
-                key={charIndex}
-                className={`inline-block ${item.bold ? 'font-bold' : ''} ${item.italic === false ? 'not-italic' : ''}`}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </span>
+          <motion.span
+            key={wordIndex}
+            variants={child}
+            className={`inline-block ${item.bold ? 'font-bold' : ''} ${item.italic === false ? 'not-italic' : ''}`}
+          >
+            {item.word}
+          </motion.span>
         );
       })}
     </motion.span>
@@ -1374,12 +1378,14 @@ const About = () => {
   return (
     <>
       <AnimatedHero
-        title="Nosotros"
+        title="Método Forix"
         subtitle="Liderazgo & Propósito"
         description="Redefinimos los estándares de hospitalidad para convertirlos en la mayor ventaja competitiva del mercado."
         bgClass="bg-forix-gray"
         rectClass="bg-forix-white"
         backgroundImage="/hero_about.jpg"
+        textEndColor="#14385C"
+        subtitleEndColor="#3D7072"
       />
       <section id="about" className="pt-24 pb-0 bg-forix-white overflow-hidden">
         <div className="container-custom">
@@ -1387,14 +1393,14 @@ const About = () => {
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-24">
             {/* Left Content */}
             <div className="order-2 lg:order-1">
-              <h2 className="text-5xl md:text-7xl font-bold text-forix-blue mb-6 tracking-tighter">Liderazgo</h2>
-              <h3 className="text-xl md:text-2xl font-medium text-forix-blue/80 mb-10 tracking-tight">
-                Liderado por <span className="font-bold">Mauricio Vacaflores.</span>
+              <h2 className="text-5xl md:text-7xl font-bold text-forix-blue mb-6 tracking-tighter">La filosofía del estándar</h2>
+              <h3 className="text-xl md:text-2xl font-light text-forix-gray mb-10 leading-relaxed max-w-xl">
+                Para Mauricio, la excelencia no es un objetivo aspiracional, sino el requisito mínimo de operación. Su gestión en <span className="font-bold text-forix-blue">FORIX GROUP</span> se basa en la convicción de que la diferencia entre una empresa común y una marca líder reside en la <span className="font-bold text-forix-blue">intencionalidad del detalle</span>. No cree en soluciones genéricas, sino en el rigor técnico que protege el prestigio de cada organización.
               </h3>
 
               <div className="space-y-8">
                 <p className="text-xl md:text-2xl text-forix-gray font-light leading-relaxed max-w-xl">
-                  Un estratega comprometido con la excelencia humana, <span className="font-medium text-forix-blue">FORIX GROUP</span> asegura un acceso directo a un pensamiento especializado, eliminando la burocracia para proporcionar una consultoría de primera clase.
+                  Su labor es transformar la hospitalidad de un concepto abstracto a una herramienta de ingeniería financiera. Bajo su liderazgo, <span className="font-bold text-forix-blue">FORIX</span> se convierte en el aliado que detiene la erosión del negocio y asegura que el éxito sea un sistema replicable, no un golpe de suerte.
                 </p>
               </div>
             </div>
@@ -1429,9 +1435,7 @@ const About = () => {
                     transition={{ duration: 1.2, ease: "easeOut", delay: 0.8 }}
                     className="flex flex-col items-center"
                   >
-                    <div className="bg-forix-blue text-forix-white px-12 py-6 border border-white/10 shadow-2xl">
-                      <span className="text-xs uppercase tracking-[0.4em] font-bold">Firma</span>
-                    </div>
+                    <img src="/Mauricio Vacaflores.png" alt="Firma Mauricio Vacaflores" className="h-16 w-auto object-contain drop-shadow-lg" />
                   </motion.div>
                 </div>
               </div>
@@ -1469,8 +1473,10 @@ const About = () => {
               <div className="space-y-8">
                 <p className="text-3xl md:text-4xl lg:text-5xl font-light text-forix-blue leading-tight italic">
                   <AnimatedText segments={[
-                    { text: '"En un mundo saturado de transacciones vacías, la verdadera ventaja competitiva no reside en el producto, sino en la ' },
-                    { text: 'consciencia de la experiencia', bold: true, italic: false },
+                    { text: '"La hospitalidad es un placer egoísta. Hacer que los demás se sientan ' },
+                    { text: 'bien', bold: true, italic: false },
+                    { text: ' te hace ' },
+                    { text: 'feliz', bold: true, italic: false },
                     { text: '."' }
                   ]} />
                 </p>
@@ -1494,23 +1500,37 @@ const About = () => {
               <p className="text-black font-bold text-3xl md:text-4xl tracking-widest">4i * X</p>
             </div>
 
-            <div className="relative max-w-4xl mx-auto w-full px-6">
-              <div className="flex justify-between items-end relative">
+            <div className="relative max-w-4xl mx-auto w-full px-4 md:px-6">
+              <div className="grid grid-cols-4 gap-2 md:gap-4 relative">
                 {[
                   { name: "Investigación" },
                   { name: "Innovación" },
                   { name: "Inmersión" },
                   { name: "Iteración" }
                 ].map((step, i) => (
-                  <div key={i} className="flex items-center gap-3 relative z-10 group cursor-default">
-                    <div className="w-10 h-36 md:w-12 md:h-52">
-                      {/* Technological Hourglass shape using clipPath */}
-                      <div
-                        className="w-full h-full bg-black transition-all duration-500 group-hover:bg-forix-blue group-hover:scale-105"
+                  <div key={i} className="flex flex-col items-center relative z-10 group cursor-default">
+                    <div className="w-8 h-28 md:w-12 md:h-52">
+                      <motion.div
+                        className="w-full h-full group-hover:scale-105 transition-transform duration-500"
                         style={{ clipPath: 'polygon(0% 0%, 100% 0%, 55% 50%, 100% 100%, 0% 100%, 45% 50%)' }}
+                        animate={{
+                          backgroundColor: ['#000000', '#14385C', '#3D7072', '#000000'],
+                          boxShadow: [
+                            '0 0 0px rgba(0,0,0,0)',
+                            '0 0 30px rgba(20,56,92,0.4)',
+                            '0 0 30px rgba(61,112,114,0.4)',
+                            '0 0 0px rgba(0,0,0,0)'
+                          ]
+                        }}
+                        transition={{
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                          delay: i * 0.6,
+                        }}
                       />
                     </div>
-                    <span className="text-base md:text-lg font-light text-forix-gray transition-colors duration-300 group-hover:text-black">{step.name}</span>
+                    <span className="text-[10px] md:text-lg font-light text-forix-gray transition-colors duration-300 group-hover:text-black mt-2 text-center">{step.name}</span>
                   </div>
                 ))}
               </div>
@@ -1519,9 +1539,9 @@ const About = () => {
               <div className="w-full h-[1px] border-t border-dotted border-black/50 mt-4" />
 
               {/* Bottom Labels */}
-              <div className="flex justify-center gap-20 mt-6">
-                <span className="text-base md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXPERIENCIA</span>
-                <span className="text-base md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXCELENCIA</span>
+              <div className="flex justify-center gap-10 md:gap-20 mt-6">
+                <span className="text-xs md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXPERIENCIA</span>
+                <span className="text-xs md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXCELENCIA</span>
               </div>
             </div>
           </div>
@@ -1560,7 +1580,7 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
   return (
     <>
       <AnimatedHero
-        title="Artículos"
+        title="CX TOOLS"
         subtitle="Liderazgo de Autor"
         description="Análisis crítico y perspectivas estratégicas sobre el futuro de la hospitalidad y la neurociencia aplicada."
         bgClass="bg-forix-blue"
@@ -1571,15 +1591,14 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
         <div className="container-custom">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-2xl">
-              <h2 className="text-forix-blue text-xs font-bold tracking-[0.3em] uppercase mb-4">Perspectivas para Directivos</h2>
-              <h3 className="text-4xl md:text-5xl font-bold text-forix-blue">
-                Que No se Conforman <br /> <span className="font-signature font-light">con el Promedio.</span>
+              <h2 className="text-forix-mint text-xs font-bold tracking-[0.3em] uppercase mb-4">Perspectivas para Directivos</h2>
+              <h3 className="text-4xl md:text-5xl font-bold text-forix-mint">
+                Que No se Conforman <br /> <span className="font-signature font-light text-white">con el Promedio.</span>
               </h3>
               <p className="text-lg text-forix-gray font-light mt-6">
                 Análisis de alto nivel sobre CXM, neurociencia aplicada y cultura organizacional.
               </p>
             </div>
-            <SecondaryButton href="#">Ver todos los artículos</SecondaryButton>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -1682,6 +1701,17 @@ const ArticleDetailView = ({ article, setCurrentView }: { article: ArticleData, 
 const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string | number>>({});
+  const [contactName, setContactName] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [particles] = useState(() => Array.from({ length: 40 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    delay: Math.random() * 0.8,
+    duration: 1.5 + Math.random() * 2,
+    size: 4 + Math.random() * 8,
+    color: ['#14385C', '#3D7072', '#D8E1E0', '#2ecc71', '#14385C'][Math.floor(Math.random() * 5)],
+  })));
 
   const questions = [
     {
@@ -1732,11 +1762,36 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
     }
   ];
 
+  // Total steps: questions + contact info step
+  const totalSteps = questions.length + 1;
+  const isContactStep = step === questions.length;
+  const isCompleted = step > questions.length;
+
   const handleAnswer = (answer: string | number) => {
     setAnswers({ ...answers, [step]: answer });
-    if (step < questions.length) {
-      setTimeout(() => setStep(step + 1), 300);
-    }
+    setTimeout(() => setStep(step + 1), 300);
+  };
+
+  const saveDiagnostic = () => {
+    const entry = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      name: contactName,
+      phone: contactPhone,
+      answers: questions.map((q, i) => ({
+        question: q.title,
+        answer: answers[i] ?? ''
+      }))
+    };
+
+    // Save to localStorage
+    const existing = JSON.parse(localStorage.getItem('forix_diagnostics') || '[]');
+    existing.push(entry);
+    localStorage.setItem('forix_diagnostics', JSON.stringify(existing));
+
+    setStep(step + 1);
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 4000);
   };
 
   if (!isOpen) return null;
@@ -1747,126 +1802,234 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-[#F4F4F4] flex items-center justify-center p-6 md:p-24"
+        className="fixed inset-0 z-[100] bg-[#F4F4F4] flex items-center justify-center p-6 md:p-24 overflow-y-auto"
       >
-        {/* Exact Brand Logo (Image 2) in the bottom right corner - Semi-opaque */}
+        {/* Confetti particles */}
+        {showConfetti && (
+          <div className="fixed inset-0 pointer-events-none z-[200] overflow-hidden">
+            {particles.map((p) => (
+              <motion.div
+                key={p.id}
+                initial={{ y: -20, x: `${p.x}vw`, opacity: 1, rotate: 0 }}
+                animate={{ y: '110vh', opacity: [1, 1, 0], rotate: 720 }}
+                transition={{ duration: p.duration, delay: p.delay, ease: 'easeIn' }}
+                style={{ position: 'absolute', width: p.size, height: p.size, borderRadius: p.size > 8 ? '50%' : '2px', backgroundColor: p.color }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Brand Logo watermark */}
         <div className="absolute bottom-8 right-8 w-32 md:w-56 opacity-10 pointer-events-none z-0">
-          <svg viewBox="0 0 800 420" className="w-full h-auto" fill="#3D7072" xmlns="http://www.w3.org/2000/svg">
-            {/* 4 Hourglasses */}
+          <svg viewBox="0 0 220 360" className="w-full h-auto" fill="#3D7072" xmlns="http://www.w3.org/2000/svg">
             <path d="M0,0 L40,0 L25,180 L40,360 L0,360 L15,180 Z" />
             <path d="M60,0 L100,0 L85,180 L100,360 L60,360 L75,180 Z" />
             <path d="M120,0 L160,0 L145,180 L160,360 L120,360 L135,180 Z" />
             <path d="M180,0 L220,0 L205,180 L220,360 L180,360 L195,180 Z" />
-
-            <g transform="translate(260, 0)">
-              {/* Top FORIX */}
-              <path d="M0,10 L70,10 L70,20 L20,20 L20,50 L60,50 L60,60 L20,60 L20,110 L0,110 Z" />
-              <path d="M130,60 C130,20 150,10 180,10 C210,10 230,20 230,60 C230,100 210,110 180,110 C150,110 130,100 130,60 Z M150,60 C150,90 160,95 180,95 C200,95 210,90 210,60 C210,30 200,25 180,25 C160,25 150,30 150,60 Z" />
-              <path d="M260,10 L310,10 C330,10 340,20 340,40 C340,55 330,65 315,68 L340,110 L315,110 L295,70 L280,70 L280,110 L260,110 Z M280,25 L280,55 L310,55 C320,55 320,45 320,40 C320,35 320,25 310,25 Z" />
-              <path d="M360,10 L380,10 L372,60 L380,110 L360,110 L368,60 Z" />
-              <path d="M400,10 L420,10 L440,50 L460,10 L480,10 L450,60 L480,110 L460,110 L440,70 L420,110 L400,110 L430,60 Z" />
-
-              {/* Middle FORIX (Upside down) */}
-              <g transform="translate(480, 230) rotate(180)">
-                <path d="M0,10 L70,10 L70,20 L20,20 L20,50 L60,50 L60,60 L20,60 L20,110 L0,110 Z" />
-                <path d="M130,60 C130,20 150,10 180,10 C210,10 230,20 230,60 C230,100 210,110 180,110 C150,110 130,100 130,60 Z M150,60 C150,90 160,95 180,95 C200,95 210,90 210,60 C210,30 200,25 180,25 C160,25 150,30 150,60 Z" />
-                <path d="M260,10 L310,10 C330,10 340,20 340,40 C340,55 330,65 315,68 L340,110 L315,110 L295,70 L280,70 L280,110 L260,110 Z M280,25 L280,55 L310,55 C320,55 320,45 320,40 C320,35 320,25 310,25 Z" />
-                <path d="M360,10 L380,10 L372,60 L380,110 L360,110 L368,60 Z" />
-                <path d="M400,10 L420,10 L440,50 L460,10 L480,10 L450,60 L480,110 L460,110 L440,70 L420,110 L400,110 L430,60 Z" />
-              </g>
-
-              {/* Bottom FORIX */}
-              <g transform="translate(0, 250)">
-                <path d="M0,10 L70,10 L70,20 L20,20 L20,50 L60,50 L60,60 L20,60 L20,110 L0,110 Z" />
-                <path d="M130,60 C130,20 150,10 180,10 C210,10 230,20 230,60 C230,100 210,110 180,110 C150,110 130,100 130,60 Z M150,60 C150,90 160,95 180,95 C200,95 210,90 210,60 C210,30 200,25 180,25 C160,25 150,30 150,60 Z" />
-                <path d="M260,10 L310,10 C330,10 340,20 340,40 C340,55 330,65 315,68 L340,110 L315,110 L295,70 L280,70 L280,110 L260,110 Z M280,25 L280,55 L310,55 C320,55 320,45 320,40 C320,35 320,25 310,25 Z" />
-                <path d="M360,10 L380,10 L372,60 L380,110 L360,110 L368,60 Z" />
-                <path d="M400,10 L420,10 L440,50 L460,10 L480,10 L450,60 L480,110 L460,110 L440,70 L420,110 L400,110 L430,60 Z" />
-              </g>
-
-              {/* GROUP */}
-              <g transform="translate(0, 410)">
-                <text x="0" y="0" fontFamily="sans-serif" fontSize="35" letterSpacing="40" fill="#3D7072" fontWeight="bold">GROUP</text>
-              </g>
-            </g>
           </svg>
         </div>
 
-        <button onClick={onClose} className="absolute top-12 right-12 text-forix-blue hover:text-forix-green transition-colors z-10">
+        <button onClick={() => { onClose(); setStep(0); setAnswers({}); setContactName(''); setContactPhone(''); }} className="absolute top-6 right-6 md:top-12 md:right-12 text-forix-blue hover:text-forix-green transition-colors z-10">
           <X size={32} strokeWidth={1.5} />
         </button>
 
+        {/* Progress bar */}
+        {!isCompleted && (
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-black/5">
+            <motion.div
+              className="h-full bg-forix-green"
+              animate={{ width: `${((step) / totalSteps) * 100}%` }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            />
+          </div>
+        )}
+
         <div className="max-w-4xl w-full relative z-10">
-          {step < questions.length ? (
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
-                PREGUNTA {step + 1} DE {questions.length}
-              </p>
-              <h3 className="text-3xl md:text-5xl font-light text-[#14385C] leading-[1.3] mb-16 max-w-3xl">
-                {questions[step].title}
-              </h3>
-
-              {questions[step].type === 'scale' && (
-                <div className="flex flex-wrap gap-4 md:gap-6">
-                  {questions[step].options.map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => handleAnswer(opt)}
-                      className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center border border-black/10 bg-transparent text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300"
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {questions[step].type === 'choice' && (
-                <div className="space-y-4">
-                  {questions[step].options.map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => handleAnswer(opt)}
-                      className="w-full text-left p-6 md:p-8 border border-black/10 bg-transparent text-lg md:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300 group flex items-center justify-between"
-                    >
-                      <span>{opt}</span>
-                      <ArrowRight size={20} className="opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-[#3D7072]" />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center"
-            >
-              <CheckCircle2 size={64} className="text-forix-green mx-auto mb-8" />
-              <h3 className="text-4xl md:text-5xl font-bold text-forix-blue mb-6">
-                Diagnóstico Completado.
-              </h3>
-              <p className="text-xl text-forix-gray font-light mb-12 max-w-2xl mx-auto leading-relaxed">
-                Hemos analizado sus respuestas. El siguiente paso es agendar una sesión estratégica directa con Mauricio Vacaflores para revisar sus resultados y trazar un roadmap de maximización.
-              </p>
-              <PrimaryButton
-                onClick={() => {
-                  alert("Redirigiendo a Calendly...");
-                  onClose();
-                  setStep(0);
-                  setAnswers({});
-                }}
-                className="text-lg py-6 px-12"
+          <AnimatePresence mode="wait">
+            {/* Questions */}
+            {step < questions.length && (
+              <motion.div
+                key={`question-${step}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               >
-                AGENDAR SESIÓN ESTRATÉGICA
-              </PrimaryButton>
-            </motion.div>
-          )}
+                <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                  PREGUNTA {step + 1} DE {questions.length}
+                </p>
+                <h3 className="text-3xl md:text-5xl font-light text-[#14385C] leading-[1.3] mb-16 max-w-3xl">
+                  {questions[step].title}
+                </h3>
+
+                {questions[step].type === 'scale' && (
+                  <div className="flex flex-wrap gap-4 md:gap-6">
+                    {questions[step].options.map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => handleAnswer(opt)}
+                        className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center border border-black/10 bg-transparent text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300"
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {questions[step].type === 'choice' && (
+                  <div className="space-y-4">
+                    {questions[step].options.map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => handleAnswer(opt)}
+                        className="w-full text-left p-6 md:p-8 border border-black/10 bg-transparent text-lg md:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300 group flex items-center justify-between"
+                      >
+                        <span>{opt}</span>
+                        <ArrowRight size={20} className="opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-[#3D7072]" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Contact info step */}
+            {isContactStep && !isCompleted && (
+              <motion.div
+                key="contact-step"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                  ÚLTIMO PASO
+                </p>
+                <h3 className="text-3xl md:text-5xl font-light text-[#14385C] leading-[1.3] mb-6 max-w-3xl">
+                  Para enviarle los resultados, necesitamos sus datos de contacto.
+                </h3>
+                <p className="text-lg text-forix-gray font-light mb-12">
+                  Su información se mantendrá estrictamente confidencial.
+                </p>
+
+                <div className="space-y-6 max-w-lg">
+                  <div>
+                    <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Nombre completo</label>
+                    <input
+                      type="text"
+                      value={contactName}
+                      onChange={(e) => setContactName(e.target.value)}
+                      placeholder="Ej: Mauricio Vacaflores"
+                      className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Número de celular</label>
+                    <input
+                      type="tel"
+                      value={contactPhone}
+                      onChange={(e) => setContactPhone(e.target.value)}
+                      placeholder="Ej: +591 70000000"
+                      className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300"
+                    />
+                  </div>
+                  <PrimaryButton
+                    onClick={saveDiagnostic}
+                    className={`text-lg py-5 px-12 w-full mt-4 ${!contactName || !contactPhone ? 'opacity-40 pointer-events-none' : ''}`}
+                  >
+                    ENVIAR DIAGNÓSTICO
+                  </PrimaryButton>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Completion screen with animation */}
+            {isCompleted && (
+              <motion.div
+                key="completed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
+                {/* Animated check circle */}
+                <div className="relative mx-auto w-24 h-24 mb-10">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
+                    className="w-24 h-24 rounded-full border-2 border-forix-green flex items-center justify-center"
+                  >
+                    <motion.div
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{ delay: 0.6, duration: 0.5 }}
+                    >
+                      <CheckCircle2 size={48} className="text-forix-green" />
+                    </motion.div>
+                  </motion.div>
+
+                  {/* Pulse rings */}
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute inset-0 rounded-full border border-forix-green/30"
+                      initial={{ scale: 1, opacity: 0.6 }}
+                      animate={{ scale: 2.5, opacity: 0 }}
+                      transition={{ duration: 2, delay: 0.8 + i * 0.4, repeat: Infinity, ease: 'easeOut' }}
+                    />
+                  ))}
+                </div>
+
+                <motion.h3
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  className="text-4xl md:text-5xl font-bold text-forix-blue mb-6"
+                >
+                  Diagnóstico Completado.
+                </motion.h3>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.6 }}
+                  className="text-xl text-forix-gray font-light mb-4 max-w-2xl mx-auto leading-relaxed"
+                >
+                  Gracias, <span className="font-medium text-forix-blue">{contactName}</span>.
+                </motion.p>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9, duration: 0.6 }}
+                  className="text-lg text-forix-gray font-light mb-12 max-w-2xl mx-auto leading-relaxed"
+                >
+                  Hemos registrado sus respuestas. El siguiente paso es agendar una sesión estratégica directa con Mauricio Vacaflores para revisar sus resultados y trazar un roadmap de maximización.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.1, duration: 0.6 }}
+                >
+                  <PrimaryButton
+                    onClick={() => {
+                      window.open('https://wa.me/59170000000?text=Hola, completé el diagnóstico FORIX y me gustaría agendar una sesión estratégica.', '_blank');
+                      onClose();
+                      setStep(0);
+                      setAnswers({});
+                      setContactName('');
+                      setContactPhone('');
+                    }}
+                    className="text-lg py-6 px-12"
+                  >
+                    AGENDAR SESIÓN ESTRATÉGICA
+                  </PrimaryButton>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
     </AnimatePresence>
@@ -1887,11 +2050,15 @@ const Contact = () => {
       }} />
 
       <div className="container-custom relative z-10 flex flex-col items-center text-center">
-        <h2 className="text-forix-blue text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase mb-8">Contacto Directo</h2>
+        <h2 className="text-forix-blue text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase mb-8">Sesión Estratégica</h2>
 
-        <h3 className="text-5xl md:text-7xl font-bold text-forix-blue mb-16 leading-tight tracking-tight">
-          Sesión de <br /> <span className="font-light">diagnóstico.</span>
+        <h3 className="text-4xl md:text-6xl font-bold text-forix-blue mb-6 leading-tight tracking-tight max-w-4xl">
+          ¿Cuánto le cuesta el silencio de los clientes que no regresan?
         </h3>
+
+        <p className="text-lg md:text-xl text-forix-gray/70 font-light mb-16 max-w-2xl leading-relaxed">
+          Transforme la lealtad en su activo más rentable, no en un costo de marketing.
+        </p>
 
         <motion.div
           whileHover={{ scale: 1.02 }}
@@ -1902,7 +2069,7 @@ const Contact = () => {
             onClick={() => setIsModalOpen(true)}
             className="bg-forix-green text-white px-8 py-5 md:px-12 md:py-6 font-medium tracking-[0.15em] uppercase text-sm md:text-base transition-all duration-300 hover:bg-forix-blue flex items-center gap-4 group shadow-lg hover:shadow-xl"
           >
-            CLIC PARA AGENDAR
+            Solicitar diagnóstico gratuito
             <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" />
           </button>
         </motion.div>
@@ -1915,22 +2082,29 @@ const Contact = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-forix-white py-12 border-t border-forix-mint">
-      <div className="container-custom flex flex-col md:flex-row justify-between items-center gap-8">
-        <div className="flex items-center">
-          <img src="/logo_navbar.png" className="h-6 w-auto" alt="FORIX GROUP" />
+    <footer className="bg-forix-white py-16 border-t border-forix-mint">
+      <div className="container-custom flex flex-col gap-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+          <div className="flex items-center">
+            <img src="/logo_navbar.png" className="h-8 w-auto" alt="FORIX GROUP" />
+          </div>
+
+          <div className="flex gap-4 md:gap-10 items-center">
+            <a href="https://www.facebook.com/profile.php?id=61587846722543" target="_blank" rel="noopener noreferrer" className="text-[9px] md:text-xs uppercase font-bold tracking-wider md:tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-1.5 md:gap-2 transition-colors duration-300"><Facebook size={14} className="md:w-4 md:h-4" /> <span className="hidden sm:inline">Facebook</span></a>
+            <a href="https://www.instagram.com/forixgroup.bo" target="_blank" rel="noopener noreferrer" className="text-[9px] md:text-xs uppercase font-bold tracking-wider md:tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-1.5 md:gap-2 transition-colors duration-300"><Instagram size={14} className="md:w-4 md:h-4" /> <span className="hidden sm:inline">Instagram</span></a>
+            <a href="https://www.linkedin.com/company/forix-group" target="_blank" rel="noopener noreferrer" className="text-[9px] md:text-xs uppercase font-bold tracking-wider md:tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-1.5 md:gap-2 transition-colors duration-300"><Linkedin size={14} className="md:w-4 md:h-4" /> <span className="hidden sm:inline">LinkedIn</span></a>
+            <a href="mailto:mauricioniafab@gmail.com" className="text-[9px] md:text-xs uppercase font-bold tracking-wider md:tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-1.5 md:gap-2 transition-colors duration-300"><Mail size={14} className="md:w-4 md:h-4" /> <span className="hidden sm:inline">Email</span></a>
+          </div>
         </div>
 
-        <div className="flex gap-8 items-center">
-          <a href="https://www.facebook.com/profile.php?id=61587846722543" target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase font-bold tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-2"><Facebook size={14} /> Facebook</a>
-          <a href="#" className="text-[10px] uppercase font-bold tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-2"><Instagram size={14} /> Instagram</a>
-          <a href="#" className="text-[10px] uppercase font-bold tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-2"><Linkedin size={14} /> LinkedIn</a>
-          <a href="mailto:estrategia@forixgroup.com" className="text-[10px] uppercase font-bold tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-2"><Mail size={14} /> Email</a>
+        <div className="border-t border-forix-mint/30 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-[10px] uppercase font-bold tracking-widest text-forix-gray/40">
+            © {new Date().getFullYear()} FORIX GROUP. Todos los derechos reservados.
+          </p>
+          <p className="text-[10px] tracking-widest text-forix-gray/40">
+            mauricioniafab@gmail.com
+          </p>
         </div>
-
-        <p className="text-[10px] uppercase font-bold tracking-widest text-forix-gray/40">
-          © {new Date().getFullYear()} FORIX GROUP. Todos los derechos reservados.
-        </p>
       </div>
     </footer>
   );
@@ -1969,25 +2143,54 @@ const Preloader = ({ onComplete }: { onComplete: () => void }) => {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
-      className="fixed inset-0 z-[9999] bg-[#0a0a0a] flex flex-col justify-center"
+      className="fixed inset-0 z-[9999] bg-white flex flex-col justify-center"
     >
-      {/* Línea de progreso central - con efecto de desvanecimiento */}
-      <div className="w-full relative h-[1px] bg-white/5">
+      {/* Línea de progreso central - rayo de luz azul */}
+      <div className="w-full relative h-[1px] bg-black/10">
+        {/* Estela de luz que deja la bolita */}
         <motion.div
-          className="absolute top-0 left-0 h-full"
+          className="absolute top-1/2 -translate-y-1/2 left-0 h-[2px]"
           style={{
             width: `${progress}%`,
-            background: 'linear-gradient(to right, transparent, #3D7072)'
+            background: 'linear-gradient(to right, transparent 0%, rgba(20,56,92,0.1) 30%, rgba(61,112,114,0.4) 70%, #3D7072 100%)',
           }}
+        />
+
+        {/* Bolita principal con glow fosforescente */}
+        <motion.div
+          className="absolute top-1/2 -translate-y-1/2"
+          style={{ left: `${progress}%` }}
+          animate={{
+            boxShadow: [
+              '0 0 8px 2px rgba(61,112,114,0.6), 0 0 20px 6px rgba(61,112,114,0.3), 0 0 40px 12px rgba(61,112,114,0.15)',
+              '0 0 12px 4px rgba(61,112,114,0.9), 0 0 30px 10px rgba(61,112,114,0.5), 0 0 60px 20px rgba(61,112,114,0.25)',
+              '0 0 8px 2px rgba(61,112,114,0.6), 0 0 20px 6px rgba(61,112,114,0.3), 0 0 40px 12px rgba(61,112,114,0.15)',
+            ],
+          }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
         >
-          {/* Pequeño punto brillante al final de la línea */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[4px] h-[4px] bg-forix-mint rounded-full shadow-[0_0_10px_#D8E1E0,0_0_20px_#D8E1E0] translate-x-1/2" />
+          {/* Core brillante */}
+          <div className="w-[6px] h-[6px] rounded-full bg-white -translate-x-1/2 relative z-10" />
+          {/* Halo azul interno */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[14px] h-[14px] rounded-full bg-[#3D7072]/50 blur-[3px]" />
+          {/* Halo azul externo */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30px] h-[30px] rounded-full bg-[#3D7072]/20 blur-[8px]" />
         </motion.div>
+
+        {/* Rayo de luz trailing - efecto de cola luminosa */}
+        <motion.div
+          className="absolute top-1/2 -translate-y-1/2 h-[1px]"
+          style={{
+            left: `${Math.max(0, progress - 15)}%`,
+            width: `${Math.min(progress, 15)}%`,
+            background: 'linear-gradient(to right, transparent, rgba(61,112,114,0.8))',
+          }}
+        />
       </div>
 
       {/* Número en la parte inferior izquierda - Posicionado más hacia la esquina */}
       <div className="absolute bottom-6 left-6 md:bottom-10 md:left-12">
-        <div className="text-white text-7xl md:text-[10rem] leading-none font-sans font-light tracking-tighter opacity-85">
+        <div className="text-forix-blue text-7xl md:text-[10rem] leading-none font-sans font-light tracking-tighter opacity-85">
           {progress}
         </div>
       </div>
@@ -2128,19 +2331,19 @@ const GeometricRadial = () => (
 
 const ForixBusinessTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/forix_business_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto" alt="FORIX BUSINESS" />
+    <img src="/forix_business_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX BUSINESS" />
   </div>
 );
 
 const ForixLearningTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/forix_learning_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto" alt="FORIX LEARNING" />
+    <img src="/forix_learning_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX LEARNING" />
   </div>
 );
 
 const ForixLabTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/logo_lab.png" className="h-10 md:h-12 lg:h-16 w-auto" alt="FORIX LAB" />
+    <img src="/logo_lab.png" className="h-10 md:h-12 lg:h-16 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX LAB" />
   </div>
 );
 
@@ -2278,27 +2481,27 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
   const features = [
     {
       id: "01",
-      title: "Metodología Propietaria",
+      title: "Porque en un mundo que olvida lo que dices, nosotros recordamos lo que sientes",
       subtitle: "Neuro-Frameworks",
-      desc: "Frameworks exclusivos que fusionan neurociencia aplicada con gestión operativa de alto nivel."
+      desc: ""
     },
     {
       id: "02",
-      title: "Enfoque en Resultados",
+      title: "Cambiamos la lógica del negocio por la magia de la hospitalidad irracional",
       subtitle: "Impacto Medible",
-      desc: "No entregamos informes, entregamos transformaciones medibles en rentabilidad y valor percibido."
+      desc: ""
     },
     {
       id: "03",
-      title: "Experiencia Multisectorial",
+      title: "Poniendo el corazón en cada detalle para que su equipo y su cliente",
       subtitle: "Adaptabilidad Elite",
-      desc: "Desde hospitalidad de lujo hasta servicios profesionales, adaptamos la excelencia a su industria."
+      desc: ""
     },
     {
       id: "04",
-      title: "Liderazgo de Autor",
+      title: "Nunca dejen de sentir que este es el lugar al que pertenecen.",
       subtitle: "Mentoría Senior",
-      desc: "Acompañamiento directo de especialistas senior en cada etapa del proceso estratégico."
+      desc: ""
     }
   ];
 
@@ -2392,19 +2595,21 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
-                    className="text-5xl md:text-7xl font-bold text-forix-white mb-10 leading-tight tracking-tighter uppercase"
+                    className={`font-bold text-forix-white mb-10 leading-tight max-w-3xl ${f.desc ? 'text-5xl md:text-7xl tracking-tighter uppercase' : 'text-2xl md:text-4xl tracking-tight'}`}
                   >
                     {f.title}
                   </motion.h3>
 
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="text-xl md:text-2xl text-forix-mint/80 font-light leading-relaxed max-w-2xl"
-                  >
-                    {f.desc}
-                  </motion.p>
+                  {f.desc && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 0.4 }}
+                      className="text-xl md:text-2xl text-forix-mint/80 font-light leading-relaxed max-w-2xl"
+                    >
+                      {f.desc}
+                    </motion.p>
+                  )}
 
                   <motion.div
                     initial={{ scaleX: 0 }}
@@ -2457,12 +2662,12 @@ const ForixSymbol = ({ className = "" }: { className?: string }) => (
 );
 
 const DifferentiatingPhraseSection = () => {
-  const phrase = "\"EN UN MUNDO SATURADO DE TRANSACCIONES VACÍAS, LA VERDADERA VENTAJA COMPETITIVA NO RESIDE EN EL PRODUCTO, SINO EN LA CONSCIENCIA DE LA EXPERIENCIA\"";
+  const phrase = "\"LA HOSPITALIDAD ES UN PLACER EGOÍSTA. HACER QUE LOS DEMÁS SE SIENTAN BIEN TE HACE FELIZ.\"";
 
   // Define which words get which style
   const getWordStyle = (word: string) => {
     const cleanWord = word.toUpperCase().replace(/[,."]/g, "");
-    if (["CONSCIENCIA", "EXPERIENCIA"].includes(cleanWord)) return "text-forix-white font-bold tracking-tight font-sans";
+    if (["BIEN", "FELIZ"].includes(cleanWord)) return "text-forix-white font-bold tracking-tight font-sans";
     return "text-forix-white/70 font-light tracking-[0.2em] font-sans";
   };
 
@@ -2526,19 +2731,13 @@ const DifferentiatingPhraseSection = () => {
           className="flex flex-wrap justify-center items-center gap-x-2 md:gap-x-4 gap-y-4 max-w-4xl mx-auto"
         >
           {words.map((word, wordIdx) => (
-            <div key={wordIdx} className="flex whitespace-nowrap items-center">
-              {word.split("").map((char, charIdx) => (
-                <motion.span
-                  key={`${wordIdx}-${charIdx}`}
-                  variants={letterVariants}
-                  className={`text-xl md:text-3xl lg:text-4xl tracking-tight leading-relaxed ${getWordStyle(word)}`}
-                >
-                  {char}
-                </motion.span>
-              ))}
-              {/* Add space after word */}
-              <span className="w-2 md:w-3" />
-            </div>
+            <motion.span
+              key={wordIdx}
+              variants={letterVariants}
+              className={`text-xl md:text-3xl lg:text-4xl tracking-tight leading-relaxed whitespace-nowrap ${getWordStyle(word)}`}
+            >
+              {word}
+            </motion.span>
           ))}
         </motion.div>
 
@@ -2590,7 +2789,7 @@ const ImmersivePhotoSection = () => {
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
               className="relative col-start-1 row-start-1 row-span-8 group overflow-hidden border border-white/10"
             >
-              <img src="/forix_business_nobg.png" alt="Forix business exterior" className={collageImageClass} />
+              <img src="/foto 2.png" alt="Forix business" className={collageImageClass} />
               <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white/50 uppercase tracking-widest">
                 {techLabels[0].coord}
               </div>
@@ -2672,7 +2871,7 @@ const ImmersivePhotoSection = () => {
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
               className="relative col-start-5 row-start-9 row-span-4 group overflow-hidden border border-white/10"
             >
-              <img src="/forix_learning_nobg.png" alt="Forix brand on laptop" className={collageImageClass} />
+              <img src="/metric_300.jpg" alt="Forix metrics" className={collageImageClass} />
               <div className="absolute bottom-4 right-4 font-mono text-[10px] text-white/50">
                 {techLabels[3].iso}
               </div>
@@ -2698,7 +2897,7 @@ const ImmersivePhotoSection = () => {
 
           <div className="grid md:hidden grid-cols-2 grid-rows-6 gap-[4px] p-[4px] w-full h-screen max-w-full">
             <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative row-span-2 group overflow-hidden border border-white/10">
-              <img src="/forix_business_nobg.png" alt="Forix business exterior" className={collageImageClass} />
+              <img src="/foto 2.png" alt="Forix business" className={collageImageClass} />
             </motion.div>
             <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
               <img src="/gallery/SSS00108_VSCO.JPG" alt="Forix presentation laptop" className={collageImageClass} />
@@ -2719,7 +2918,7 @@ const ImmersivePhotoSection = () => {
               <img src="/gallery/FORIX LAB.JPG" alt="Forix phone experience" className={collageImageClass} />
             </motion.div>
             <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
-              <img src="/forix_learning_nobg.png" alt="Forix brand on laptop" className={collageImageClass} />
+              <img src="/metric_300.jpg" alt="Forix metrics" className={collageImageClass} />
             </motion.div>
           </div>
         </div>
@@ -2746,80 +2945,94 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
     <>
       <Hero />
 
-      {/* SOCIAL PROOF */}
-      <section className="pt-16 pb-6 bg-forix-blue">
-        <div className="container-custom mb-10 text-center">
-          <h2 className="text-forix-mint text-base md:text-lg font-bold tracking-[0.4em] uppercase">Empresas que elevaron su estándar</h2>
-        </div>
-        <div className="relative w-full flex overflow-x-hidden py-4">
-          <div className="animate-marquee whitespace-nowrap flex items-center">
-            {[...companies, ...companies].map((company, idx) => (
-              <span key={idx} className="mx-12 text-lg font-light text-forix-mint/40 uppercase tracking-[0.3em]">
-                {company}
-                <span className="mx-12 text-forix-mint/20">•</span>
-              </span>
-            ))}
+      {/* SOCIAL PROOF + METRICS - Unified section with gradient from hero */}
+      <section className="relative overflow-hidden">
+        {/* Gradient transition from hero black to blue */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-forix-blue to-forix-blue" />
+
+        {/* Ambient glow effects */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-forix-green/5 rounded-full blur-[200px] pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-forix-mint/5 rounded-full blur-[150px] pointer-events-none" />
+
+        {/* Social Proof */}
+        <div className="relative z-10 pt-40 pb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="container-custom mb-12 text-center"
+          >
+            <span className="text-forix-green text-[10px] font-bold tracking-[0.5em] uppercase mb-4 block">Confianza Demostrada</span>
+            <h2 className="text-forix-white text-3xl md:text-4xl font-bold tracking-tight">Empresas que elevaron su estándar</h2>
+          </motion.div>
+
+          <div className="relative w-full flex overflow-x-hidden py-6">
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#14385C] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#14385C] to-transparent z-10 pointer-events-none" />
+            <div className="animate-marquee whitespace-nowrap flex items-center">
+              {[...companies, ...companies, ...companies].map((company, idx) => (
+                <span key={idx} className="mx-10 text-sm md:text-base font-bold text-white/50 uppercase tracking-[0.4em] hover:text-forix-green transition-colors duration-500">
+                  {company}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* METRICS */}
-      <section className="pt-6 pb-24 bg-forix-blue relative overflow-hidden">
-        {/* Decorative background elements for glassmorphism depth */}
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-forix-green/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-forix-mint/5 rounded-full blur-[120px] pointer-events-none" />
+        {/* Metrics */}
+        <div className="relative z-10 pb-28">
+          <div className="container-custom">
+            <div className="grid md:grid-cols-3 gap-px bg-white/[0.06] rounded-sm overflow-hidden">
+              {[
+                {
+                  end: 20,
+                  prefix: "+",
+                  label: "Ecosistemas de servicio diseñados",
+                  sublabel: "Metodología 4i*X aplicada"
+                },
+                {
+                  end: 300,
+                  prefix: "+",
+                  label: "Líderes y equipos transformados",
+                  sublabel: "En hospitalidad y CXM"
+                },
+                {
+                  end: 100,
+                  suffix: "%",
+                  label: "Implementación del Método FORIX",
+                  sublabel: "Compromiso total de entrega"
+                }
+              ].map((metric, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: i * 0.15 }}
+                  className="relative bg-forix-blue/40 backdrop-blur-xl p-12 md:p-16 flex flex-col items-center text-center group"
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-b from-forix-green/10 to-transparent pointer-events-none" />
 
-        <div className="container-custom relative z-10">
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-            {[
-              {
-                end: 20,
-                prefix: "+",
-                label: "ECOSISTEMAS DE SERVICIO DISEÑADOS",
-                image: "/metric_20.jpg"
-              },
-              {
-                end: 300,
-                prefix: "+",
-                label: "LÍDERES Y EQUIPOS TRANSFORMADOS",
-                image: "/metric_300.jpg"
-              },
-              {
-                end: 100,
-                suffix: "%",
-                label: "IMPLEMENTACIÓN DEL MÉTODO FORIX",
-                image: "/metric_100.jpg"
-              }
-            ].map((metric, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: i * 0.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="relative overflow-hidden backdrop-blur-2xl bg-white/[0.03] border border-white/10 p-10 md:p-12 flex flex-col items-center justify-center text-center min-h-[300px] group transition-all duration-700 hover:border-forix-green/30"
-              >
-                {/* Background Image with Grayscale to Color Animation */}
-                <div className="absolute inset-0 z-0">
-                  <img
-                    src={metric.image}
-                    alt=""
-                    className="w-full h-full object-cover opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-1000 blur-[3px] group-hover:blur-[1px]"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-forix-blue/60 group-hover:bg-forix-blue/30 transition-all duration-1000" />
-                </div>
+                  <motion.div
+                    className="relative z-10 text-6xl md:text-8xl font-serif font-light tracking-tighter mb-2"
+                    animate={{ color: ['#3D7072', '#D8E1E0', '#3D7072'] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.8 }}
+                  >
+                    <AnimatedNumber end={metric.end} prefix={metric.prefix} suffix={metric.suffix} />
+                  </motion.div>
 
-                <div className="relative z-10 text-5xl md:text-7xl font-serif font-light text-forix-green tracking-tighter mb-8 group-hover:text-forix-white transition-colors duration-700">
-                  <AnimatedNumber end={metric.end} prefix={metric.prefix} suffix={metric.suffix} />
-                </div>
+                  <div className="relative z-10 w-8 h-[2px] bg-forix-green/30 my-6 group-hover:w-16 group-hover:bg-forix-green transition-all duration-700" />
 
-                <div className="relative z-10 w-12 h-[1px] bg-forix-green/40 mb-8 group-hover:w-24 group-hover:bg-forix-mint transition-all duration-700" />
-                <div className="relative z-10 text-xs md:text-sm uppercase tracking-[0.35em] text-forix-mint/60 group-hover:text-forix-white transition-colors duration-700 font-medium leading-relaxed max-w-[220px]">
-                  {metric.label}
-                </div>
-              </motion.div>
-            ))}
+                  <p className="relative z-10 text-[11px] uppercase tracking-[0.3em] text-forix-white/80 font-bold mb-2 leading-relaxed">
+                    {metric.label}
+                  </p>
+                  <p className="relative z-10 text-[10px] tracking-[0.2em] text-forix-mint/40 font-light">
+                    {metric.sublabel}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -2836,37 +3049,74 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-0 mb-16 border border-forix-gray/5">
-            <PillarCard
-              title={<ForixBusinessTypoLogo />}
-              desc={
-                <div className="space-y-1">
-                  <p>Neuro-Mapping misterioso</p>
-                  <p>Diseño sensorial y auditoría de calidad</p>
-                  <p>Protocolos de servicio & hospitalidad</p>
-                </div>
+          <div className="grid md:grid-cols-3 gap-0 mb-16">
+            {[
+              {
+                num: "01",
+                icon: Briefcase,
+                logo: <ForixBusinessTypoLogo />,
+                tagline: "The Masterplan",
+                items: ["Neuro-Mapping misterioso", "Diseño sensorial y auditoría de calidad", "Protocolos de servicio & hospitalidad"]
+              },
+              {
+                num: "02",
+                icon: GraduationCap,
+                logo: <ForixLearningTypoLogo />,
+                tagline: "Formación de Elite",
+                items: ["Certificación en ADN de anfitriones", "Mentorías para líderes de excelencia", "Talleres de diseño y manuales de autor"]
+              },
+              {
+                num: "03",
+                icon: BarChart3,
+                logo: <ForixLabTypoLogo />,
+                tagline: "Inteligencia Aplicada",
+                items: ["Ecosistema de métricas y emociones", "Análisis predictivo de experiencia", "Dashboards de performance CX"]
               }
-              image="/service_business.png"
-              onClick={() => setCurrentView('servicios')}
-            />
-            <PillarCard
-              title={<ForixLearningTypoLogo />}
-              desc={
-                <div className="space-y-1">
-                  <p>Certificación en ADN de anfitriones.</p>
-                  <p>Mentorías para líderes de excelencia.</p>
-                  <p>Talleres de diseño y manuales de autor.</p>
+            ].map((pillar, i) => (
+              <motion.div
+                key={pillar.num}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: i * 0.15 }}
+                viewport={{ once: true }}
+                onClick={() => setCurrentView('servicios')}
+                className="group relative cursor-pointer border-r last:border-r-0 border-forix-blue/10 px-8 md:px-10 py-12 md:py-16 hover:bg-forix-blue transition-all duration-700"
+              >
+                {/* Number */}
+                <span className="text-[10px] font-bold tracking-[0.3em] text-forix-green group-hover:text-forix-mint transition-colors duration-500 uppercase">
+                  {pillar.num} — {pillar.tagline}
+                </span>
+
+                {/* Icon */}
+                <div className="my-10 md:my-14 relative">
+                  <div className="w-16 h-16 md:w-20 md:h-20 border border-forix-blue/15 group-hover:border-forix-mint/30 flex items-center justify-center transition-all duration-700 group-hover:scale-110">
+                    <pillar.icon size={32} strokeWidth={1.2} className="text-forix-blue group-hover:text-forix-mint transition-colors duration-500" />
+                  </div>
+                  {/* Decorative line */}
+                  <div className="absolute top-1/2 left-[calc(100%+12px)] w-12 h-[1px] bg-forix-blue/10 group-hover:bg-forix-mint/30 group-hover:w-20 transition-all duration-700 hidden md:block" />
                 </div>
-              }
-              image="/service_learning.png"
-              onClick={() => setCurrentView('servicios')}
-            />
-            <PillarCard
-              title={<ForixLabTypoLogo />}
-              desc="Ecosistema de métricas y emociones"
-              image="/service_lab.jpg"
-              onClick={() => setCurrentView('servicios')}
-            />
+
+                {/* Logo */}
+                <div className="mb-6">
+                  {pillar.logo}
+                </div>
+
+                {/* Items */}
+                <div className="space-y-3">
+                  {pillar.items.map((item, j) => (
+                    <div key={j} className="flex items-start gap-3">
+                      <span className="w-[3px] h-[3px] rounded-full bg-forix-green group-hover:bg-forix-mint mt-2 shrink-0 transition-colors duration-500" />
+                      <p className="text-sm font-light text-forix-blue/60 group-hover:text-forix-white/70 tracking-wide leading-relaxed transition-colors duration-500">
+                        {item}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-forix-green group-hover:w-full transition-all duration-700" />
+              </motion.div>
+            ))}
           </div>
 
           <div className="text-center">
@@ -2889,21 +3139,33 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
             <button onClick={() => setCurrentView('articulos')} className="text-forix-green text-xs font-bold uppercase tracking-widest flex items-center gap-2">Ver Todo <ArrowRight size={14} /></button>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {MARKDOWN_ARTICLES.slice(0, 3).map((article, i) => (
-              <motion.div
-                key={i}
-                onClick={() => setCurrentView(getArticleView(article.slug))}
-                className="group relative p-10 border border-forix-mint/30 transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden flex flex-col h-full"
-              >
-                <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-forix-green mb-4 block">{article.category}</span>
-                <h4 className="text-2xl md:text-[28px] font-bold text-forix-blue group-hover:text-forix-white mb-6 leading-tight transition-colors duration-500">{article.title}</h4>
-                <p className="text-base md:text-lg text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-6 transition-colors duration-500">{article.summary}</p>
-                <div className="mt-auto flex items-center gap-2 text-forix-green group-hover:text-forix-mint text-xs font-bold uppercase tracking-widest transition-colors duration-500">
-                  Leer artículo <ArrowRight size={12} />
-                </div>
-                <div className="absolute top-0 right-0 w-1 h-0 bg-forix-green group-hover:h-full transition-all duration-700" />
-              </motion.div>
-            ))}
+            {MARKDOWN_ARTICLES.slice(0, 3).map((article, i) => {
+              const icons = [Activity, Compass, Users];
+              const IconComponent = icons[i] || Activity;
+              const shortSummaries = [
+                'Por qué la deserción invisible destruye más valor que cualquier crisis visible.',
+                'El salto de lo transaccional al vínculo emocional como ventaja competitiva.',
+                'Estructura, cultura y talento al servicio de una experiencia que fideliza.'
+              ];
+              return (
+                <motion.div
+                  key={i}
+                  onClick={() => setCurrentView(getArticleView(article.slug))}
+                  className="group relative p-10 border border-forix-mint/30 transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden flex flex-col"
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-forix-green">{article.category}</span>
+                    <IconComponent size={20} strokeWidth={1.5} className="text-forix-green group-hover:text-forix-mint transition-colors duration-500" />
+                  </div>
+                  <h4 className="text-2xl font-bold text-forix-blue group-hover:text-forix-white mb-4 leading-tight transition-colors duration-500">{article.title}</h4>
+                  <p className="text-sm text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-8 leading-relaxed transition-colors duration-500">{shortSummaries[i]}</p>
+                  <div className="mt-auto flex items-center gap-2 text-forix-green group-hover:text-forix-mint text-xs font-bold uppercase tracking-widest transition-colors duration-500">
+                    Leer artículo <ArrowRight size={12} />
+                  </div>
+                  <div className="absolute top-0 right-0 w-1 h-0 bg-forix-green group-hover:h-full transition-all duration-700" />
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -2914,6 +3176,11 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState('home');
+
+  // Scroll to top when view changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentView]);
 
   // Prevent scrolling while preloader is active
   useEffect(() => {
