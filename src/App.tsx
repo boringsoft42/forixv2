@@ -464,7 +464,7 @@ const ArticleCard = ({ category, title, subtitle, summary, readingTime, index = 
     viewport={{ once: true, margin: "-50px" }}
     transition={{ duration: 0.6, delay: index * 0.1 }}
     onClick={onClick}
-    className="bg-white border border-forix-gray/10 group transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden relative p-10 flex flex-col justify-between h-full"
+    className="bg-white border border-forix-mint/40 shadow-[0_0_0_1px_rgba(20,56,92,0.05)] group transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden relative p-10 md:p-12 flex flex-col justify-between h-full"
   >
     <div className="relative z-10">
       <div className="flex items-center gap-4 mb-8">
@@ -472,13 +472,14 @@ const ArticleCard = ({ category, title, subtitle, summary, readingTime, index = 
         <span className="w-8 h-[1px] bg-forix-mint" />
         <span className="text-[10px] uppercase font-medium tracking-[0.1em] text-forix-gray/40 group-hover:text-forix-white/50 transition-colors duration-500">{readingTime}</span>
       </div>
-      <h4 className="text-[24px] font-medium text-forix-blue group-hover:text-forix-white mb-4 leading-tight tracking-tight transition-colors duration-500">{title}</h4>
-      <p className="text-xs uppercase tracking-[0.25em] text-forix-gray/40 group-hover:text-forix-mint/70 transition-colors duration-500 mb-5">{subtitle}</p>
-      <p className="text-[16px] font-light text-forix-gray/70 group-hover:text-forix-white/70 leading-relaxed mb-10 transition-colors duration-500">{summary}</p>
+      <h4 className="text-[26px] md:text-[30px] font-medium text-forix-blue group-hover:text-forix-white mb-4 leading-tight tracking-tight transition-colors duration-500">{title}</h4>
+      <p className="text-sm uppercase tracking-[0.25em] text-forix-gray/40 group-hover:text-forix-mint/70 transition-colors duration-500 mb-5">{subtitle}</p>
+      <p className="text-[17px] md:text-[18px] font-light text-forix-gray/70 group-hover:text-forix-white/70 leading-relaxed mb-10 transition-colors duration-500">{summary}</p>
     </div>
     <div className="relative z-10 flex items-center gap-2 text-forix-green text-xs font-bold uppercase tracking-widest group-hover:text-forix-mint transition-colors duration-500">
       Leer Artículo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
     </div>
+    <div className="pointer-events-none absolute inset-[14px] border border-forix-blue/8 transition-colors duration-500 group-hover:border-white/15" />
     <div className="absolute top-0 right-0 w-1 h-0 bg-forix-green group-hover:h-full transition-all duration-700 z-0" />
   </motion.div>
 );
@@ -550,13 +551,14 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
     { name: "Home", id: "home" },
     { name: "Soluciones", id: "servicios" },
     { name: "Método FORIX", id: "nosotros" },
-    { name: "CX Tools", id: "articulos" },
+    { name: "CX TOOLS", id: "articulos" },
     { name: "Sesión Estratégica", id: "contacto" }
   ];
 
   const directLinks = [
     { name: "Soluciones", id: "servicios" },
     { name: "Método FORIX", id: "nosotros" },
+    { name: "CX TOOLS", id: "articulos" },
     { name: "Sesión Estratégica", id: "contacto" }
   ];
 
@@ -578,10 +580,10 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
         <div className="container-custom flex justify-between items-center">
           {/* Logo Left - hidden on home page when not scrolled */}
           <div
-            className={`flex items-center cursor-pointer shrink-0 transition-opacity duration-500 ${currentView === 'home' && !isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            className={`flex items-center cursor-pointer shrink-0 transition-all duration-500 ${currentView === 'home' && !isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${!isScrolled && currentView !== 'home' ? 'bg-forix-white/88 px-3 py-1.5 shadow-lg backdrop-blur-sm border border-forix-mint/20' : ''}`}
             onClick={() => setCurrentView('home')}
           >
-            <img src="/logo_navbar.png" className="h-4 md:h-6 w-auto" alt="FORIX GROUP" />
+            <img src="/logo_navbar.png" className="h-4 md:h-6 w-auto drop-shadow-[0_2px_10px_rgba(20,56,92,0.15)]" alt="FORIX GROUP" />
           </div>
 
           {/* Floating Menu Widget (Right) */}
@@ -730,9 +732,33 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
 };
 
 const HeroLogo = () => (
-  <div className="flex items-center select-none">
-    <img src="/logo_hero.png" className="w-[100vw] max-w-4xl h-auto px-6 md:px-0" alt="FORIX GROUP" />
-  </div>
+  <motion.div
+    initial={{ opacity: 0, scale: 0.96, y: 18 }}
+    animate={{ opacity: 1, scale: 1, y: 0 }}
+    transition={{ duration: 1.25, ease: [0.21, 0.47, 0.32, 0.98] }}
+    className="relative flex items-center justify-center select-none"
+  >
+    <motion.img
+      src="/logo_hero.png"
+      className="w-[100vw] max-w-4xl h-auto px-6 md:px-0"
+      alt="FORIX GROUP"
+      animate={{
+        y: [0, -8, 0],
+        filter: [
+          'drop-shadow(0 0 0px rgba(216,225,224,0.0))',
+          'drop-shadow(0 0 24px rgba(216,225,224,0.18))',
+          'drop-shadow(0 0 0px rgba(216,225,224,0.0))'
+        ]
+      }}
+      transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+    />
+    <motion.div
+      aria-hidden="true"
+      className="absolute bottom-2 left-1/2 h-px w-[38%] -translate-x-1/2 bg-gradient-to-r from-transparent via-forix-mint/80 to-transparent"
+      animate={{ opacity: [0.2, 0.75, 0.2], scaleX: [0.88, 1.04, 0.88] }}
+      transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
+    />
+  </motion.div>
 );
 
 const Hero = () => {
@@ -754,13 +780,7 @@ const Hero = () => {
       {/* Content - Centered */}
       <div className="relative z-10 flex flex-col items-center gap-8">
         {/* Logo centered */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        >
-          <HeroLogo />
-        </motion.div>
+        <HeroLogo />
 
         {/* Subtitle centered */}
         <motion.div
@@ -768,7 +788,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4 }}
         >
-          <p className="text-forix-mint text-base md:text-xl font-light leading-relaxed tracking-[0.2em] uppercase text-center max-w-2xl">
+          <p className="text-forix-mint text-lg md:text-[1.45rem] font-light leading-relaxed tracking-[0.2em] uppercase text-center max-w-3xl">
             Consultora boutique especializada en<br />
             hospitalidad & customer experience
           </p>
@@ -1055,53 +1075,52 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
   );
 };
 
-const StackedServiceItem = ({ title, desc, index, icon: Icon }: { title: string, desc: string, index: number, key?: React.Key, icon?: React.ComponentType<{ size?: number, strokeWidth?: number, className?: string }> }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"]
-  });
-
-  // Fade as it scrolls out to "lose relevance"
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.4]);
-
+const StackedServiceItem = ({ title, desc, index: _index, icon: Icon }: { title: string, desc: string, index: number, key?: React.Key, icon?: React.ComponentType<{ size?: number, strokeWidth?: number, className?: string }> }) => {
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="sticky top-0 min-h-[70vh] md:min-h-[60vh] flex flex-col justify-center bg-forix-white border-t border-forix-blue/10 py-20 px-6 md:px-12 lg:px-24"
-      style={{ top: `${index * 20}px` }}
+      className="bg-forix-white border-t border-forix-blue/10 py-20 px-6 md:px-12 lg:px-24"
     >
-      <motion.div
-        style={{ opacity }}
-        className="container-custom grid md:grid-cols-12 gap-12 items-start"
-      >
+      <div className="container-custom grid md:grid-cols-12 gap-12 items-start">
         <div className="md:col-span-5">
-          {Icon && (
-            <div className="mb-6">
-              <Icon size={28} strokeWidth={1} className="text-forix-blue" />
-            </div>
-          )}
-          <h4 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter text-forix-blue">
-            {title}
-          </h4>
+          <div className="md:sticky md:top-40 lg:top-44 self-start">
+            {Icon && (
+              <div className="mb-6">
+                <Icon size={28} strokeWidth={1} className="text-forix-blue" />
+              </div>
+            )}
+            <h4 className="max-w-md text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter text-forix-blue">
+              {title}
+            </h4>
+          </div>
         </div>
         <div className="md:col-span-7">
           <div className="max-w-2xl space-y-6">
             {desc.split('. ').map((sentence, i, arr) => (
               <p
                 key={i}
-                className="text-xl md:text-2xl font-light leading-relaxed text-forix-gray"
+                className="text-xl md:text-[1.65rem] font-light leading-relaxed text-forix-gray"
               >
                 {sentence}{i < arr.length - 1 ? '.' : ''}
               </p>
             ))}
           </div>
+          <div className="mt-10">
+            <SecondaryButton
+              onClick={() => {
+                const el = document.getElementById('contacto');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="text-sm md:text-base"
+            >
+              Solicitar sesión estratégica
+            </SecondaryButton>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
@@ -1115,19 +1134,19 @@ const Services = () => {
       lema: "Arquitectura de la distinción",
       items: [
         {
-          title: "Mistery Shopping",
+          title: "Mystery Shopping",
           icon: ScanEye,
-          desc: "Auditoría de guante blanco. A través de una inmersión encubierta de alta precisión, decodificamos cada micro-momento de la verdad en su establecimiento. No evaluamos tareas, mapeamos la respuesta emocional y el cumplimiento estético de su promesa de marca. Es el espejo más honesto y sofisticado para quienes exigen la perfección absoluta en cada detalle."
+          desc: "La mayoría de las organizaciones operan con una brecha invisible: la distancia entre la experiencia que creen entregar y la que su cliente realmente vive. Sin datos de campo precisos, las decisiones de mejora se toman sobre percepciones internas, no sobre realidad. A través de un protocolo de inmersión encubierta de alta precisión, evaluamos cada punto de contacto de su operación desde la perspectiva del cliente real. Analizamos la coherencia entre su promesa de marca y su ejecución en el piso, la respuesta emocional generada en cada micro-momento y el nivel de cumplimiento de sus estándares de servicio. El resultado es un informe ejecutivo con hallazgos accionables, clasificados por nivel de impacto en la experiencia y en la rentabilidad."
         },
         {
-          title: "Diseño sensorial y auditoría de calidad",
+          title: "Ingeniería de atmósfera comercial",
           icon: AudioLines,
-          desc: "Curamos la música, los aromas y la iluminación de tu negocio para que el ambiente 'venda' por sí solo. Creamos una atmósfera donde el cliente se sienta cómodo, valorado y dispuesto a invertir más tiempo y dinero."
+          desc: "El entorno físico de un negocio no es decoración: es un sistema de influencia. La música, el aroma, la iluminación y la temperatura generan respuestas neurológicas que determinan el tiempo de permanencia, el nivel de gasto y la disposición a regresar. Cuando este sistema no está diseñado con intención, opera en contra. Diseñamos y auditamos cada variable sensorial de su espacio comercial con base en principios de neuromarketing aplicado, asegurándonos de que cada elemento refuerce su posicionamiento de marca y active los estados emocionales que favorecen la decisión de compra. El proceso incluye diagnóstico sensorial del espacio actual, diseño de la atmósfera objetivo y protocolo de implementación y control."
         },
         {
-          title: "Protocolos de Servicio & Hospitalidad",
+          title: "Arquitectura de protocolos de servicio",
           icon: BookOpen,
-          desc: "Escribimos el guión exclusivo de tu empresa. Definimos cómo saluda tu equipo, cómo resuelve problemas y cómo cuenta la historia de tu marca a través de pequeños detalles que emocionan."
+          desc: "La excelencia en el servicio no puede depender del talento individual de cada colaborador ni de la interpretación libre de lo que buen servicio significa. Sin protocolos precisos, cada cliente recibe una experiencia distinta, y la marca pierde coherencia en su promesa más esencial. Diseñamos el sistema completo de protocolos de servicio y hospitalidad de su organización: desde los rituales de bienvenida y los flujos de atención hasta la gestión de momentos de fricción y los estándares de comunicación verbal y no verbal. Cada protocolo es co-construido con su equipo para garantizar adopción real, y documentado en un formato operativo que permite replicación y escalabilidad sin perder identidad de marca."
         }
       ]
     },
@@ -1138,19 +1157,19 @@ const Services = () => {
       lema: "Maestría en el arte de servir",
       items: [
         {
-          title: "Certificación en ADN de anfitriones",
+          title: "Certificación en cultura de anfitrión",
           icon: Fingerprint,
-          desc: "Un entrenamiento intensivo donde el personal deja de ser 'empleado' para convertirse en 'anfitrión'. Enseñamos el arte de leer al cliente, el lenguaje corporal de la excelencia y cómo crear momentos que la gente nunca olvide."
+          desc: "El mayor obstáculo para una cultura de servicio excepcional no es la falta de conocimiento: es la mentalidad operativa. Un colaborador que se percibe a sí mismo como ejecutor de tareas entrega transacciones. Un anfitrión que comprende su rol en la experiencia del cliente entrega momentos memorables. Este programa de certificación intensiva trabaja en la reconfiguración de esa mentalidad, desarrollando en el personal de contacto las competencias de lectura del cliente, gestión emocional en el servicio, lenguaje corporal de excelencia y construcción de micro-momentos de alto impacto. Al concluir, cada participante cuenta con un marco propio de actuación que le permite tomar decisiones de servicio con criterio, autonomía y consistencia."
         },
         {
-          title: "Mentorías para líderes de excelencia",
+          title: "Programa de liderazgo en gestión de experiencia",
           icon: Compass,
-          desc: "Acompañamiento estratégico para los que toman las decisiones. Trabajamos en cómo inspirar al equipo (Marca Empleadora) y cómo supervisar la calidad sin ser un jefe tradicional, sino un mentor de cultura."
+          desc: "Los estándares de servicio se diseñan en la sala de directivos, pero se sostienen o se erosionan en la primera línea de liderazgo. Un gerente o supervisor sin las competencias para gestionar cultura termina administrando cumplimiento, no inspirando excelencia. Este programa de acompañamiento estratégico está diseñado para líderes operativos y directivos que necesitan desarrollar su capacidad de gestionar equipos de alto desempeño en entornos de servicio: cómo construir Marca Empleadora desde adentro, cómo supervisar calidad sin microgestión y cómo sostener los estándares de experiencia bajo presión operativa. El proceso combina sesiones de mentoría individual, análisis de casos reales de su operación y herramientas de liderazgo aplicadas a la gestión de CX."
         },
         {
-          title: "Talleres de diseño y manuales de autor",
+          title: "Workshop de codificación de identidad de servicio",
           icon: PenTool,
-          desc: "Sesiones dinámicas de trabajo (Workshops) donde definimos los pequeños detalles que hacen grande a la marca. El resultado es un Manual de Servicio que no termina en un estante, sino que es la guía viva de trabajo diario."
+          desc: "Una marca de servicio distintiva no se declara: se codifica. Sin un manual que traduzca la identidad de la organización en comportamientos concretos y replicables, la cultura queda en la intención y el estándar depende de quien esté presente ese día. A través de sesiones colaborativas de diseño, co-construimos con su equipo el Manual de Servicio de Autor de su organización: los rituales propios de su marca, el lenguaje que la representa, los gestos que la diferencian y los criterios que guían cada decisión de servicio. Al ser construido de manera participativa, el manual no se percibe como una imposición externa, sino como la formalización de lo mejor que su equipo ya sabe hacer, elevado a estándar."
         }
       ]
     },
@@ -1161,9 +1180,14 @@ const Services = () => {
       lema: "La ciencia de la excelencia",
       items: [
         {
-          title: "Ecosistema de métricas y emociones",
+          title: "Sistema de inteligencia de experiencia de cliente",
           icon: Activity,
-          desc: "96 de cada 100 clientes insatisfechos nunca presentan una queja; simplemente se retiran en silencio. Esta \"hemorragia silenciosa\" erosiona las ganancias y frena el crecimiento real, ya que la contabilidad tradicional solo registra el dinero que entra, no el que se pierde por quienes no vuelven."
+          desc: "El 96% de los clientes insatisfechos no presenta quejas: simplemente no vuelve. Esta pérdida silenciosa no aparece en ningún estado financiero, pero erosiona el crecimiento real de manera sistemática. Las organizaciones que miden solo satisfacción inmediata están viendo únicamente la superficie del problema. Diseñamos un sistema integrado de medición de la experiencia que combina métricas cuantitativas de lealtad y comportamiento, indicadores cualitativos y emocionales que capturan lo que los números solos no explican. El sistema incluye el diseño del ecosistema de medición, la definición de indicadores clave por etapa del customer journey y el protocolo de análisis e interpretación para la toma de decisiones ejecutivas."
+        },
+        {
+          title: "Diagnóstico de rentabilidad experiencial",
+          icon: BarChart3,
+          desc: "La mayoría de las organizaciones miden la experiencia de cliente con indicadores de satisfacción. Muy pocas la miden con indicadores de crecimiento. Esta brecha representa uno de los mayores errores estratégicos del management moderno: tratar al CX como una función de soporte cuando en realidad es el principal motor de expansión de ingresos que existe en cualquier negocio. Las empresas con programas maduros de experiencia de cliente crecen sus ingresos más rápido que aquellas con CX deficiente. En FORIX Lab traducimos esa evidencia en un análisis aplicado a la realidad financiera y operativa de su organización. Evaluamos el impacto económico de cada etapa del customer journey sobre variables críticas de negocio: tasa de retención, valor de vida del cliente, velocidad de recompra, sensibilidad al precio y potencial de referido. El resultado es un mapa de rentabilidad experiencial que identifica con precisión qué intervenciones en la experiencia generan el mayor retorno sobre la inversión comercial."
         }
       ]
     }
@@ -1175,7 +1199,7 @@ const Services = () => {
       <ServicesHero
         title="Soluciones"
         subtitle="Excelencia Estratégica"
-        description="Arquitectura de distinción y auditoría de alta precisión para elevar el estándar de su organización."
+        description="Arquitectura de experiencias boutique."
       />
 
       <section className="pb-32">
@@ -1187,7 +1211,7 @@ const Services = () => {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                   <div>
                     <h2 className="text-forix-green text-xs font-bold tracking-[0.5em] uppercase mb-4">{pillar.subtitle}</h2>
-                    <img src={pillar.logo} className="h-10 md:h-12 lg:h-14 w-auto mb-2" alt={pillar.name} />
+                    <img src={pillar.logo} className="h-14 md:h-16 lg:h-20 w-auto mb-2" alt={pillar.name} />
                   </div>
                   <p className="font-signature text-3xl md:text-4xl italic text-forix-green">"{pillar.lema}"</p>
                 </div>
@@ -1252,7 +1276,7 @@ const Results = () => {
   const companies = [
     "Hotel Qhawarina",
     "El Camino Spanish School",
-    "Coffe Bike",
+    "Coffee Bike",
     "Verbalia Spanish School",
     "Visu Club",
     "Villa",
@@ -1315,14 +1339,14 @@ const Results = () => {
   );
 };
 
-const AnimatedText = ({ segments }: { segments: { text: string, bold?: boolean, italic?: boolean }[] }) => {
-  const words: { word: string, bold?: boolean, italic?: boolean }[] = [];
+const AnimatedText = ({ segments }: { segments: { text: string, bold?: boolean, italic?: boolean, className?: string }[] }) => {
+  const words: { word: string, bold?: boolean, italic?: boolean, className?: string }[] = [];
 
   segments.forEach(segment => {
     const parts = segment.text.split(/(\s+)/);
     parts.forEach(part => {
       if (part.length > 0) {
-        words.push({ word: part, bold: segment.bold, italic: segment.italic });
+        words.push({ word: part, bold: segment.bold, italic: segment.italic, className: segment.className });
       }
     });
   });
@@ -1365,7 +1389,7 @@ const AnimatedText = ({ segments }: { segments: { text: string, bold?: boolean, 
           <motion.span
             key={wordIndex}
             variants={child}
-            className={`inline-block ${item.bold ? 'font-bold' : ''} ${item.italic === false ? 'not-italic' : ''}`}
+            className={`inline-block ${item.bold ? 'font-bold' : ''} ${item.italic === false ? 'not-italic' : ''} ${item.className ?? ''}`}
           >
             {item.word}
           </motion.span>
@@ -1394,14 +1418,17 @@ const About = () => {
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-24">
             {/* Left Content */}
             <div className="order-2 lg:order-1">
-              <h2 className="text-5xl md:text-7xl font-bold text-forix-blue mb-6 tracking-tighter">La filosofía del estándar</h2>
-              <h3 className="text-xl md:text-2xl font-light text-forix-gray mb-10 leading-relaxed max-w-xl">
-                Para Mauricio, la excelencia no es un objetivo aspiracional, sino el requisito mínimo de operación. Su gestión en <span className="font-bold text-forix-blue">FORIX GROUP</span> se basa en la convicción de que la diferencia entre una empresa común y una marca líder reside en la <span className="font-bold text-forix-blue">intencionalidad del detalle</span>. No cree en soluciones genéricas, sino en el rigor técnico que protege el prestigio de cada organización.
-              </h3>
+              <h2 className="text-5xl md:text-7xl font-bold text-forix-blue mb-8 tracking-tighter">La filosofía del estándar</h2>
 
-              <div className="space-y-8">
-                <p className="text-xl md:text-2xl text-forix-gray font-light leading-relaxed max-w-xl">
-                  Su labor es transformar la hospitalidad de un concepto abstracto a una herramienta de ingeniería financiera. Bajo su liderazgo, <span className="font-bold text-forix-blue">FORIX</span> se convierte en el aliado que detiene la erosión del negocio y asegura que el éxito sea un sistema replicable, no un golpe de suerte.
+              <div className="space-y-8 max-w-2xl">
+                <p className="text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
+                  La <span className="font-semibold text-forix-blue">excelencia</span> no es un objetivo aspiracional, sino el requisito mínimo de operación. FORIX GROUP se basa en la <span className="font-semibold text-forix-blue">convicción</span> de que la diferencia entre una empresa común y una marca líder reside en la intencionalidad del <span className="font-semibold text-forix-blue">detalle</span>. No cree en soluciones genéricas, sino en el rigor técnico que protege el <span className="font-semibold text-forix-blue">prestigio</span> de cada organización.
+                </p>
+                <p className="text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
+                  Nuestra labor es transformar la <span className="font-semibold text-forix-blue">hospitalidad</span> de un concepto abstracto a una herramienta de <span className="font-semibold text-forix-blue">ingeniería financiera</span>.
+                </p>
+                <p className="text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
+                  Somos el <span className="font-semibold text-forix-blue">aliado</span> que detiene la erosión del <span className="font-semibold text-forix-blue">negocio</span> y asegura que el <span className="font-semibold text-forix-blue">éxito</span> sea un sistema replicable, no un golpe de suerte.
                 </p>
               </div>
             </div>
@@ -1419,16 +1446,11 @@ const About = () => {
                   </svg>
                 </div>
 
-                {/* Placeholder Box instead of Photo */}
-                <div className="absolute inset-0 opacity-20 pointer-events-none z-10"
-                  style={{ backgroundImage: 'radial-gradient(circle, #14385C 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-                <img src="/about_mauricio.jpg" alt="Mauricio Vacaflores" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" />
-                <div className="absolute bottom-4 left-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <span className="text-[10px] uppercase tracking-[0.5em] text-white bg-forix-blue/80 px-2 py-1">Mauricio Vacaflores</span>
-                </div>
+                <div className="absolute inset-0 border border-forix-blue/10 bg-forix-ghost/30 shadow-[0_0_0_18px_rgba(244,242,241,0.92)]" />
+                <img src="/about_mauricio.jpg" alt="Mauricio Vacaflores" className="relative z-10 w-full h-full object-cover grayscale" />
 
                 {/* Signature Box - Bottom Right */}
-                <div className="absolute -bottom-12 -right-8 lg:-right-16 z-30">
+                <div className="absolute -bottom-20 left-1/2 z-30 w-[82%] -translate-x-1/2 md:-bottom-24">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -1436,7 +1458,7 @@ const About = () => {
                     transition={{ duration: 1.2, ease: "easeOut", delay: 0.8 }}
                     className="flex flex-col items-center"
                   >
-                    <img src="/Mauricio Vacaflores.png" alt="Firma Mauricio Vacaflores" className="h-16 w-auto object-contain drop-shadow-lg" />
+                    <img src="/Mauricio Vacaflores.png" alt="Firma Mauricio Vacaflores" className="w-full h-auto object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]" />
                   </motion.div>
                 </div>
               </div>
@@ -1444,7 +1466,7 @@ const About = () => {
           </div>
 
           {/* Company Information (From PDF) */}
-          <div className="grid lg:grid-cols-12 gap-12 pt-24 border-t border-forix-blue/5">
+          <div className="grid lg:grid-cols-12 gap-12 pt-28 border-t border-forix-blue/5">
             <div className="lg:col-span-4">
               <h2 className="text-forix-blue text-xs font-bold tracking-[0.4em] uppercase mb-8">Propósito & Esencia</h2>
               <div className="w-12 h-[1px] bg-forix-green mb-12" />
@@ -1452,8 +1474,6 @@ const About = () => {
               {/* New Photo Container - Adapted to theme */}
               <div className="relative group">
                 <div className="w-full bg-forix-ghost/50 border border-forix-blue/10 relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-10 pointer-events-none"
-                    style={{ backgroundImage: 'radial-gradient(circle, #14385C 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
                   <img
                     src="/about_essence.jpg"
                     alt="Propósito"
@@ -1462,9 +1482,6 @@ const About = () => {
                   />
                   {/* Decorative corner */}
                   <div className="absolute top-0 left-0 w-8 h-8 border-l border-t border-forix-blue/30" />
-                  <div className="absolute bottom-4 right-4 font-mono text-[8px] text-white/40 uppercase tracking-widest">
-                    Forix Essence / 01
-                  </div>
                 </div>
                 {/* Accent line */}
                 <div className="absolute -bottom-4 -left-4 w-24 h-[1px] bg-forix-mint/50" />
@@ -1474,22 +1491,19 @@ const About = () => {
               <div className="space-y-8">
                 <p className="text-3xl md:text-4xl lg:text-5xl font-light text-forix-blue leading-tight italic">
                   <AnimatedText segments={[
-                    { text: '"La hospitalidad es un placer egoísta. Hacer que los demás se sientan ' },
-                    { text: 'bien', bold: true, italic: false },
-                    { text: ' te hace ' },
-                    { text: 'feliz', bold: true, italic: false },
+                    { text: '"' },
+                    { text: 'Satisface', bold: true, className: 'text-forix-green' },
+                    { text: ' con lo esperado, ' },
+                    { text: 'sorprende', bold: true, className: 'text-forix-blue' },
+                    { text: ' con lo ' },
+                    { text: 'inesperado', bold: true, className: 'text-forix-green' },
                     { text: '."' }
                   ]} />
                 </p>
 
-                <div className="space-y-6">
-                  <p className="text-xl md:text-2xl text-forix-gray font-light leading-relaxed">
-                    En <span className="font-medium text-forix-blue">FORIX GROUP</span>, fusionamos neurociencia aplicada con la alta hospitalidad para transformar organizaciones en símbolos de excelencia.
-                  </p>
-                  <p className="text-xl md:text-2xl text-forix-gray font-light leading-relaxed">
-                    Somos un ecosistema boutique de transformación humana y empresarial enfocado en hospitalidad, restauración, turismo y negocios experienciales. Diseñamos nuestro propio método como parte de nuestro compromiso empresarial.
-                  </p>
-                </div>
+                <p className="max-w-4xl text-xl md:text-2xl text-forix-gray font-light leading-relaxed italic">
+                  “Las marcas centradas en el cliente obtienen <span className="font-semibold text-forix-blue">ganancias un 60% más altas</span> que aquellas que no se centran en la experiencia de sus clientes”.
+                </p>
               </div>
             </div>
           </div>
@@ -1577,6 +1591,23 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
     }
   ];
   const articles = MARKDOWN_ARTICLES;
+  const templates = [
+    {
+      title: "Plantilla de Mystery Shopping",
+      desc: "Checklist de auditoría encubierta para detectar brechas entre promesa de marca y experiencia real.",
+      href: "/templates/plantilla-mystery-shopping.txt"
+    },
+    {
+      title: "Plantilla de protocolo de servicio",
+      desc: "Estructura base para documentar rituales, estándares y momentos críticos de atención.",
+      href: "/templates/plantilla-protocolo-servicio.txt"
+    },
+    {
+      title: "Plantilla de rentabilidad experiencial",
+      desc: "Marco inicial para relacionar experiencia, retención, recompra y valor de vida del cliente.",
+      href: "/templates/plantilla-rentabilidad-experiencial.txt"
+    }
+  ];
 
   return (
     <>
@@ -1588,8 +1619,9 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
         rectClass="bg-forix-gray"
         backgroundImage="/hero_articulos.jpg"
       />
-      <section id="articulos" className="section-spacing bg-forix-gray">
-        <div className="container-custom">
+      <section id="articulos" className="section-spacing bg-forix-gray relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.08] forix-symbol-pattern pointer-events-none" />
+        <div className="container-custom relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-2xl">
               <h2 className="text-forix-mint text-xs font-bold tracking-[0.3em] uppercase mb-4">Perspectivas para Directivos</h2>
@@ -1604,6 +1636,41 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
 
           <div className="grid md:grid-cols-3 gap-8">
             {articles.map((a, i) => <ArticleCard key={a.slug} index={i} {...a} onClick={() => setCurrentView(getArticleView(a.slug))} />)}
+          </div>
+
+          <div className="mt-24 border-t border-forix-mint/15 pt-20">
+            <div className="max-w-2xl mb-12">
+              <h3 className="text-forix-mint text-xs font-bold tracking-[0.3em] uppercase mb-4">Plantillas Descargables</h3>
+              <p className="text-xl md:text-2xl text-forix-white font-light leading-relaxed">
+                Herramientas base para iniciar auditoría, diseño de protocolo y lectura de rentabilidad experiencial.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {templates.map((template) => (
+                <a
+                  key={template.href}
+                  href={template.href}
+                  download
+                  className="group relative border border-forix-mint/30 bg-white/[0.03] p-8 md:p-10 transition-all duration-500 hover:bg-forix-mint hover:text-forix-blue"
+                >
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className="text-[10px] uppercase tracking-[0.28em] text-forix-green group-hover:text-forix-blue">CX TOOLKIT</span>
+                    <Download size={18} className="text-forix-green group-hover:text-forix-blue transition-colors" />
+                  </div>
+                  <h4 className="text-2xl font-bold text-forix-white group-hover:text-forix-blue leading-tight mb-4 transition-colors duration-500">
+                    {template.title}
+                  </h4>
+                  <p className="text-[17px] text-forix-mint/75 group-hover:text-forix-blue/75 leading-relaxed transition-colors duration-500">
+                    {template.desc}
+                  </p>
+                  <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-forix-green group-hover:text-forix-blue transition-colors duration-500">
+                    Descargar plantilla <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                  <div className="pointer-events-none absolute inset-[14px] border border-white/6 group-hover:border-forix-blue/10 transition-colors duration-500" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -1943,11 +2010,14 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                 <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
                   ÚLTIMO PASO
                 </p>
-                <h3 className="text-3xl md:text-5xl font-light text-[#14385C] leading-[1.3] mb-6 max-w-3xl">
+                <h3 className="text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
                   Para enviarle los resultados, necesitamos sus datos de contacto.
                 </h3>
-                <p className="text-lg text-forix-gray font-light mb-12">
+                <p className="text-xl text-forix-gray font-light mb-4">
                   Su información se mantendrá estrictamente confidencial.
+                </p>
+                <p className="text-base md:text-lg text-forix-gray/70 font-light mb-12 max-w-2xl leading-relaxed">
+                  En esta versión, sus respuestas se almacenan localmente en este navegador bajo el registro interno de diagnósticos. Si luego se conectan EmailJS o Google Sheets, también podrán recibirse en esos destinos.
                 </p>
 
                 <div className="space-y-6 max-w-lg">
@@ -2494,9 +2564,9 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
     target: targetRef,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-80%"]);
-  const lineWidth = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
-  const lineOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-83.333%"]);
+  const lineWidth = useTransform(scrollYProgress, [0.08, 0.96], ["0%", "100%"]);
+  const lineOpacity = useTransform(scrollYProgress, [0.08, 0.18, 0.92, 1], [0, 1, 1, 0.3]);
 
   // Background color transitions - "Painting with light" - More vibrant and aligned
   const bgColor = useTransform(
@@ -2519,26 +2589,22 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
   const features = [
     {
       id: "01",
-      title: "Porque en un mundo que olvida lo que dices, nosotros recordamos lo que sientes",
-      subtitle: "Neuro-Frameworks",
+      title: "Porque en un mundo que olvida lo que dices, nosotros recordamos lo que haces sentir.",
       desc: ""
     },
     {
       id: "02",
-      title: "Cambiamos la lógica del negocio por la magia de la hospitalidad irracional",
-      subtitle: "Impacto Medible",
+      title: "Cambiamos la lógica del negocio por la magia de la hospitalidad irracional.",
       desc: ""
     },
     {
       id: "03",
-      title: "Poniendo el corazón en cada detalle para que su equipo y su cliente",
-      subtitle: "Adaptabilidad Elite",
+      title: "Poniendo el corazón en cada detalle para que su equipo y su cliente nunca olviden cómo se sintieron.",
       desc: ""
     },
     {
       id: "04",
       title: "Nunca dejen de sentir que este es el lugar al que pertenecen.",
-      subtitle: "Mentoría Senior",
       desc: ""
     }
   ];
@@ -2549,22 +2615,23 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
         style={{ backgroundColor: bgColor, backgroundImage: lightGlow }}
         className="sticky top-0 flex h-screen items-center overflow-hidden transition-colors duration-1000"
       >
-        <motion.div style={{ x }} className="flex relative">
-          {/* Continuous Connection Line (Horizontal) - Animated with Intense Glow & Flare */}
+        {/* Continuous line anchored to the viewport, not the moving track */}
+        <motion.div
+          style={{ width: lineWidth, opacity: lineOpacity }}
+          className="absolute top-[76%] left-0 h-[2px] bg-forix-mint z-0 pointer-events-none origin-left shadow-[0_0_50px_rgba(216,225,224,1),0_0_20px_rgba(216,225,224,0.6)] md:top-[77%]"
+        >
+          <div className="absolute top-1/2 left-0 h-[1px] w-screen -translate-y-1/2 bg-white/12 pointer-events-none" />
           <motion.div
-            style={{ width: lineWidth, opacity: lineOpacity }}
-            className="absolute top-1/2 left-[50vw] h-[2px] bg-forix-mint z-0 pointer-events-none origin-left shadow-[0_0_50px_rgba(216,225,224,1),0_0_20px_rgba(216,225,224,0.6)]"
-          >
-            {/* Traveling Flare */}
-            <motion.div
-              style={{ left: "100%" }}
-              className="absolute top-1/2 -translate-y-1/2 w-24 h-24 bg-forix-mint/30 blur-2xl rounded-full"
-            />
-            <motion.div
-              style={{ left: "100%" }}
-              className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-forix-mint blur-[2px] rounded-full shadow-[0_0_20px_#D8E1E0]"
-            />
-          </motion.div>
+            style={{ left: "100%" }}
+            className="absolute top-1/2 -translate-y-1/2 w-24 h-24 bg-forix-mint/30 blur-2xl rounded-full"
+          />
+          <motion.div
+            style={{ left: "100%" }}
+            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-forix-mint blur-[2px] rounded-full shadow-[0_0_20px_#D8E1E0]"
+          />
+        </motion.div>
+
+        <motion.div style={{ x }} className="flex relative">
 
           {/* INTRO SLIDE (Style of Image 2) */}
           <div className="relative h-screen w-screen flex flex-col items-center justify-center text-center px-6">
@@ -2594,8 +2661,8 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
               </h2>
 
               <div className="relative w-full flex flex-col items-center">
-                <p className="text-forix-mint/70 text-xl md:text-2xl font-light leading-relaxed max-w-2xl mt-12">
-                  Somos una consultora boutique que fusiona la neurociencia aplicada con la gestión de experiencia (CXM) para generar conciencia empresarial.
+                <p className="text-forix-mint/80 text-xl md:text-[1.9rem] font-light leading-relaxed max-w-4xl mt-12">
+                  Somos un ecosistema boutique de transformación humana y empresarial enfocado en hospitalidad, restauración, turismo y negocios experienciales.
                 </p>
               </div>
             </motion.div>
@@ -2607,7 +2674,7 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
 
           {/* FEATURE SLIDES (Style of Image 1) */}
           {features.map((f, i) => (
-            <div key={i} className="relative h-screen w-screen flex items-center justify-center px-12 md:px-24">
+            <div key={i} className="relative h-screen w-screen flex items-start justify-center px-8 pt-20 md:px-24 md:pt-24 lg:pt-28">
               {/* Subtle Background Diamonds for Features - Stronger effect as requested */}
               <div className="absolute inset-0 flex items-center justify-center opacity-70 pointer-events-none">
                 <div className="w-full h-full">
@@ -2615,25 +2682,14 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
                 </div>
               </div>
 
-              <div className="max-w-4xl w-full relative z-10">
+              <div className="max-w-5xl w-full relative z-10">
                 {/* Content Side - Centered and Minimalist */}
                 <div className="flex flex-col items-center text-center">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="flex items-center gap-4 mb-8"
-                  >
-                    <span className="text-forix-mint text-sm font-bold tracking-[0.5em] uppercase">
-                      {f.id} — {f.subtitle}
-                    </span>
-                  </motion.div>
-
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
-                    className={`font-bold text-forix-white mb-10 leading-tight max-w-3xl ${f.desc ? 'text-5xl md:text-7xl tracking-tighter uppercase' : 'text-2xl md:text-4xl tracking-tight'}`}
+                    className={`text-forix-white mb-10 leading-[1.05] max-w-[20ch] italic ${f.desc ? 'font-bold text-5xl md:text-7xl tracking-tighter uppercase' : 'font-light text-[2.6rem] md:text-[3.5rem] lg:text-[4.35rem] tracking-tight'}`}
                   >
                     {f.title}
                   </motion.h3>
@@ -2700,13 +2756,13 @@ const ForixSymbol = ({ className = "" }: { className?: string }) => (
 );
 
 const DifferentiatingPhraseSection = () => {
-  const phrase = "\"LA HOSPITALIDAD ES UN PLACER EGOÍSTA. HACER QUE LOS DEMÁS SE SIENTAN BIEN TE HACE FELIZ.\"";
+  const phrase = '"Satisface con lo esperado, sorprende con lo inesperado."';
 
   // Define which words get which style
   const getWordStyle = (word: string) => {
     const cleanWord = word.toUpperCase().replace(/[,."]/g, "");
-    if (["BIEN", "FELIZ"].includes(cleanWord)) return "text-forix-white font-bold tracking-tight font-sans";
-    return "text-forix-white/70 font-light tracking-[0.2em] font-sans";
+    if (["SATISFACE", "SORPRENDE", "INESPERADO"].includes(cleanWord)) return "text-forix-white font-semibold tracking-tight font-sans";
+    return "text-forix-white/70 font-light tracking-[0.14em] font-sans";
   };
 
   const container = {
@@ -2739,7 +2795,7 @@ const DifferentiatingPhraseSection = () => {
   const words = phrase.split(" ");
 
   return (
-    <section className="py-16 bg-forix-blue relative overflow-hidden flex items-center justify-center min-h-[50vh]">
+    <section className="py-20 bg-forix-blue relative overflow-hidden flex items-center justify-center min-h-[55vh]">
       {/* Subtle Large Geometric Figures on the Left */}
       <div className="absolute left-0 top-0 bottom-0 w-1/2 pointer-events-none flex items-center justify-start pl-4 md:pl-12 z-0">
         <div className="flex gap-6 md:gap-10 items-center h-full">
@@ -2772,7 +2828,7 @@ const DifferentiatingPhraseSection = () => {
             <motion.span
               key={wordIdx}
               variants={letterVariants}
-              className={`text-xl md:text-3xl lg:text-4xl tracking-tight leading-relaxed whitespace-nowrap ${getWordStyle(word)}`}
+              className={`text-2xl md:text-4xl lg:text-5xl tracking-tight leading-relaxed whitespace-nowrap italic ${getWordStyle(word)}`}
             >
               {word}
             </motion.span>
@@ -2800,19 +2856,18 @@ const ImmersivePhotoSection = () => {
   // Scale the center image to fully cover the screen
   const scale = useTransform(scrollYProgress, [0.1, 0.9], [1, 3.8]);
   const skewX = useTransform(scrollYProgress, [0.1, 0.9], [0, 2]);
+  const centerFilter = useTransform(
+    scrollYProgress,
+    [0.12, 0.9],
+    ["grayscale(38%) saturate(0.92)", "grayscale(0%) saturate(1)"]
+  );
 
   // Fade and scale side images away
   const sideOpacity = useTransform(scrollYProgress, [0.1, 0.35], [1, 0]);
   const sideScale = useTransform(scrollYProgress, [0.1, 0.35], [1, 0.9]);
   const sideY = useTransform(scrollYProgress, [0.1, 0.35], [0, -20]);
-  const techLabels = [
-    { id: "01", coord: "47.3769Â° N, 8.5417Â° E", iso: "ISO 100", shutter: "1/2000" },
-    { id: "02", coord: "35.6762Â° N, 139.6503Â° E", iso: "ISO 400", shutter: "1/500" },
-    { id: "03", coord: "40.7128Â° N, 74.0060Â° W", iso: "ISO 200", shutter: "1/1000" },
-    { id: "04", coord: "51.5074Â° N, 0.1278Â° W", iso: "ISO 800", shutter: "1/250" },
-    { id: "05", coord: "48.8566Â° N, 2.3522Â° E", iso: "ISO 100", shutter: "1/4000" },
-  ];
   const collageImageClass = "w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700";
+  const galleryTileClass = "relative group overflow-hidden border border-white/15 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]";
 
   return (
     <section ref={containerRef} className="relative h-[250vh] bg-[#050505] overflow-visible">
@@ -2825,65 +2880,49 @@ const ImmersivePhotoSection = () => {
           <div className="hidden md:grid grid-cols-[1.1fr_0.95fr_1.25fr_1.25fr_0.95fr_0.9fr] grid-rows-12 gap-[4px] p-[4px] w-full h-screen max-w-full">
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-1 row-start-1 row-span-8 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-1 row-start-1 row-span-8`}
             >
               <img src="/foto 2.png" alt="Forix business" className={collageImageClass} />
-              <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white/50 uppercase tracking-widest">
-                {techLabels[0].coord}
-              </div>
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-1 row-start-9 row-span-4 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-1 row-start-9 row-span-4`}
             >
               <img src="/gallery/SSS00129_VSCO.JPG" alt="Forix discussion scene" className={collageImageClass} />
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-2 row-start-1 row-span-3 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-2 row-start-1 row-span-3`}
             >
               <img src="/gallery/SSS00108_VSCO.JPG" alt="Forix presentation laptop" className={collageImageClass} />
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-2 row-start-4 row-span-5 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-2 row-start-4 row-span-5`}
             >
               <img src="/gallery/HERO ABOUT UDS.JPG" alt="Forix 2022 presentation" className={collageImageClass} />
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-2 row-start-9 row-span-4 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-2 row-start-9 row-span-4`}
             >
               <img src="/gallery/FORIX LAB.JPG" alt="Forix phone experience" className={collageImageClass} />
             </motion.div>
 
             <motion.div
               style={{ scale, skewX }}
-              className="relative z-20 col-start-3 col-span-2 row-start-1 row-span-12 group overflow-hidden border border-white/15 shadow-[0_0_120px_rgba(0,0,0,0.95)]"
+              className="relative z-20 col-start-3 col-span-2 row-start-1 row-span-12 group overflow-hidden border border-white/20 shadow-[0_0_120px_rgba(0,0,0,0.95),inset_0_0_0_1px_rgba(255,255,255,0.1)]"
             >
-              <img src="/gallery/business.JPG" alt="Forix signature portrait" className={collageImageClass} />
-
-              <motion.div
-                style={{ opacity: sideOpacity }}
-                className="absolute inset-0 pointer-events-none"
-              >
-                <div className="absolute top-8 left-8 border-l border-t border-white/30 w-12 h-12" />
-                <div className="absolute top-8 right-8 border-r border-t border-white/30 w-12 h-12" />
-                <div className="absolute bottom-8 left-8 border-l border-b border-white/30 w-12 h-12" />
-                <div className="absolute bottom-8 right-8 border-r border-b border-white/30 w-12 h-12" />
-                <div className="absolute top-1/2 left-8 -translate-y-1/2 font-mono text-[10px] text-white/40 vertical-rl tracking-widest uppercase">
-                  Forix Visual Archive
-                </div>
-                <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-12 font-mono text-[10px] text-white/60 uppercase tracking-[0.2em]">
-                  <span>{techLabels[2].coord}</span>
-                  <span>{techLabels[2].iso}</span>
-                  <span>{techLabels[2].shutter}</span>
-                </div>
-              </motion.div>
+              <motion.img
+                src="/gallery/business.JPG"
+                alt="Forix signature portrait"
+                className="w-full h-full object-cover transition-all duration-700"
+                style={{ filter: centerFilter }}
+              />
 
               <motion.div
                 style={{ opacity: sideOpacity }}
@@ -2893,69 +2932,68 @@ const ImmersivePhotoSection = () => {
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-5 row-start-1 row-span-3 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-5 row-start-1 row-span-3`}
             >
               <img src="/gallery/HERO SERV.JPG" alt="Forix service presentation" className={collageImageClass} />
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-5 row-start-4 row-span-5 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-5 row-start-4 row-span-5`}
             >
               <img src="/gallery/HERO SERVICIES.JPG" alt="Forix service desk overview" className={collageImageClass} />
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-5 row-start-9 row-span-4 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-5 row-start-9 row-span-4`}
             >
               <img src="/metric_300.jpg" alt="Forix metrics" className={collageImageClass} />
-              <div className="absolute bottom-4 right-4 font-mono text-[10px] text-white/50">
-                {techLabels[3].iso}
-              </div>
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-6 row-start-1 row-span-6 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-6 row-start-1 row-span-6`}
             >
               <img src="/gallery/HERO MAIN.JPG" alt="Forix tabletop composition" className={collageImageClass} />
-              <div className="absolute top-4 right-4 font-mono text-[10px] text-white/50 uppercase tracking-widest">
-                {techLabels[4].coord}
-              </div>
             </motion.div>
 
             <motion.div
               style={{ opacity: sideOpacity, scale: sideScale, y: sideY }}
-              className="relative col-start-6 row-start-7 row-span-6 group overflow-hidden border border-white/10"
+              className={`${galleryTileClass} col-start-6 row-start-7 row-span-6`}
             >
               <img src="/gallery/SSS00146_VSCO.JPG" alt="Forix signed card portrait" className={collageImageClass} />
             </motion.div>
           </div>
 
           <div className="grid md:hidden grid-cols-2 grid-rows-6 gap-[4px] p-[4px] w-full h-screen max-w-full">
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative row-span-2 group overflow-hidden border border-white/10">
+            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={`${galleryTileClass} row-span-2`}>
               <img src="/foto 2.png" alt="Forix business" className={collageImageClass} />
             </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
+            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
               <img src="/gallery/SSS00108_VSCO.JPG" alt="Forix presentation laptop" className={collageImageClass} />
             </motion.div>
             <motion.div style={{ scale, skewX }} className="relative row-span-2 group overflow-hidden border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.9)]">
-              <img src="/gallery/business.JPG" alt="Forix signature portrait" className={collageImageClass} />
+              <motion.img
+                src="/gallery/business.JPG"
+                alt="Forix signature portrait"
+                className="w-full h-full object-cover transition-all duration-700"
+                style={{ filter: centerFilter }}
+              />
             </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative row-span-2 group overflow-hidden border border-white/10">
+            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={`${galleryTileClass} row-span-2`}>
               <img src="/gallery/HERO SERVICIES.JPG" alt="Forix service desk overview" className={collageImageClass} />
             </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
+            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
               <img src="/gallery/HERO MAIN.JPG" alt="Forix tabletop composition" className={collageImageClass} />
             </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
+            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
               <img src="/gallery/SSS00146_VSCO.JPG" alt="Forix signed card portrait" className={collageImageClass} />
             </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
+            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
               <img src="/gallery/FORIX LAB.JPG" alt="Forix phone experience" className={collageImageClass} />
             </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className="relative group overflow-hidden border border-white/10">
+            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
               <img src="/metric_300.jpg" alt="Forix metrics" className={collageImageClass} />
             </motion.div>
           </div>
@@ -2969,7 +3007,7 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
   const companies = [
     "Hotel Qhawarina",
     "El Camino Spanish School",
-    "Coffe Bike",
+    "Coffee Bike",
     "Verbalia Spanish School",
     "Visu Club",
     "Villa",
@@ -3094,21 +3132,21 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
                 icon: Briefcase,
                 logo: <ForixBusinessTypoLogo />,
                 tagline: "The Masterplan",
-                items: ["Neuro-Mapping misterioso", "Diseño sensorial y auditoría de calidad", "Protocolos de servicio & hospitalidad"]
+                items: ["Mystery Shopping", "Ingeniería de atmósfera comercial", "Arquitectura de protocolos de servicio"]
               },
               {
                 num: "02",
                 icon: GraduationCap,
                 logo: <ForixLearningTypoLogo />,
                 tagline: "Formación de Elite",
-                items: ["Certificación en ADN de anfitriones", "Mentorías para líderes de excelencia", "Talleres de diseño y manuales de autor"]
+                items: ["Certificación en cultura de anfitrión", "Programa de liderazgo en gestión de experiencia", "Workshop de codificación de identidad de servicio"]
               },
               {
                 num: "03",
                 icon: BarChart3,
                 logo: <ForixLabTypoLogo />,
                 tagline: "Inteligencia Aplicada",
-                items: ["Ecosistema de métricas y emociones", "Análisis predictivo de experiencia", "Dashboards de performance CX"]
+                items: ["Sistema de inteligencia de experiencia de cliente", "Diagnóstico de rentabilidad experiencial", "Dashboards de performance CX"]
               }
             ].map((pillar, i) => (
               <motion.div
@@ -3170,8 +3208,9 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
       <ImmersivePhotoSection />
 
       {/* ARTICULOS SUMMARY */}
-      <section className="py-24 bg-forix-white">
-        <div className="container-custom">
+      <section className="py-24 bg-forix-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.06] forix-symbol-pattern pointer-events-none" />
+        <div className="container-custom relative z-10">
           <div className="flex justify-between items-end mb-12">
             <h2 className="text-forix-blue text-xs font-bold tracking-[0.4em] uppercase">Artículos</h2>
             <button onClick={() => setCurrentView('articulos')} className="text-forix-green text-xs font-bold uppercase tracking-widest flex items-center gap-2">Ver Todo <ArrowRight size={14} /></button>
@@ -3189,17 +3228,18 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
                 <motion.div
                   key={i}
                   onClick={() => setCurrentView(getArticleView(article.slug))}
-                  className="group relative p-10 border border-forix-mint/30 transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden flex flex-col"
+                  className="group relative p-10 md:p-12 border border-forix-mint/40 shadow-[0_0_0_1px_rgba(20,56,92,0.05)] transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden flex flex-col"
                 >
                   <div className="flex items-center justify-between mb-6">
                     <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-forix-green">{article.category}</span>
                     <IconComponent size={20} strokeWidth={1.5} className="text-forix-green group-hover:text-forix-mint transition-colors duration-500" />
                   </div>
-                  <h4 className="text-2xl font-bold text-forix-blue group-hover:text-forix-white mb-4 leading-tight transition-colors duration-500">{article.title}</h4>
-                  <p className="text-sm text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-8 leading-relaxed transition-colors duration-500">{shortSummaries[i]}</p>
+                  <h4 className="text-[26px] md:text-[30px] font-bold text-forix-blue group-hover:text-forix-white mb-4 leading-tight transition-colors duration-500">{article.title}</h4>
+                  <p className="text-[17px] md:text-[18px] text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-8 leading-relaxed transition-colors duration-500">{shortSummaries[i]}</p>
                   <div className="mt-auto flex items-center gap-2 text-forix-green group-hover:text-forix-mint text-xs font-bold uppercase tracking-widest transition-colors duration-500">
                     Leer artículo <ArrowRight size={12} />
                   </div>
+                  <div className="pointer-events-none absolute inset-[14px] border border-forix-blue/8 transition-colors duration-500 group-hover:border-white/15" />
                   <div className="absolute top-0 right-0 w-1 h-0 bg-forix-green group-hover:h-full transition-all duration-700" />
                 </motion.div>
               );

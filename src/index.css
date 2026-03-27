@@ -22,8 +22,18 @@
 }
 
 @layer base {
+  html {
+    font-size: 16px;
+  }
+
   body {
     @apply bg-forix-white text-forix-gray font-sans antialiased selection:bg-forix-green selection:text-white;
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 17px;
   }
 }
 
@@ -50,6 +60,12 @@
 
 .fade-in {
   animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+.forix-symbol-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2314385C' fill-opacity='1'%3E%3Cpath d='M8 8h8L12 24l4 16H8l4-16zm18 0h8l-4 16 4 16h-8l4-16zm18 0h8l-4 16 4 16h-8l4-16zm18 0h8l-4 16 4 16h-8l4-16z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 84px 84px;
 }
 
 @keyframes fadeIn {

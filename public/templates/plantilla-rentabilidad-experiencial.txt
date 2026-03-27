@@ -1,0 +1,32 @@
+PLANTILLA FORIX
+RENTABILIDAD EXPERIENCIAL
+
+1. Variables de negocio
+- Tasa de retención:
+- Frecuencia de recompra:
+- Ticket promedio:
+- Valor de vida del cliente:
+
+2. Variables de experiencia
+- NPS:
+- CSAT:
+- Fricciones críticas:
+- Puntos de abandono:
+
+3. Lectura financiera
+- Ingreso estimado por cliente retenido:
+- Costo por cliente perdido:
+- Impacto del referido:
+- Sensibilidad al precio:
+
+4. Prioridades de intervención
+- Momento de alto impacto:
+- Riesgo operativo:
+- Oportunidad de mejora:
+
+5. Plan de acción
+- Acción 1:
+- Acción 2:
+- Acción 3:
+- Responsable:
+- Fecha compromiso:

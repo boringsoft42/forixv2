@@ -1,0 +1,37 @@
+PLANTILLA FORIX
+MYSTERY SHOPPING
+
+1. Datos generales
+- Marca:
+- Sucursal:
+- Fecha:
+- Hora:
+- Evaluador:
+
+2. Primera impresión
+- Visibilidad del local:
+- Limpieza:
+- Ambientación:
+- Señalización:
+
+3. Interacción del equipo
+- Tiempo de respuesta:
+- Calidad del saludo:
+- Conocimiento del servicio:
+- Capacidad de resolución:
+- Cierre de la interacción:
+
+4. Coherencia con la promesa de marca
+- ¿La experiencia refleja el posicionamiento esperado?
+- ¿Qué elementos fortalecen la percepción?
+- ¿Qué elementos la contradicen?
+
+5. Hallazgos críticos
+- Fricciones detectadas:
+- Momentos memorables:
+- Riesgos reputacionales:
+
+6. Acciones recomendadas
+- Acción inmediata:
+- Acción de mejora operativa:
+- Acción de entrenamiento:
