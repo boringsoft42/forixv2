@@ -4,7 +4,6 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import emailjs from '@emailjs/browser';
 import { motion, AnimatePresence, useInView, useAnimation, useScroll, useTransform } from 'motion/react';
 import articleOneMarkdown from '../articulo_1.md?raw';
 import articleTwoMarkdown from '../articulo_2.md?raw';
@@ -1772,6 +1771,8 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
   const [contactName, setContactName] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const googleSheetsUrl = import.meta.env.VITE_GOOGLE_SHEETS_URL?.trim();
   const [particles] = useState(() => Array.from({ length: 40 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -1840,7 +1841,9 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
     setTimeout(() => setStep(step + 1), 300);
   };
 
-  const saveDiagnostic = () => {
+  const saveDiagnostic = async () => {
+    if (isSubmitting) return;
+
     const answersText = questions.map((q, i) =>
       `P${i + 1}: ${q.title}\nR: ${answers[i] ?? 'Sin respuesta'}`
     ).join('\n\n');
@@ -1861,37 +1864,33 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
     existing.push(entry);
     localStorage.setItem('forix_diagnostics', JSON.stringify(existing));
 
-    // Send via EmailJS
-    // CONFIGURAR: Reemplaza estos 3 valores con los tuyos de https://www.emailjs.com
-    const EMAILJS_SERVICE_ID = 'TU_SERVICE_ID';
-    const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';
-    const EMAILJS_PUBLIC_KEY = 'TU_PUBLIC_KEY';
+    setIsSubmitting(true);
 
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      from_name: contactName,
-      phone: contactPhone,
-      date: new Date().toLocaleString('es-BO'),
-      answers: answersText,
-      message: `Nuevo diagnóstico completado por ${contactName} (${contactPhone}).\n\n${answersText}`,
-    }, EMAILJS_PUBLIC_KEY).catch(() => {
-      // Silently fail - data is still saved in localStorage
-    });
-
-    // Send to Google Sheets (optional)
-    // CONFIGURAR: Reemplaza con tu URL de Google Apps Script
-    const GOOGLE_SHEETS_URL = '';
-    if (GOOGLE_SHEETS_URL) {
-      fetch(GOOGLE_SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: contactName,
-          phone: contactPhone,
-          date: new Date().toISOString(),
-          ...Object.fromEntries(questions.map((q, i) => [`p${i + 1}`, String(answers[i] ?? '')]))
-        })
-      }).catch(() => {});
+    try {
+      if (googleSheetsUrl) {
+        await fetch(googleSheetsUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            id: entry.id,
+            name: contactName,
+            phone: contactPhone,
+            date: entry.date,
+            answers: entry.answers,
+            answersText,
+            p1: String(answers[0] ?? ''),
+            p2: String(answers[1] ?? ''),
+            p3: String(answers[2] ?? ''),
+            p4: String(answers[3] ?? ''),
+            p5: String(answers[4] ?? ''),
+          }),
+        });
+      }
+    } catch {
+      // Keep local fallback even if Google Sheets delivery is unavailable.
+    } finally {
+      setIsSubmitting(false);
     }
 
     setStep(step + 1);
@@ -2017,7 +2016,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                   Su información se mantendrá estrictamente confidencial.
                 </p>
                 <p className="text-base md:text-lg text-forix-gray/70 font-light mb-12 max-w-2xl leading-relaxed">
-                  En esta versión, sus respuestas se almacenan localmente en este navegador bajo el registro interno de diagnósticos. Si luego se conectan EmailJS o Google Sheets, también podrán recibirse en esos destinos.
+                  Sus respuestas se guardan localmente en este navegador y, si se configura la URL de Google Sheets, también se envían automáticamente a la hoja.
                 </p>
 
                 <div className="space-y-6 max-w-lg">
@@ -2043,9 +2042,9 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                   </div>
                   <PrimaryButton
                     onClick={saveDiagnostic}
-                    className={`text-lg py-5 px-12 w-full mt-4 ${!contactName || !contactPhone ? 'opacity-40 pointer-events-none' : ''}`}
+                    className={`text-lg py-5 px-12 w-full mt-4 ${!contactName || !contactPhone || isSubmitting ? 'opacity-40 pointer-events-none' : ''}`}
                   >
-                    ENVIAR DIAGNÓSTICO
+                    {isSubmitting ? 'ENVIANDO...' : 'ENVIAR DIAGNÓSTICO'}
                   </PrimaryButton>
                 </div>
               </motion.div>
