@@ -611,10 +611,6 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                         </span>
                         <div
                           className="w-8 h-8 border border-forix-white/40 flex items-center justify-center group-hover:border-forix-white transition-colors duration-300 cursor-pointer"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleLinkClick('contacto');
-                          }}
                         >
                           <Pencil size={14} className="text-forix-white/90 group-hover:text-forix-white" />
                         </div>
