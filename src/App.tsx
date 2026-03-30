@@ -579,7 +579,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
         <div className="container-custom flex justify-between items-center">
           {/* Logo Left - hidden on home page when not scrolled */}
           <div
-            className={`flex items-center cursor-pointer shrink-0 transition-all duration-500 ${currentView === 'home' && !isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${!isScrolled && currentView !== 'home' ? 'bg-forix-white/88 px-3 py-1.5 shadow-lg backdrop-blur-sm border border-forix-mint/20' : ''}`}
+            className={`flex items-center cursor-pointer shrink-0 transition-all duration-500 ${!isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             onClick={() => setCurrentView('home')}
           >
             <img src="/logo_navbar.png" className="h-4 md:h-6 w-auto drop-shadow-[0_2px_10px_rgba(20,56,92,0.15)]" alt="FORIX GROUP" />
@@ -1098,14 +1098,17 @@ const StackedServiceItem = ({ title, desc, index: _index, icon: Icon }: { title:
         </div>
         <div className="md:col-span-7">
           <div className="max-w-2xl space-y-6">
-            {desc.split('. ').map((sentence, i, arr) => (
-              <p
-                key={i}
-                className="text-xl md:text-[1.65rem] font-light leading-relaxed text-forix-gray"
-              >
-                {sentence}{i < arr.length - 1 ? '.' : ''}
-              </p>
-            ))}
+            {desc.split('\n\n').map((block, bIdx, blocks) => {
+              const isClosing = blocks.length > 1 && bIdx === blocks.length - 1;
+              return block.split('. ').map((sentence, i, arr) => (
+                <p
+                  key={`${bIdx}-${i}`}
+                  className={`text-xl md:text-[1.65rem] font-light leading-relaxed text-forix-gray ${isClosing ? 'italic font-normal' : ''}`}
+                >
+                  {sentence}{i < arr.length - 1 ? '.' : ''}
+                </p>
+              ));
+            })}
           </div>
           <div className="mt-10">
             <SecondaryButton
@@ -1135,17 +1138,17 @@ const Services = () => {
         {
           title: "Mystery Shopping",
           icon: ScanEye,
-          desc: "La mayoría de las organizaciones operan con una brecha invisible: la distancia entre la experiencia que creen entregar y la que su cliente realmente vive. Sin datos de campo precisos, las decisiones de mejora se toman sobre percepciones internas, no sobre realidad. A través de un protocolo de inmersión encubierta de alta precisión, evaluamos cada punto de contacto de su operación desde la perspectiva del cliente real. Analizamos la coherencia entre su promesa de marca y su ejecución en el piso, la respuesta emocional generada en cada micro-momento y el nivel de cumplimiento de sus estándares de servicio. El resultado es un informe ejecutivo con hallazgos accionables, clasificados por nivel de impacto en la experiencia y en la rentabilidad."
+          desc: "La mayoría de las organizaciones operan con una brecha invisible: la distancia entre la experiencia que creen entregar y la que su cliente realmente vive. Sin datos de campo precisos, las decisiones de mejora se toman sobre percepciones internas, no sobre realidad. A través de un protocolo de inmersión encubierta de alta precisión, evaluamos cada punto de contacto de su operación desde la perspectiva del cliente real. Analizamos la coherencia entre su promesa de marca y su ejecución en el piso, la respuesta emocional generada en cada micro-momento y el nivel de cumplimiento de sus estándares de servicio. El resultado es un informe ejecutivo con hallazgos accionables, clasificados por nivel de impacto en la experiencia y en la rentabilidad.\n\nPara organizaciones que no se conforman con suponer que todo va bien."
         },
         {
           title: "Ingeniería de atmósfera comercial",
           icon: AudioLines,
-          desc: "El entorno físico de un negocio no es decoración: es un sistema de influencia. La música, el aroma, la iluminación y la temperatura generan respuestas neurológicas que determinan el tiempo de permanencia, el nivel de gasto y la disposición a regresar. Cuando este sistema no está diseñado con intención, opera en contra. Diseñamos y auditamos cada variable sensorial de su espacio comercial con base en principios de neuromarketing aplicado, asegurándonos de que cada elemento refuerce su posicionamiento de marca y active los estados emocionales que favorecen la decisión de compra. El proceso incluye diagnóstico sensorial del espacio actual, diseño de la atmósfera objetivo y protocolo de implementación y control."
+          desc: "El entorno físico de un negocio no es decoración: es un sistema de influencia. La música, el aroma, la iluminación y la temperatura generan respuestas neurológicas que determinan el tiempo de permanencia, el nivel de gasto y la disposición a regresar. Cuando este sistema no está diseñado con intención, opera en contra. Diseñamos y auditamos cada variable sensorial de su espacio comercial con base en principios de neuromarketing aplicado, asegurándonos de que cada elemento refuerce su posicionamiento de marca y active los estados emocionales que favorecen la decisión de compra. El proceso incluye diagnóstico sensorial del espacio actual, diseño de la atmósfera objetivo y protocolo de implementación y control.\n\nPorque el ambiente que el cliente no puede describir es el que más determina su comportamiento."
         },
         {
           title: "Arquitectura de protocolos de servicio",
           icon: BookOpen,
-          desc: "La excelencia en el servicio no puede depender del talento individual de cada colaborador ni de la interpretación libre de lo que buen servicio significa. Sin protocolos precisos, cada cliente recibe una experiencia distinta, y la marca pierde coherencia en su promesa más esencial. Diseñamos el sistema completo de protocolos de servicio y hospitalidad de su organización: desde los rituales de bienvenida y los flujos de atención hasta la gestión de momentos de fricción y los estándares de comunicación verbal y no verbal. Cada protocolo es co-construido con su equipo para garantizar adopción real, y documentado en un formato operativo que permite replicación y escalabilidad sin perder identidad de marca."
+          desc: "La excelencia en el servicio no puede depender del talento individual de cada colaborador ni de la interpretación libre de lo que buen servicio significa. Sin protocolos precisos, cada cliente recibe una experiencia distinta, y la marca pierde coherencia en su promesa más esencial. Diseñamos el sistema completo de protocolos de servicio y hospitalidad de su organización: desde los rituales de bienvenida y los flujos de atención hasta la gestión de momentos de fricción y los estándares de comunicación verbal y no verbal. Cada protocolo es co-construido con su equipo para garantizar adopción real, y documentado en un formato operativo que permite replicación y escalabilidad sin perder identidad de marca.\n\nPorque la distinción sostenida es siempre resultado de un sistema, nunca de una casualidad."
         }
       ]
     },
@@ -1158,17 +1161,17 @@ const Services = () => {
         {
           title: "Certificación en cultura de anfitrión",
           icon: Fingerprint,
-          desc: "El mayor obstáculo para una cultura de servicio excepcional no es la falta de conocimiento: es la mentalidad operativa. Un colaborador que se percibe a sí mismo como ejecutor de tareas entrega transacciones. Un anfitrión que comprende su rol en la experiencia del cliente entrega momentos memorables. Este programa de certificación intensiva trabaja en la reconfiguración de esa mentalidad, desarrollando en el personal de contacto las competencias de lectura del cliente, gestión emocional en el servicio, lenguaje corporal de excelencia y construcción de micro-momentos de alto impacto. Al concluir, cada participante cuenta con un marco propio de actuación que le permite tomar decisiones de servicio con criterio, autonomía y consistencia."
+          desc: "El mayor obstáculo para una cultura de servicio excepcional no es la falta de conocimiento: es la mentalidad operativa. Un colaborador que se percibe a sí mismo como ejecutor de tareas entrega transacciones. Un anfitrión que comprende su rol en la experiencia del cliente entrega momentos memorables. Este programa de certificación intensiva trabaja en la reconfiguración de esa mentalidad, desarrollando en el personal de contacto las competencias de lectura del cliente, gestión emocional en el servicio, lenguaje corporal de excelencia y construcción de micro-momentos de alto impacto. Al concluir, cada participante cuenta con un marco propio de actuación que le permite tomar decisiones de servicio con criterio, autonomía y consistencia.\n\nPara empresas que entienden que el servicio de excelencia es la ventaja competitiva más difícil de copiar."
         },
         {
           title: "Programa de liderazgo en gestión de experiencia",
           icon: Compass,
-          desc: "Los estándares de servicio se diseñan en la sala de directivos, pero se sostienen o se erosionan en la primera línea de liderazgo. Un gerente o supervisor sin las competencias para gestionar cultura termina administrando cumplimiento, no inspirando excelencia. Este programa de acompañamiento estratégico está diseñado para líderes operativos y directivos que necesitan desarrollar su capacidad de gestionar equipos de alto desempeño en entornos de servicio: cómo construir Marca Empleadora desde adentro, cómo supervisar calidad sin microgestión y cómo sostener los estándares de experiencia bajo presión operativa. El proceso combina sesiones de mentoría individual, análisis de casos reales de su operación y herramientas de liderazgo aplicadas a la gestión de CX."
+          desc: "Los estándares de servicio se diseñan en la sala de directivos, pero se sostienen o se erosionan en la primera línea de liderazgo. Un gerente o supervisor sin las competencias para gestionar cultura termina administrando cumplimiento, no inspirando excelencia. Este programa de acompañamiento estratégico está diseñado para líderes operativos y directivos que necesitan desarrollar su capacidad de gestionar equipos de alto desempeño en entornos de servicio: cómo construir Marca Empleadora desde adentro, cómo supervisar calidad sin microgestión y cómo sostener los estándares de experiencia bajo presión operativa. El proceso combina sesiones de mentoría individual, análisis de casos reales de su operación y herramientas de liderazgo aplicadas a la gestión de CX.\n\nPara líderes que comprenden que el primer cliente al que deben conquistar es su propio equipo."
         },
         {
           title: "Workshop de codificación de identidad de servicio",
           icon: PenTool,
-          desc: "Una marca de servicio distintiva no se declara: se codifica. Sin un manual que traduzca la identidad de la organización en comportamientos concretos y replicables, la cultura queda en la intención y el estándar depende de quien esté presente ese día. A través de sesiones colaborativas de diseño, co-construimos con su equipo el Manual de Servicio de Autor de su organización: los rituales propios de su marca, el lenguaje que la representa, los gestos que la diferencian y los criterios que guían cada decisión de servicio. Al ser construido de manera participativa, el manual no se percibe como una imposición externa, sino como la formalización de lo mejor que su equipo ya sabe hacer, elevado a estándar."
+          desc: "Una marca de servicio distintiva no se declara: se codifica. Sin un manual que traduzca la identidad de la organización en comportamientos concretos y replicables, la cultura queda en la intención y el estándar depende de quien esté presente ese día. A través de sesiones colaborativas de diseño, co-construimos con su equipo el Manual de Servicio de Autor de su organización: los rituales propios de su marca, el lenguaje que la representa, los gestos que la diferencian y los criterios que guían cada decisión de servicio. Al ser construido de manera participativa, el manual no se percibe como una imposición externa, sino como la formalización de lo mejor que su equipo ya sabe hacer, elevado a estándar.\n\nUn documento que no termina archivado: se convierte en la guía viva de su operación diaria."
         }
       ]
     },
@@ -1181,12 +1184,12 @@ const Services = () => {
         {
           title: "Sistema de inteligencia de experiencia de cliente",
           icon: Activity,
-          desc: "El 96% de los clientes insatisfechos no presenta quejas: simplemente no vuelve. Esta pérdida silenciosa no aparece en ningún estado financiero, pero erosiona el crecimiento real de manera sistemática. Las organizaciones que miden solo satisfacción inmediata están viendo únicamente la superficie del problema. Diseñamos un sistema integrado de medición de la experiencia que combina métricas cuantitativas de lealtad y comportamiento, indicadores cualitativos y emocionales que capturan lo que los números solos no explican. El sistema incluye el diseño del ecosistema de medición, la definición de indicadores clave por etapa del customer journey y el protocolo de análisis e interpretación para la toma de decisiones ejecutivas."
+          desc: "El 96% de los clientes insatisfechos no presenta quejas: simplemente no vuelve. Esta pérdida silenciosa no aparece en ningún estado financiero, pero erosiona el crecimiento real de manera sistemática. Las organizaciones que miden solo satisfacción inmediata están viendo únicamente la superficie del problema. Diseñamos un sistema integrado de medición de la experiencia que combina métricas cuantitativas de lealtad y comportamiento, indicadores cualitativos y emocionales que capturan lo que los números solos no explican. El sistema incluye el diseño del ecosistema de medición, la definición de indicadores clave por etapa del customer journey y el protocolo de análisis e interpretación para la toma de decisiones ejecutivas.\n\nPorque no es posible gestionar con precisión lo que no se mide con inteligencia."
         },
         {
           title: "Diagnóstico de rentabilidad experiencial",
           icon: BarChart3,
-          desc: "La mayoría de las organizaciones miden la experiencia de cliente con indicadores de satisfacción. Muy pocas la miden con indicadores de crecimiento. Esta brecha representa uno de los mayores errores estratégicos del management moderno: tratar al CX como una función de soporte cuando en realidad es el principal motor de expansión de ingresos que existe en cualquier negocio. Las empresas con programas maduros de experiencia de cliente crecen sus ingresos más rápido que aquellas con CX deficiente. En FORIX Lab traducimos esa evidencia en un análisis aplicado a la realidad financiera y operativa de su organización. Evaluamos el impacto económico de cada etapa del customer journey sobre variables críticas de negocio: tasa de retención, valor de vida del cliente, velocidad de recompra, sensibilidad al precio y potencial de referido. El resultado es un mapa de rentabilidad experiencial que identifica con precisión qué intervenciones en la experiencia generan el mayor retorno sobre la inversión comercial."
+          desc: "La mayoría de las organizaciones miden la experiencia de cliente con indicadores de satisfacción. Muy pocas la miden con indicadores de crecimiento. Esta brecha representa uno de los mayores errores estratégicos del management moderno: tratar al CX como una función de soporte cuando en realidad es el principal motor de expansión de ingresos que existe en cualquier negocio. Las empresas con programas maduros de experiencia de cliente crecen sus ingresos más rápido que aquellas con CX deficiente. En FORIX Lab traducimos esa evidencia en un análisis aplicado a la realidad financiera y operativa de su organización. Evaluamos el impacto económico de cada etapa del customer journey sobre variables críticas de negocio: tasa de retención, valor de vida del cliente, velocidad de recompra, sensibilidad al precio y potencial de referido. El resultado es un mapa de rentabilidad experiencial que identifica con precisión qué intervenciones en la experiencia generan el mayor retorno sobre la inversión comercial.\n\nPara directivos que ya no quieren saber si su CX es bueno, sino cuánto dinero les está costando que no lo sea."
         }
       ]
     }
@@ -1448,16 +1451,16 @@ const About = () => {
                 <div className="absolute inset-0 border border-forix-blue/10 bg-forix-ghost/30 shadow-[0_0_0_18px_rgba(244,242,241,0.92)]" />
                 <img src="/about_mauricio.jpg" alt="Mauricio Vacaflores" className="relative z-10 w-full h-full object-cover grayscale" />
 
-                {/* Signature Box - Bottom Right */}
-                <div className="absolute -bottom-20 left-1/2 z-30 w-[82%] -translate-x-1/2 md:-bottom-24">
+                {/* Signature Box - Bottom, diagonal like reference */}
+                <div className="absolute -bottom-10 left-[5%] z-30 w-[75%] md:-bottom-14">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1.2, ease: "easeOut", delay: 0.8 }}
-                    className="flex flex-col items-center"
+                    className="flex flex-col items-start"
                   >
-                    <img src="/Mauricio Vacaflores.png" alt="Firma Mauricio Vacaflores" className="w-full h-auto object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]" />
+                    <img src="/Mauricio Vacaflores.png" alt="Firma Mauricio Vacaflores" className="w-full h-auto object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)] -rotate-[25deg]" />
                   </motion.div>
                 </div>
               </div>
@@ -2148,10 +2151,10 @@ const Contact = () => {
 
   return (
     <section id="contacto" className="py-32 bg-[#F4F4F4] overflow-hidden relative min-h-[60vh] flex items-center justify-center">
-      {/* Brand Pattern Background - New Logo Watermark */}
-      <div className="absolute inset-0 z-0 opacity-[0.03]" style={{
-        backgroundImage: 'url("/contact_bg.png")',
-        backgroundSize: '120px',
+      {/* Brand Pattern Background */}
+      <div className="absolute inset-0 z-0 opacity-[0.06] pointer-events-none" style={{
+        backgroundImage: 'url("/image (1).png")',
+        backgroundSize: '200px',
         backgroundRepeat: 'repeat',
         backgroundPosition: 'center'
       }} />
@@ -2755,12 +2758,12 @@ const ForixSymbol = ({ className = "" }: { className?: string }) => (
 );
 
 const DifferentiatingPhraseSection = () => {
-  const phrase = '"Satisface con lo esperado, sorprende con lo inesperado."';
+  const phrase = '"La hospitalidad es un placer egoísta, hacer que los demás se sientan bien te hace feliz."';
 
   // Define which words get which style
   const getWordStyle = (word: string) => {
     const cleanWord = word.toUpperCase().replace(/[,."]/g, "");
-    if (["SATISFACE", "SORPRENDE", "INESPERADO"].includes(cleanWord)) return "text-forix-white font-semibold tracking-tight font-sans";
+    if (["HOSPITALIDAD", "PLACER", "FELIZ"].includes(cleanWord)) return "text-forix-white font-semibold tracking-tight font-sans";
     return "text-forix-white/70 font-light tracking-[0.14em] font-sans";
   };
 
@@ -3207,8 +3210,7 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
       <ImmersivePhotoSection />
 
       {/* ARTICULOS SUMMARY */}
-      <section className="py-24 bg-forix-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.06] forix-symbol-pattern pointer-events-none" />
+      <section className="py-24 bg-white relative overflow-hidden">
         <div className="container-custom relative z-10">
           <div className="flex justify-between items-end mb-12">
             <h2 className="text-forix-blue text-xs font-bold tracking-[0.4em] uppercase">Artículos</h2>
