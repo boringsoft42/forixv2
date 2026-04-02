@@ -456,27 +456,25 @@ const FiguresBlock = ({ figures }: { figures: { num: string, label: string, desc
 );
 
 // [C-07] TARJETA DE ARTICULO
-const ArticleCard = ({ category, title, subtitle, summary, readingTime, index = 0, onClick }: { category: string, title: string, subtitle: string, summary: string, readingTime: string, index?: number, onClick?: () => void, key?: React.Key }) => (
+const ArticleCard = ({ category, title, subtitle: _subtitle, summary, readingTime, index = 0, onClick, icon: Icon }: { category: string, title: string, subtitle: string, summary: string, readingTime: string, index?: number, onClick?: () => void, key?: React.Key, icon?: React.ComponentType<{ size?: number, strokeWidth?: number, className?: string }> }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
     transition={{ duration: 0.6, delay: index * 0.1 }}
     onClick={onClick}
-    className="bg-white border border-forix-mint/40 shadow-[0_0_0_1px_rgba(20,56,92,0.05)] group transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden relative p-10 md:p-12 flex flex-col justify-between h-full"
+    className="bg-white border border-forix-mint/40 shadow-[0_0_0_1px_rgba(20,56,92,0.05)] group transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden relative p-6 sm:p-10 md:p-12 flex flex-col justify-between h-full"
   >
     <div className="relative z-10">
-      <div className="flex items-center gap-4 mb-8">
-        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-forix-green">{category}</span>
-        <span className="w-8 h-[1px] bg-forix-mint" />
-        <span className="text-[10px] uppercase font-medium tracking-[0.1em] text-forix-gray/40 group-hover:text-forix-white/50 transition-colors duration-500">{readingTime}</span>
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-forix-green">{category}</span>
+        {Icon ? <Icon size={20} strokeWidth={1.5} className="text-forix-green group-hover:text-forix-mint transition-colors duration-500" /> : <span className="text-[10px] uppercase font-medium tracking-[0.1em] text-forix-gray/40 group-hover:text-forix-white/50 transition-colors duration-500 hidden sm:block">{readingTime}</span>}
       </div>
-      <h4 className="text-[26px] md:text-[30px] font-medium text-forix-blue group-hover:text-forix-white mb-4 leading-tight tracking-tight transition-colors duration-500">{title}</h4>
-      <p className="text-sm uppercase tracking-[0.25em] text-forix-gray/40 group-hover:text-forix-mint/70 transition-colors duration-500 mb-5">{subtitle}</p>
-      <p className="text-[17px] md:text-[18px] font-light text-forix-gray/70 group-hover:text-forix-white/70 leading-relaxed mb-10 transition-colors duration-500">{summary}</p>
+      <h4 className="text-xl sm:text-[26px] md:text-[30px] font-bold text-forix-blue group-hover:text-forix-white mb-4 leading-tight tracking-tight transition-colors duration-500">{title}</h4>
+      <p className="text-sm sm:text-[17px] md:text-[18px] text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-6 sm:mb-8 leading-relaxed transition-colors duration-500 line-clamp-2 sm:line-clamp-3">{summary}</p>
     </div>
-    <div className="relative z-10 flex items-center gap-2 text-forix-green text-xs font-bold uppercase tracking-widest group-hover:text-forix-mint transition-colors duration-500">
-      Leer Artículo <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+    <div className="mt-auto relative z-10 flex items-center gap-2 text-forix-green text-xs font-bold uppercase tracking-widest group-hover:text-forix-mint transition-colors duration-500">
+      Leer Artículo <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
     </div>
     <div className="pointer-events-none absolute inset-[14px] border border-forix-blue/8 transition-colors duration-500 group-hover:border-white/15" />
     <div className="absolute top-0 right-0 w-1 h-0 bg-forix-green group-hover:h-full transition-all duration-700 z-0" />
@@ -575,7 +573,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
   return (
     <>
       {/* Top Bar with Logo */}
-      <nav className={`fixed top-0 left-0 w-full z-[60] transition-all duration-500 ${isScrolled ? 'py-2 bg-forix-white/90 backdrop-blur-md border-b border-forix-mint/20' : 'py-5 bg-transparent'}`}>
+      <nav className={`fixed top-0 left-0 w-full z-[60] transition-all duration-500 ${isScrolled ? 'py-2 bg-forix-white/90 backdrop-blur-md border-b border-forix-mint/20' : 'py-3 sm:py-5 bg-transparent'}`}>
         <div className="container-custom flex justify-between items-center">
           {/* Logo Left - hidden on home page when not scrolled */}
           <div
@@ -594,7 +592,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className={`fixed top-4 right-4 md:top-6 md:right-6 z-[70] ${isScrolled ? 'bg-forix-blue/95 backdrop-blur-md shadow-2xl border border-white/10' : 'bg-transparent border border-white/15'} rounded-none cursor-pointer group transition-all duration-500 flex flex-col overflow-hidden ${isScrolled ? 'p-1.5 px-3 py-2' : 'p-4 md:p-6 min-w-[180px] md:min-w-[250px]'}`}
+                  className={`fixed top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 z-[70] ${isScrolled ? 'bg-forix-blue/95 backdrop-blur-md shadow-2xl border border-white/10' : 'bg-transparent border border-white/15'} rounded-none cursor-pointer group transition-all duration-500 flex flex-col overflow-hidden ${isScrolled ? 'p-1.5 px-3 py-2' : 'p-3 sm:p-4 md:p-6 min-w-[160px] sm:min-w-[180px] md:min-w-[250px]'}`}
                   onClick={() => setIsExpanded(true)}
                 >
                   <div className={`flex items-center w-full ${isScrolled ? 'justify-end gap-3' : 'justify-between gap-4 mb-5 pb-4 border-b border-white/10'}`}>
@@ -658,7 +656,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                   initial={{ opacity: 0, scale: 0.95, transformOrigin: 'top right' }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="fixed top-4 right-4 md:top-6 md:right-6 p-8 md:p-10 rounded-none shadow-2xl min-w-[300px] md:min-w-[360px] border border-white/10 z-[70]"
+                  className="fixed top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 p-6 sm:p-8 md:p-10 rounded-none shadow-2xl min-w-[260px] sm:min-w-[300px] md:min-w-[360px] max-w-[calc(100vw-24px)] border border-white/10 z-[70]"
                   style={{ backgroundColor: 'rgba(61, 112, 114, 0.95)', backdropFilter: 'blur(12px)' }}
                 >
                   <div className="flex items-center justify-between mb-10">
@@ -691,7 +689,7 @@ const Navbar = ({ currentView, setCurrentView }: { currentView: string, setCurre
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05, ease: "easeOut" }}
                         onClick={() => handleLinkClick(link.id)}
-                        className={`text-left text-2xl md:text-3xl font-sans font-light tracking-tighter transition-all duration-500 hover:translate-x-2 group flex items-center gap-2.5 ${currentView === link.id ? 'text-white font-normal' : 'text-white/70 hover:text-white'}`}
+                        className={`text-left text-xl sm:text-2xl md:text-3xl font-sans font-light tracking-tighter transition-all duration-500 hover:translate-x-2 group flex items-center gap-2.5 ${currentView === link.id ? 'text-white font-normal' : 'text-white/70 hover:text-white'}`}
                       >
                         <span className={`w-1 h-1 rounded-none bg-forix-green transition-all duration-500 scale-0 group-hover:scale-100 ${currentView === link.id ? 'scale-100' : ''}`} />
                         {link.name}
@@ -758,7 +756,7 @@ const HeroLogo = () => (
 
 const Hero = () => {
   return (
-    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center bg-[#050505] px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center bg-[#050505] px-4 sm:px-6 md:px-12 lg:px-24 overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 z-0 opacity-50 mix-blend-luminosity"
@@ -783,9 +781,9 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4 }}
         >
-          <p className="text-forix-mint text-lg md:text-[1.45rem] font-light leading-relaxed tracking-[0.2em] uppercase text-center max-w-3xl">
-            Consultora boutique especializada en<br />
-            hospitalidad & customer experience
+          <p className="text-forix-mint text-sm sm:text-lg md:text-[1.45rem] font-light leading-relaxed tracking-[0.12em] sm:tracking-[0.2em] uppercase text-center max-w-3xl">
+            Consultora boutique especializada en<br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>hospitalidad & customer experience
           </p>
         </motion.div>
 
@@ -798,7 +796,7 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="text-forix-white hover:text-forix-green transition-colors duration-300 text-sm md:text-base tracking-[0.25em] uppercase flex items-center gap-3 cursor-pointer border border-white/20 hover:border-forix-green/40 px-6 py-3"
+          className="text-forix-white hover:text-forix-green transition-colors duration-300 text-xs sm:text-sm md:text-base tracking-[0.15em] sm:tracking-[0.25em] uppercase flex items-center gap-2 sm:gap-3 cursor-pointer border border-white/20 hover:border-forix-green/40 px-4 sm:px-6 py-3"
         >
           Inicia Tu Diagnóstico <ArrowRight size={18} />
         </motion.button>
@@ -814,7 +812,7 @@ const AnimatedHero = ({
   bgClass,
   rectClass,
   backgroundImage,
-  titleClassName = "text-6xl md:text-8xl lg:text-9xl",
+  titleClassName = "text-4xl sm:text-6xl md:text-8xl lg:text-9xl",
   textEndColor = "#D8E1E0",
   subtitleEndColor = "#D8E1E0"
 }: {
@@ -848,7 +846,7 @@ const AnimatedHero = ({
       ref={containerRef}
       className={`relative h-[150vh] ${bgClass}`}
     >
-      <div className="sticky top-0 h-[85vh] w-full flex flex-col justify-end pb-24 overflow-hidden">
+      <div className="sticky top-0 h-[85vh] w-full flex flex-col justify-end pb-12 sm:pb-24 overflow-hidden">
         {/* Background Image if provided */}
         {backgroundImage && (
           <div
@@ -857,7 +855,6 @@ const AnimatedHero = ({
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              backgroundAttachment: 'fixed'
             }}
           />
         )}
@@ -885,7 +882,7 @@ const AnimatedHero = ({
         </div>
 
         <div className="container-custom relative z-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 items-end">
             <div className="lg:col-span-8">
               <motion.h1
                 style={{ color: textColor }}
@@ -903,7 +900,7 @@ const AnimatedHero = ({
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
-                className="flex items-center gap-3 mb-6"
+                className="flex items-center gap-3 mb-4 sm:mb-6"
               >
                 <motion.div style={{ backgroundColor: subtitleColor }} className="w-2 h-2 rounded-full" />
                 <motion.span style={{ color: subtitleColor }} className="text-[10px] font-bold tracking-[0.4em] uppercase">
@@ -916,7 +913,7 @@ const AnimatedHero = ({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
-                className="text-xl md:text-2xl font-light leading-relaxed max-w-md"
+                className="text-lg sm:text-xl md:text-2xl font-light leading-relaxed max-w-md"
               >
                 {description}
               </motion.p>
@@ -925,8 +922,8 @@ const AnimatedHero = ({
         </div>
 
         {/* Decorative Line */}
-        <div className="absolute bottom-12 left-12 w-24 h-[1px] bg-white/10" />
-        <div className="absolute bottom-12 right-12 w-16 h-16 border-r border-b border-white/5" />
+        <div className="absolute bottom-6 left-6 sm:bottom-12 sm:left-12 w-24 h-[1px] bg-white/10" />
+        <div className="absolute bottom-6 right-6 sm:bottom-12 sm:right-12 w-16 h-16 border-r border-b border-white/5" />
       </div>
     </section>
   );
@@ -934,7 +931,7 @@ const AnimatedHero = ({
 
 const SectionHero = ({ title, subtitle, description }: { title: string, subtitle: string, description: string }) => {
   return (
-    <section className="relative min-h-[60vh] flex flex-col justify-center bg-forix-gray pt-32 pb-12 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section className="relative min-h-[60vh] flex flex-col justify-center bg-forix-gray pt-24 sm:pt-32 pb-12 px-4 sm:px-6 md:px-12 lg:px-24 overflow-hidden">
       {/* Bauhaus Geometric Elements */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-forix-blue/10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-1/2 h-1 bg-forix-green/30 pointer-events-none" />
@@ -949,7 +946,7 @@ const SectionHero = ({ title, subtitle, description }: { title: string, subtitle
           <span className="text-forix-green text-[10px] font-bold tracking-[0.5em] uppercase mb-6 block">
             {subtitle}
           </span>
-          <h1 className="text-forix-white text-5xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tighter mb-8 max-w-4xl">
+          <h1 className="text-forix-white text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tighter mb-6 sm:mb-8 max-w-4xl">
             {title}
           </h1>
           <div className="max-w-2xl">
@@ -988,7 +985,7 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
       ref={containerRef}
       className="relative h-[150vh] bg-[#14385C]"
     >
-      <div className="sticky top-0 h-[85vh] w-full flex flex-col justify-end pb-24 overflow-hidden">
+      <div className="sticky top-0 h-[85vh] w-full flex flex-col justify-end pb-12 sm:pb-24 overflow-hidden">
         {/* New Hero Background Image */}
         <div
           className="absolute inset-0 z-0"
@@ -996,7 +993,6 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
             backgroundImage: 'url("/hero_servicios.jpg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundAttachment: 'fixed'
           }}
         />
 
@@ -1023,14 +1019,14 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
         </div>
 
         <div className="container-custom relative z-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 items-end">
             <div className="lg:col-span-8">
               <motion.h1
                 style={{ color: titleColor }}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.85] tracking-tighter uppercase"
+                className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.85] tracking-tighter uppercase"
               >
                 {title}
               </motion.h1>
@@ -1041,10 +1037,10 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
-                className="flex items-center gap-3 mb-6"
+                className="flex items-center gap-3 mb-4 sm:mb-6"
               >
                 <motion.div style={{ backgroundColor: subtitleColor }} className="w-2 h-2 rounded-full" />
-                <motion.span style={{ color: subtitleColor }} className="text-xs md:text-sm font-bold tracking-[0.4em] uppercase">
+                <motion.span style={{ color: subtitleColor }} className="text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.4em] uppercase">
                   {subtitle}
                 </motion.span>
               </motion.div>
@@ -1054,7 +1050,7 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
-                className="text-xl md:text-2xl font-light leading-relaxed max-w-md"
+                className="text-lg sm:text-xl md:text-2xl font-light leading-relaxed max-w-md"
               >
                 {description}
               </motion.p>
@@ -1063,8 +1059,8 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
         </div>
 
         {/* Decorative Line */}
-        <div className="absolute bottom-12 left-12 w-24 h-[1px] bg-white/10" />
-        <div className="absolute bottom-12 right-12 w-16 h-16 border-r border-b border-white/5" />
+        <div className="absolute bottom-6 left-6 sm:bottom-12 sm:left-12 w-24 h-[1px] bg-white/10" />
+        <div className="absolute bottom-6 right-6 sm:bottom-12 sm:right-12 w-16 h-16 border-r border-b border-white/5" />
       </div>
     </section>
   );
@@ -1077,17 +1073,18 @@ const StackedServiceItem = ({ title, desc, index: _index, icon: Icon }: { title:
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="bg-forix-white border-t border-forix-blue/10 py-20 px-6 md:px-12 lg:px-24"
+      className="bg-forix-white border-t border-forix-blue/10 py-12 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-24 sticky top-[200px] sm:top-[200px] md:top-[180px] z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]"
+      style={{ zIndex: 10 + _index }}
     >
-      <div className="container-custom grid md:grid-cols-12 gap-12 items-start">
+      <div className="container-custom grid md:grid-cols-12 gap-8 sm:gap-12 items-start">
         <div className="md:col-span-5">
           <div className="md:sticky md:top-40 lg:top-44 self-start">
             {Icon && (
-              <div className="mb-6">
+              <div className="mb-4 sm:mb-6">
                 <Icon size={28} strokeWidth={1} className="text-forix-blue" />
               </div>
             )}
-            <h4 className="max-w-md text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter text-forix-blue">
+            <h4 className="max-w-md text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter text-forix-blue">
               {title}
             </h4>
           </div>
@@ -1099,7 +1096,7 @@ const StackedServiceItem = ({ title, desc, index: _index, icon: Icon }: { title:
               return block.split('. ').map((sentence, i, arr) => (
                 <p
                   key={`${bIdx}-${i}`}
-                  className={`text-xl md:text-[1.65rem] font-light leading-relaxed text-forix-gray ${isClosing ? 'italic font-normal' : ''}`}
+                  className={`text-base sm:text-xl md:text-[1.65rem] font-light leading-relaxed text-forix-gray ${isClosing ? 'italic font-normal' : ''}`}
                 >
                   {sentence}{i < arr.length - 1 ? '.' : ''}
                 </p>
@@ -1204,14 +1201,14 @@ const Services = () => {
         {pillars.map((pillar, pIdx) => (
           <div key={pIdx} className="relative">
             {/* Pillar Header */}
-            <div className="sticky top-0 z-20 bg-forix-white/90 backdrop-blur-md border-b border-forix-blue/10 py-12 px-6 md:px-12 lg:px-24">
+            <div className="sticky top-0 z-20 bg-forix-white/90 backdrop-blur-md py-8 sm:py-12 px-4 sm:px-6 md:px-12 lg:px-24">
               <div className="container-custom">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
                   <div>
-                    <h2 className="text-forix-green text-xs font-bold tracking-[0.5em] uppercase mb-4">{pillar.subtitle}</h2>
-                    <img src={pillar.logo} className="h-14 md:h-16 lg:h-20 w-auto mb-2" alt={pillar.name} />
+                    <h2 className="text-forix-green text-[10px] sm:text-xs font-bold tracking-[0.3em] sm:tracking-[0.5em] uppercase mb-3 sm:mb-4">{pillar.subtitle}</h2>
+                    <img src={pillar.logo} className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto mb-2" alt={pillar.name} />
                   </div>
-                  <p className="font-signature text-3xl md:text-4xl italic text-forix-green">"{pillar.lema}"</p>
+                  <p className="font-signature text-2xl sm:text-3xl md:text-4xl italic text-forix-green">"{pillar.lema}"</p>
                 </div>
               </div>
             </div>
@@ -1410,22 +1407,22 @@ const About = () => {
         textEndColor="#14385C"
         subtitleEndColor="#3D7072"
       />
-      <section id="about" className="pt-24 pb-0 bg-forix-white overflow-hidden">
+      <section id="about" className="pt-16 sm:pt-24 pb-0 bg-forix-white overflow-hidden">
         <div className="container-custom">
           {/* Liderazgo Section */}
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-24">
+          <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 lg:gap-24 items-center mb-16 sm:mb-24">
             {/* Left Content */}
             <div className="order-2 lg:order-1">
-              <h2 className="text-5xl md:text-7xl font-bold text-forix-blue mb-8 tracking-tighter">La filosofía del estándar</h2>
+              <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold text-forix-blue mb-6 sm:mb-8 tracking-tighter">La filosofía del estándar</h2>
 
-              <div className="space-y-8 max-w-2xl">
-                <p className="text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
+              <div className="space-y-6 sm:space-y-8 max-w-2xl">
+                <p className="text-base sm:text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
                   La <span className="font-semibold text-forix-blue">excelencia</span> no es un objetivo aspiracional, sino el requisito mínimo de operación. FORIX GROUP se basa en la <span className="font-semibold text-forix-blue">convicción</span> de que la diferencia entre una empresa común y una marca líder reside en la intencionalidad del <span className="font-semibold text-forix-blue">detalle</span>. No cree en soluciones genéricas, sino en el rigor técnico que protege el <span className="font-semibold text-forix-blue">prestigio</span> de cada organización.
                 </p>
-                <p className="text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
+                <p className="text-base sm:text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
                   Nuestra labor es transformar la <span className="font-semibold text-forix-blue">hospitalidad</span> de un concepto abstracto a una herramienta de <span className="font-semibold text-forix-blue">ingeniería financiera</span>.
                 </p>
-                <p className="text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
+                <p className="text-base sm:text-xl md:text-[1.7rem] text-forix-gray font-light leading-relaxed">
                   Somos el <span className="font-semibold text-forix-blue">aliado</span> que detiene la erosión del <span className="font-semibold text-forix-blue">negocio</span> y asegura que el <span className="font-semibold text-forix-blue">éxito</span> sea un sistema replicable, no un golpe de suerte.
                 </p>
               </div>
@@ -1433,9 +1430,9 @@ const About = () => {
 
             {/* Right Placeholder Box with Design Elements */}
             <div className="order-1 lg:order-2 relative">
-              <div className="relative aspect-[3/4] w-full max-w-md mx-auto">
+              <div className="relative aspect-[3/4] w-full max-w-sm sm:max-w-md mx-auto">
                 {/* Geometric Pattern - Top Right */}
-                <div className="absolute -top-10 -right-10 w-20 h-20 z-20 opacity-90">
+                <div className="absolute -top-6 -right-4 sm:-top-10 sm:-right-10 w-14 sm:w-20 h-14 sm:h-20 z-20 opacity-90">
                   <svg viewBox="0 0 100 100" className="w-full h-full text-forix-blue">
                     <path d="M 0 0 L 12 0 L 6 50 L 12 100 L 0 100 L 6 50 Z" fill="currentColor" />
                     <path d="M 28 0 L 40 0 L 34 50 L 40 100 L 28 100 L 34 50 Z" fill="currentColor" />
@@ -1448,7 +1445,7 @@ const About = () => {
                 <img src="/about_mauricio.jpg" alt="Mauricio Vacaflores" className="relative z-10 w-full h-full object-cover grayscale" />
 
                 {/* Signature Box - Bottom, diagonal like reference */}
-                <div className="absolute -bottom-10 left-[5%] z-30 w-[75%] md:-bottom-14">
+                <div className="absolute bottom-2 left-[20%] sm:left-[5%] z-30 w-[75%] sm:bottom-4 md:bottom-6">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -1464,7 +1461,7 @@ const About = () => {
           </div>
 
           {/* Company Information (From PDF) */}
-          <div className="grid lg:grid-cols-12 gap-12 pt-28 border-t border-forix-blue/5">
+          <div className="grid lg:grid-cols-12 gap-8 sm:gap-12 pt-16 sm:pt-28 border-t border-forix-blue/5">
             <div className="lg:col-span-4">
               <h2 className="text-forix-blue text-xs font-bold tracking-[0.4em] uppercase mb-8">Propósito & Esencia</h2>
               <div className="w-12 h-[1px] bg-forix-green mb-12" />
@@ -1487,7 +1484,7 @@ const About = () => {
             </div>
             <div className="lg:col-span-8 space-y-16">
               <div className="space-y-8">
-                <p className="text-3xl md:text-4xl lg:text-5xl font-light text-forix-blue leading-tight italic">
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-forix-blue leading-tight italic">
                   <AnimatedText segments={[
                     { text: '"' },
                     { text: 'Satisface', bold: true, className: 'text-forix-green' },
@@ -1499,7 +1496,7 @@ const About = () => {
                   ]} />
                 </p>
 
-                <p className="max-w-4xl text-xl md:text-2xl text-forix-gray font-light leading-relaxed italic">
+                <p className="max-w-4xl text-base sm:text-xl md:text-2xl text-forix-gray font-light leading-relaxed italic">
                   “Las marcas centradas en el cliente obtienen <span className="font-semibold text-forix-blue">ganancias un 60% más altas</span> que aquellas que no se centran en la experiencia de sus clientes”.
                 </p>
               </div>
@@ -1507,14 +1504,14 @@ const About = () => {
           </div>
 
           {/* Método FORIX - Full width centered */}
-          <div className="py-24 flex flex-col items-center justify-center min-h-[70vh]">
-            <div className="text-center mb-16">
-              <h4 className="text-black text-4xl md:text-5xl font-bold uppercase tracking-tight mb-3">Método FORIX</h4>
-              <p className="text-black font-bold text-3xl md:text-4xl tracking-widest">4i * X</p>
+          <div className="py-16 sm:py-24 flex flex-col items-center justify-center min-h-[50vh] sm:min-h-[70vh]">
+            <div className="text-center mb-10 sm:mb-16">
+              <h4 className="text-black text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight mb-3">Método FORIX</h4>
+              <p className="text-black font-bold text-xl sm:text-3xl md:text-4xl tracking-widest">4i * X</p>
             </div>
 
-            <div className="relative max-w-4xl mx-auto w-full px-4 md:px-6">
-              <div className="grid grid-cols-4 gap-2 md:gap-4 relative">
+            <div className="relative max-w-4xl mx-auto w-full px-2 sm:px-4 md:px-6">
+              <div className="grid grid-cols-4 gap-1 sm:gap-2 md:gap-4 relative">
                 {[
                   { name: "Investigación" },
                   { name: "Innovación" },
@@ -1522,7 +1519,7 @@ const About = () => {
                   { name: "Iteración" }
                 ].map((step, i) => (
                   <div key={i} className="flex flex-col items-center relative z-10 group cursor-default">
-                    <div className="w-8 h-28 md:w-12 md:h-52">
+                    <div className="w-6 h-20 sm:w-8 sm:h-28 md:w-12 md:h-52">
                       <motion.div
                         className="w-full h-full group-hover:scale-105 transition-transform duration-500"
                         style={{ clipPath: 'polygon(0% 0%, 100% 0%, 55% 50%, 100% 100%, 0% 100%, 45% 50%)' }}
@@ -1543,7 +1540,7 @@ const About = () => {
                         }}
                       />
                     </div>
-                    <span className="text-[10px] md:text-lg font-light text-forix-gray transition-colors duration-300 group-hover:text-black mt-2 text-center">{step.name}</span>
+                    <span className="text-[8px] sm:text-[10px] md:text-lg font-light text-forix-gray transition-colors duration-300 group-hover:text-black mt-1 sm:mt-2 text-center">{step.name}</span>
                   </div>
                 ))}
               </div>
@@ -1552,9 +1549,9 @@ const About = () => {
               <div className="w-full h-[1px] border-t border-dotted border-black/50 mt-4" />
 
               {/* Bottom Labels */}
-              <div className="flex justify-center gap-10 md:gap-20 mt-6">
-                <span className="text-xs md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXPERIENCIA</span>
-                <span className="text-xs md:text-lg uppercase tracking-[0.2em] text-black font-medium">EXCELENCIA</span>
+              <div className="flex justify-center gap-6 sm:gap-10 md:gap-20 mt-4 sm:mt-6">
+                <span className="text-[10px] sm:text-xs md:text-lg uppercase tracking-[0.1em] sm:tracking-[0.2em] text-black font-medium">EXPERIENCIA</span>
+                <span className="text-[10px] sm:text-xs md:text-lg uppercase tracking-[0.1em] sm:tracking-[0.2em] text-black font-medium">EXCELENCIA</span>
               </div>
             </div>
           </div>
@@ -1620,10 +1617,10 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
       <section id="articulos" className="section-spacing bg-forix-gray relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.08] forix-symbol-pattern pointer-events-none" />
         <div className="container-custom relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-16 gap-6">
             <div className="max-w-2xl">
-              <h2 className="text-forix-mint text-xs font-bold tracking-[0.3em] uppercase mb-4">Perspectivas para Directivos</h2>
-              <h3 className="text-4xl md:text-5xl font-bold text-forix-mint">
+              <h2 className="text-forix-mint text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase mb-4">Perspectivas para Directivos</h2>
+              <h3 className="text-2xl sm:text-4xl md:text-5xl font-bold text-forix-mint">
                 Que No se Conforman <br /> <span className="font-signature font-light text-white">con el Promedio.</span>
               </h3>
               <p className="text-lg text-forix-gray font-light mt-6">
@@ -1633,7 +1630,10 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {articles.map((a, i) => <ArticleCard key={a.slug} index={i} {...a} onClick={() => setCurrentView(getArticleView(a.slug))} />)}
+            {articles.map((a, i) => {
+              const icons = [Activity, Compass, Users];
+              return <ArticleCard key={a.slug} index={i} {...a} icon={icons[i]} onClick={() => setCurrentView(getArticleView(a.slug))} />;
+            })}
           </div>
 
           <div className="mt-24 border-t border-forix-mint/15 pt-20">
@@ -1650,7 +1650,7 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
                   key={template.href}
                   href={template.href}
                   download
-                  className="group relative border border-forix-mint/30 bg-white/[0.03] p-8 md:p-10 transition-all duration-500 hover:bg-forix-mint hover:text-forix-blue"
+                  className="group relative border border-forix-mint/30 bg-white/[0.03] p-6 sm:p-8 md:p-10 transition-all duration-500 hover:bg-forix-mint hover:text-forix-blue"
                 >
                   <div className="mb-6 flex items-center justify-between">
                     <span className="text-[10px] uppercase tracking-[0.28em] text-forix-green group-hover:text-forix-blue">CX TOOLKIT</span>
@@ -1698,7 +1698,7 @@ const ArticleDetailView = ({ article, setCurrentView }: { article: ArticleData, 
             Volver a Articulos
           </button>
 
-          <div className="grid lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] gap-16">
+          <div className="grid lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] gap-8 sm:gap-16">
             <aside className="space-y-8">
               <div className="border border-forix-mint/30 p-8">
                 <p className="text-[10px] uppercase tracking-[0.25em] text-forix-green mb-3">{article.category}</p>
@@ -1710,7 +1710,7 @@ const ArticleDetailView = ({ article, setCurrentView }: { article: ArticleData, 
             <article className="max-w-4xl">
               <header className="border-b border-forix-mint/30 pb-12 mb-12">
                 <p className="text-xs uppercase tracking-[0.3em] text-forix-green mb-5">{article.readingTime}</p>
-                <h1 className="text-4xl md:text-6xl font-bold text-forix-blue tracking-tight leading-[0.95] mb-6">{article.title}</h1>
+                <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-forix-blue tracking-tight leading-[0.95] mb-6">{article.title}</h1>
                 <p className="text-xl md:text-2xl text-forix-gray/70 font-light leading-relaxed mb-8">{article.subtitle}</p>
               </header>
 
@@ -1905,7 +1905,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-[#F4F4F4] flex items-center justify-center p-6 md:p-24 overflow-y-auto"
+        className="fixed inset-0 z-[100] bg-[#F4F4F4] flex items-center justify-center p-4 sm:p-6 md:p-24 overflow-y-auto"
       >
         {/* Confetti particles */}
         {showConfetti && (
@@ -1961,17 +1961,17 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                 <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
                   PREGUNTA {step + 1} DE {questions.length}
                 </p>
-                <h3 className="text-3xl md:text-5xl font-light text-[#14385C] leading-[1.3] mb-16 max-w-3xl">
+                <h3 className="text-xl sm:text-3xl md:text-5xl font-light text-[#14385C] leading-[1.3] mb-8 sm:mb-16 max-w-3xl">
                   {questions[step].title}
                 </h3>
 
                 {questions[step].type === 'scale' && (
-                  <div className="flex flex-wrap gap-4 md:gap-6">
+                  <div className="flex flex-wrap gap-2 sm:gap-4 md:gap-6">
                     {questions[step].options.map((opt) => (
                       <button
                         key={opt}
                         onClick={() => handleAnswer(opt)}
-                        className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center border border-black/10 bg-transparent text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300"
+                        className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center border border-black/10 bg-transparent text-base sm:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300"
                       >
                         {opt}
                       </button>
@@ -1980,12 +1980,12 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                 )}
 
                 {questions[step].type === 'choice' && (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {questions[step].options.map((opt) => (
                       <button
                         key={opt}
                         onClick={() => handleAnswer(opt)}
-                        className="w-full text-left p-6 md:p-8 border border-black/10 bg-transparent text-lg md:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300 group flex items-center justify-between"
+                        className="w-full text-left p-4 sm:p-6 md:p-8 border border-black/10 bg-transparent text-sm sm:text-lg md:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300 group flex items-center justify-between"
                       >
                         <span>{opt}</span>
                         <ArrowRight size={20} className="opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-[#3D7072]" />
@@ -2008,7 +2008,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                 <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
                   ÚLTIMO PASO
                 </p>
-                <h3 className="text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
+                <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
                   Para enviarle los resultados, necesitamos sus datos de contacto.
                 </h3>
                 <p className="text-xl text-forix-gray font-light mb-4">
@@ -2091,7 +2091,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6 }}
-                  className="text-4xl md:text-5xl font-bold text-forix-blue mb-6"
+                  className="text-2xl sm:text-4xl md:text-5xl font-bold text-forix-blue mb-6"
                 >
                   Diagnóstico Completado.
                 </motion.h3>
@@ -2146,7 +2146,7 @@ const Contact = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section id="contacto" className="py-32 bg-[#F4F4F4] overflow-hidden relative min-h-[60vh] flex items-center justify-center">
+    <section id="contacto" className="py-16 sm:py-24 md:py-32 bg-[#F4F4F4] overflow-hidden relative min-h-[50vh] sm:min-h-[60vh] flex items-center justify-center">
       {/* Brand Pattern Background */}
       <div className="absolute inset-0 z-0 opacity-[0.06] pointer-events-none" style={{
         backgroundImage: 'url("/image (1).png")',
@@ -2158,11 +2158,11 @@ const Contact = () => {
       <div className="container-custom relative z-10 flex flex-col items-center text-center">
         <h2 className="text-forix-blue text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase mb-8">Sesión Estratégica</h2>
 
-        <h3 className="text-4xl md:text-6xl font-bold text-forix-blue mb-6 leading-tight tracking-tight max-w-4xl">
+        <h3 className="text-2xl sm:text-4xl md:text-6xl font-bold text-forix-blue mb-6 leading-tight tracking-tight max-w-4xl">
           ¿Cuánto le cuesta el silencio de los clientes que no regresan?
         </h3>
 
-        <p className="text-lg md:text-xl text-forix-gray/70 font-light mb-16 max-w-2xl leading-relaxed">
+        <p className="text-base sm:text-lg md:text-xl text-forix-gray/70 font-light mb-10 sm:mb-16 max-w-2xl leading-relaxed">
           Transforme la lealtad en su activo más rentable, no en un costo de marketing.
         </p>
 
@@ -2173,7 +2173,7 @@ const Contact = () => {
         >
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-forix-green text-white px-8 py-5 md:px-12 md:py-6 font-medium tracking-[0.15em] uppercase text-sm md:text-base transition-all duration-300 hover:bg-forix-blue flex items-center gap-4 group shadow-lg hover:shadow-xl"
+            className="bg-forix-green text-white px-6 py-4 sm:px-8 sm:py-5 md:px-12 md:py-6 font-medium tracking-[0.1em] sm:tracking-[0.15em] uppercase text-xs sm:text-sm md:text-base transition-all duration-300 hover:bg-forix-blue flex items-center gap-3 sm:gap-4 group shadow-lg hover:shadow-xl"
           >
             Solicitar diagnóstico gratuito
             <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" />
@@ -2188,14 +2188,14 @@ const Contact = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-forix-white py-16 border-t border-forix-mint">
-      <div className="container-custom flex flex-col gap-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+    <footer className="bg-forix-white py-10 sm:py-16 border-t border-forix-mint">
+      <div className="container-custom flex flex-col gap-8 sm:gap-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 sm:gap-10">
           <div className="flex items-center">
             <img src="/logo_navbar.png" className="h-8 w-auto" alt="FORIX GROUP" />
           </div>
 
-          <div className="flex gap-4 md:gap-10 items-center">
+          <div className="flex flex-wrap gap-3 sm:gap-4 md:gap-10 items-center">
             <a href="https://www.facebook.com/profile.php?id=61587846722543" target="_blank" rel="noopener noreferrer" className="text-[9px] md:text-xs uppercase font-bold tracking-wider md:tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-1.5 md:gap-2 transition-colors duration-300"><Facebook size={14} className="md:w-4 md:h-4" /> <span className="hidden sm:inline">Facebook</span></a>
             <a href="https://www.instagram.com/forixgroup.bo" target="_blank" rel="noopener noreferrer" className="text-[9px] md:text-xs uppercase font-bold tracking-wider md:tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-1.5 md:gap-2 transition-colors duration-300"><Instagram size={14} className="md:w-4 md:h-4" /> <span className="hidden sm:inline">Instagram</span></a>
             <a href="https://www.linkedin.com/company/forix-group" target="_blank" rel="noopener noreferrer" className="text-[9px] md:text-xs uppercase font-bold tracking-wider md:tracking-widest text-forix-gray hover:text-forix-blue flex items-center gap-1.5 md:gap-2 transition-colors duration-300"><Linkedin size={14} className="md:w-4 md:h-4" /> <span className="hidden sm:inline">LinkedIn</span></a>
@@ -2437,19 +2437,19 @@ const GeometricRadial = () => (
 
 const ForixBusinessTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/forix_business_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX BUSINESS" />
+    <img src="/forix_business_nobg.png" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX BUSINESS" />
   </div>
 );
 
 const ForixLearningTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/forix_learning_nobg.png" className="h-10 md:h-12 lg:h-16 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX LEARNING" />
+    <img src="/forix_learning_nobg.png" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX LEARNING" />
   </div>
 );
 
 const ForixLabTypoLogo = () => (
   <div className="flex flex-col items-start w-full group-hover:text-forix-mint transition-colors duration-500 text-forix-blue">
-    <img src="/logo_lab.png" className="h-10 md:h-12 lg:h-16 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX LAB" />
+    <img src="/logo_lab.png" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto transition-all duration-500 group-hover:brightness-0 group-hover:invert" alt="FORIX LAB" />
   </div>
 );
 
@@ -2457,7 +2457,7 @@ const PillarCard = ({ title, desc, icon: Icon, customHeader, onClick, image }: {
   <motion.div
     whileHover={{ backgroundColor: "#14385C", color: "#F4F2F1" }}
     onClick={onClick}
-    className="group relative bg-forix-ghost/40 p-8 md:p-12 flex flex-col items-start text-left transition-all duration-500 cursor-pointer border border-forix-gray/5 overflow-hidden h-full min-h-[400px] md:min-h-[500px]"
+    className="group relative bg-forix-ghost/40 p-6 sm:p-8 md:p-12 flex flex-col items-start text-left transition-all duration-500 cursor-pointer border border-forix-gray/5 overflow-hidden h-full min-h-[320px] sm:min-h-[400px] md:min-h-[500px]"
   >
     {image && (
       <div className="absolute inset-0 z-0">
@@ -2646,20 +2646,20 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
               transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
               className="relative z-10 flex flex-col items-center"
             >
-              <h2 className="flex flex-col items-center mb-12">
-                <span className="text-forix-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter uppercase leading-[0.85]">
+              <h2 className="flex flex-col items-center mb-8 sm:mb-12">
+                <span className="text-forix-white text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter uppercase leading-[0.85]">
                   Redefinimos la
                 </span>
-                <span className="font-signature font-light text-6xl md:text-8xl lg:text-9xl leading-[0.4] z-10 py-6 !text-forix-green">
+                <span className="font-signature font-light text-4xl sm:text-6xl md:text-8xl lg:text-9xl leading-[0.4] z-10 py-4 sm:py-6 !text-forix-green">
                   Hospitalidad
                 </span>
-                <span className="text-forix-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter uppercase leading-[0.85] mt-4">
+                <span className="text-forix-white text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter uppercase leading-[0.85] mt-2 sm:mt-4">
                   estratégica.
                 </span>
               </h2>
 
               <div className="relative w-full flex flex-col items-center">
-                <p className="text-forix-mint/80 text-xl md:text-[1.9rem] font-light leading-relaxed max-w-4xl mt-12">
+                <p className="text-forix-mint/80 text-base sm:text-xl md:text-[1.9rem] font-light leading-relaxed max-w-4xl mt-6 sm:mt-12">
                   Somos un ecosistema boutique de transformación humana y empresarial enfocado en hospitalidad, restauración, turismo y negocios experienciales.
                 </p>
               </div>
@@ -2672,7 +2672,7 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
 
           {/* FEATURE SLIDES (Style of Image 1) */}
           {features.map((f, i) => (
-            <div key={i} className="relative h-screen w-screen flex items-start justify-center px-8 pt-20 md:px-24 md:pt-24 lg:pt-28">
+            <div key={i} className="relative h-screen w-screen flex items-center justify-center px-4 sm:px-8 md:px-24">
               {/* Subtle Background Diamonds for Features - Stronger effect as requested */}
               <div className="absolute inset-0 flex items-center justify-center opacity-70 pointer-events-none">
                 <div className="w-full h-full">
@@ -2687,7 +2687,7 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
-                    className={`text-forix-white mb-10 leading-[1.05] max-w-[20ch] italic ${f.desc ? 'font-bold text-5xl md:text-7xl tracking-tighter uppercase' : 'font-light text-[2.6rem] md:text-[3.5rem] lg:text-[4.35rem] tracking-tight'}`}
+                    className={`text-forix-white mb-6 sm:mb-10 leading-[1.05] max-w-[20ch] italic ${f.desc ? 'font-bold text-3xl sm:text-5xl md:text-7xl tracking-tighter uppercase' : 'font-light text-[1.6rem] sm:text-[2.6rem] md:text-[3.5rem] lg:text-[4.35rem] tracking-tight'}`}
                   >
                     {f.title}
                   </motion.h3>
@@ -2723,7 +2723,7 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
               </div>
             </div>
 
-            <h2 className="relative z-10 text-forix-white text-4xl md:text-6xl font-bold mb-12 tracking-tighter">
+            <h2 className="relative z-10 text-forix-white text-2xl sm:text-4xl md:text-6xl font-bold mb-8 sm:mb-12 tracking-tighter">
               ¿Listo para elevar <br /> su estándar?
             </h2>
 
@@ -2826,7 +2826,7 @@ const DifferentiatingPhraseSection = () => {
             <motion.span
               key={wordIdx}
               variants={letterVariants}
-              className={`text-2xl md:text-4xl lg:text-5xl tracking-tight leading-relaxed whitespace-nowrap italic ${getWordStyle(word)}`}
+              className={`text-lg sm:text-2xl md:text-4xl lg:text-5xl tracking-tight leading-relaxed italic ${getWordStyle(word)}`}
             >
               {word}
             </motion.span>
@@ -3038,7 +3038,7 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
             className="container-custom mb-12 text-center"
           >
             <span className="text-forix-green text-[10px] font-bold tracking-[0.5em] uppercase mb-4 block">Confianza Demostrada</span>
-            <h2 className="text-forix-white text-3xl md:text-4xl font-bold tracking-tight">Empresas que elevaron su estándar</h2>
+            <h2 className="text-forix-white text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Empresas que elevaron su estándar</h2>
           </motion.div>
 
           <div className="relative w-full flex overflow-x-hidden py-6">
@@ -3084,12 +3084,12 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: i * 0.15 }}
-                  className="relative bg-forix-blue/40 backdrop-blur-xl p-12 md:p-16 flex flex-col items-center text-center group"
+                  className="relative bg-forix-blue/40 backdrop-blur-xl p-8 sm:p-12 md:p-16 flex flex-col items-center text-center group"
                 >
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-b from-forix-green/10 to-transparent pointer-events-none" />
 
                   <motion.div
-                    className="relative z-10 text-6xl md:text-8xl font-serif font-light tracking-tighter mb-2"
+                    className="relative z-10 text-5xl sm:text-7xl md:text-9xl font-serif font-light tracking-tighter mb-2"
                     animate={{ color: ['#3D7072', '#D8E1E0', '#3D7072'] }}
                     transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.8 }}
                   >
@@ -3098,10 +3098,10 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
 
                   <div className="relative z-10 w-8 h-[2px] bg-forix-green/30 my-6 group-hover:w-16 group-hover:bg-forix-green transition-all duration-700" />
 
-                  <p className="relative z-10 text-[11px] uppercase tracking-[0.3em] text-forix-white/80 font-bold mb-2 leading-relaxed">
+                  <p className="relative z-10 text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] sm:tracking-[0.3em] text-forix-white/80 font-bold mb-2 leading-relaxed">
                     {metric.label}
                   </p>
-                  <p className="relative z-10 text-[10px] tracking-[0.2em] text-forix-mint/40 font-light">
+                  <p className="relative z-10 text-[11px] sm:text-xs md:text-sm tracking-[0.15em] sm:tracking-[0.2em] text-forix-mint/50 font-light">
                     {metric.sublabel}
                   </p>
                 </motion.div>
@@ -3116,9 +3116,9 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
         <div className="container-custom">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-2xl">
-              <h2 className="text-forix-blue text-sm md:text-base font-bold tracking-[0.4em] uppercase mb-4">Nuestros Pilares</h2>
-              <h3 className="text-4xl md:text-5xl font-bold text-forix-blue leading-tight">
-                Arquitectura de <span className="font-signature font-light text-5xl md:text-6xl">Excelencia</span> Estratégica.
+              <h2 className="text-forix-blue text-xs sm:text-sm md:text-base font-bold tracking-[0.3em] sm:tracking-[0.4em] uppercase mb-4">Nuestros Pilares</h2>
+              <h3 className="text-2xl sm:text-4xl md:text-5xl font-bold text-forix-blue leading-tight">
+                Arquitectura de <span className="font-signature font-light text-3xl sm:text-5xl md:text-6xl">Excelencia</span> Estratégica.
               </h3>
             </div>
           </div>
@@ -3154,10 +3154,10 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
                 transition={{ duration: 0.7, delay: i * 0.15 }}
                 viewport={{ once: true }}
                 onClick={() => setCurrentView('servicios')}
-                className="group relative cursor-pointer border-r last:border-r-0 border-forix-blue/10 px-8 md:px-10 py-12 md:py-16 hover:bg-forix-blue transition-all duration-700"
+                className="group relative cursor-pointer border-b md:border-b-0 md:border-r last:border-b-0 last:border-r-0 border-forix-blue/10 px-6 sm:px-8 md:px-10 py-8 sm:py-12 md:py-16 hover:bg-forix-blue transition-all duration-700"
               >
                 {/* Number */}
-                <span className="text-[10px] font-bold tracking-[0.3em] text-forix-green group-hover:text-forix-mint transition-colors duration-500 uppercase">
+                <span className="text-xs sm:text-sm font-bold tracking-[0.2em] sm:tracking-[0.3em] text-forix-green group-hover:text-forix-mint transition-colors duration-500 uppercase">
                   {pillar.num} — {pillar.tagline}
                 </span>
 
@@ -3180,7 +3180,7 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
                   {pillar.items.map((item, j) => (
                     <div key={j} className="flex items-start gap-3">
                       <span className="w-[3px] h-[3px] rounded-full bg-forix-green group-hover:bg-forix-mint mt-2 shrink-0 transition-colors duration-500" />
-                      <p className="text-sm font-light text-forix-blue/60 group-hover:text-forix-white/70 tracking-wide leading-relaxed transition-colors duration-500">
+                      <p className="text-base sm:text-lg font-light text-forix-blue/60 group-hover:text-forix-white/70 tracking-wide leading-relaxed transition-colors duration-500">
                         {item}
                       </p>
                     </div>
@@ -3225,14 +3225,14 @@ const HomeView = ({ setCurrentView }: { setCurrentView: (view: string) => void }
                 <motion.div
                   key={i}
                   onClick={() => setCurrentView(getArticleView(article.slug))}
-                  className="group relative p-10 md:p-12 border border-forix-mint/40 shadow-[0_0_0_1px_rgba(20,56,92,0.05)] transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden flex flex-col"
+                  className="group relative p-6 sm:p-10 md:p-12 border border-forix-mint/40 shadow-[0_0_0_1px_rgba(20,56,92,0.05)] transition-all duration-500 hover:bg-forix-blue hover:text-forix-white cursor-pointer overflow-hidden flex flex-col"
                 >
                   <div className="flex items-center justify-between mb-6">
                     <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-forix-green">{article.category}</span>
                     <IconComponent size={20} strokeWidth={1.5} className="text-forix-green group-hover:text-forix-mint transition-colors duration-500" />
                   </div>
-                  <h4 className="text-[26px] md:text-[30px] font-bold text-forix-blue group-hover:text-forix-white mb-4 leading-tight transition-colors duration-500">{article.title}</h4>
-                  <p className="text-[17px] md:text-[18px] text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-8 leading-relaxed transition-colors duration-500">{shortSummaries[i]}</p>
+                  <h4 className="text-xl sm:text-[26px] md:text-[30px] font-bold text-forix-blue group-hover:text-forix-white mb-4 leading-tight transition-colors duration-500">{article.title}</h4>
+                  <p className="text-sm sm:text-[17px] md:text-[18px] text-forix-gray/60 group-hover:text-forix-white/70 font-light mb-6 sm:mb-8 leading-relaxed transition-colors duration-500">{shortSummaries[i]}</p>
                   <div className="mt-auto flex items-center gap-2 text-forix-green group-hover:text-forix-mint text-xs font-bold uppercase tracking-widest transition-colors duration-500">
                     Leer artículo <ArrowRight size={12} />
                   </div>
