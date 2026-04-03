@@ -36,7 +36,8 @@ import {
   Activity,
   BarChart3,
   GraduationCap,
-  Briefcase
+  Briefcase,
+  ChevronUp
 } from 'lucide-react';
 
 type ArticleSection = {
@@ -1121,6 +1122,21 @@ const StackedServiceItem = ({ title, desc, index: _index, icon: Icon }: { title:
 };
 
 const Services = () => {
+  const servicesTopRef = useRef<HTMLDivElement>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 800);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    servicesTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const pillars = [
     {
       name: "FORIX BUSINESS",
@@ -1190,7 +1206,8 @@ const Services = () => {
   const collageImageClass = "w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700";
 
   return (
-    <div className="bg-forix-white">
+    <div className="bg-forix-white relative">
+      <div ref={servicesTopRef} />
       <ServicesHero
         title="Soluciones"
         subtitle="Excelencia Estratégica"
@@ -1228,6 +1245,23 @@ const Services = () => {
           </div>
         ))}
       </section>
+
+      {/* Back to Top Button */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            onClick={scrollToTop}
+            className="fixed bottom-6 right-4 sm:right-6 z-50 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-forix-blue/80 backdrop-blur-sm border border-forix-blue/20 text-white flex items-center justify-center shadow-lg hover:bg-forix-blue transition-colors duration-300"
+            aria-label="Volver al inicio"
+          >
+            <ChevronUp size={18} strokeWidth={1.5} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -1445,7 +1479,7 @@ const About = () => {
                 <img src="/about_mauricio.jpg" alt="Mauricio Vacaflores" className="relative z-10 w-full h-full object-cover grayscale" />
 
                 {/* Signature Box - Bottom, diagonal like reference */}
-                <div className="absolute bottom-2 left-[20%] sm:left-[5%] z-30 w-[75%] sm:bottom-4 md:bottom-6">
+                <div className="absolute -bottom-8 left-[30%] sm:left-[25%] z-30 w-[65%] sm:-bottom-10 md:-bottom-12">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -1482,7 +1516,7 @@ const About = () => {
                 <div className="absolute -bottom-4 -left-4 w-24 h-[1px] bg-forix-mint/50" />
               </div>
             </div>
-            <div className="lg:col-span-8 space-y-16">
+            <div className="lg:col-span-8 flex items-center">
               <div className="space-y-8">
                 <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-forix-blue leading-tight italic">
                   <AnimatedText segments={[
@@ -1589,18 +1623,18 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
   const templates = [
     {
       title: "Plantilla de Mystery Shopping",
-      desc: "Checklist de auditoría encubierta para detectar brechas entre promesa de marca y experiencia real.",
-      href: "/templates/plantilla-mystery-shopping.txt"
+      desc: "Herramienta de perfilamiento psicográfico para decodificar el entorno, aspiraciones y miedos reales de su cliente ideal. Va más allá de la demografía para entender qué ve, oye, piensa y siente su mercado objetivo.",
+      href: "/CX TOOLS 1 - Mapa de empatía.pdf"
     },
     {
       title: "Plantilla de protocolo de servicio",
-      desc: "Estructura base para documentar rituales, estándares y momentos críticos de atención.",
-      href: "/templates/plantilla-protocolo-servicio.txt"
+      desc: "Modelo estratégico para encajar sus productos y servicios con las necesidades y deseos específicos del cliente. Conecta el perfil del cliente con su propuesta de valor para crear una oferta donde el precio deja de ser el factor decisivo.",
+      href: "/CX TOOLS 2 - Value Proposition Canvas.pdf"
     },
     {
       title: "Plantilla de rentabilidad experiencial",
-      desc: "Marco inicial para relacionar experiencia, retención, recompra y valor de vida del cliente.",
-      href: "/templates/plantilla-rentabilidad-experiencial.txt"
+      desc: "Mapa de ruta integral que visualiza cada punto de contacto entre el cliente y su empresa. Mide los picos emocionales y las caídas de servicio en cada etapa para maximizar retención y valor de vida del cliente.",
+      href: "/CX TOOLS 3 - Customer Journey Map.pdf"
     }
   ];
 
@@ -1640,7 +1674,7 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
             <div className="max-w-2xl mb-12">
               <h3 className="text-forix-mint text-xs font-bold tracking-[0.3em] uppercase mb-4">Plantillas Descargables</h3>
               <p className="text-xl md:text-2xl text-forix-white font-light leading-relaxed">
-                Herramientas base para iniciar auditoría, diseño de protocolo y lectura de rentabilidad experiencial.
+                Herramientas diseñadas para quienes han dejado de vender productos y han comenzado a diseñar experiencias. No es gestión; es la ingeniería detrás de una Experiencia Boutique
               </p>
             </div>
 
@@ -1768,7 +1802,14 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string | number>>({});
   const [contactName, setContactName] = useState('');
+  const [contactCargo, setContactCargo] = useState('');
+  const [contactEmpresa, setContactEmpresa] = useState('');
   const [contactPhone, setContactPhone] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactIndustria, setContactIndustria] = useState('');
+  const [contactEmpleados, setContactEmpleados] = useState('');
+  const [contactPreferencia, setContactPreferencia] = useState('');
+  const [contactSubStep, setContactSubStep] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const googleSheetsUrl = import.meta.env.VITE_GOOGLE_SHEETS_URL?.trim();
@@ -1784,56 +1825,79 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
   const questions = [
     {
       id: 1,
-      title: "¿Del 1 al 10, qué tan consistente es la experiencia que recibe un cliente en su empresa, sin importar quién lo atienda o en qué sucursal esté?",
+      title: "¿Del 1 al 10, qué tan consistente es la experiencia que recibe un cliente en su empresa, independientemente de quién lo atienda o en qué sucursal esté?",
       type: "scale",
       options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
     {
       id: 2,
-      title: "¿Cuál de estos desafíos le quita el sueño hoy mismo?",
+      title: "¿Cuenta con un manual de estándares de hospitalidad y lenguaje de marca que sea de lectura obligatoria para todo el personal?",
       type: "choice",
       options: [
-        "Mis clientes me comparan solo por precio.",
-        "Tengo procesos, pero a mi equipo le falta 'alma' y compromiso.",
-        "Atraigo clientes, pero no logro que vuelvan o recomienden.",
-        "Siento que mi marca se ha vuelto genérica ante la competencia."
+        "Sí",
+        "No",
+        "Solo para algunos puestos"
       ]
     },
     {
       id: 3,
-      title: "¿Tiene detectado cuánta rentabilidad está perdiendo mensualmente por clientes que se van insatisfechos y no regresan?",
+      title: "¿Cuándo fue la última vez que se realizó una auditoría o 'Mystery Shopper' para verificar que esos estándares se cumplen realmente en el punto de contacto?",
       type: "choice",
       options: [
-        "Sí, lo tengo medido",
-        "Tengo una idea, pero no el dato exacto",
-        "No tengo forma de medirlo hoy"
+        "Último mes",
+        "Últimos 6 meses",
+        "Hace más de un año",
+        "Nunca"
       ]
     },
     {
       id: 4,
-      title: "Si hoy mismo usted dejará de supervisar la operación, ¿la cultura de servicio se mantendría intacta o empezaría a degradarse?",
+      title: "¿Qué porcentaje de sus clientes actuales dejan una retroalimentación (NPS o encuesta) después de su compra?",
       type: "choice",
       options: [
-        "Se mantendría intacta",
-        "Empezaría a degradarse poco a poco",
-        "Se degradaría rápidamente"
+        "Menos del 5% (Nivel Crítico)",
+        "Entre el 5% y el 20% (Nivel Estándar)",
+        "Más del 20% (Nivel Avanzado)",
+        "No lo medimos"
       ]
     },
     {
       id: 5,
-      title: "¿Está listo para redefinir sus estándares y convertir la hospitalidad en su mayor ventaja competitiva, aunque esto implique transformar la mentalidad de toda su organización?",
+      title: "De los comentarios negativos recibidos en el último mes, ¿en qué porcentaje de los casos se cambió un proceso interno para que ese error no vuelva a suceder?",
       type: "choice",
       options: [
-        "Sí, estoy listo",
-        "Necesito más información"
+        "En todos los casos",
+        "En algunos casos",
+        "Solo se resolvió la queja individual",
+        "No hacemos ese seguimiento"
+      ]
+    },
+    {
+      id: 6,
+      title: "¿Tienen identificados cuáles son los 3 \"Momentos de la Verdad\" (picos emocionales) donde su cliente decide si volverá a comprar o no?",
+      type: "choice",
+      options: [
+        "Sí",
+        "No"
+      ]
+    },
+    {
+      id: 7,
+      title: "¿Sabe cuántos clientes está perdiendo hoy mismo debido a una mala experiencia que nunca llegó a reportarse?",
+      type: "choice",
+      options: [
+        "Lo sé con exactitud",
+        "Tengo un estimado preocupante",
+        "No tengo forma de saberlo actualmente"
       ]
     }
   ];
 
-  // Total steps: questions + contact info step
-  const totalSteps = questions.length + 1;
-  const isContactStep = step === questions.length;
-  const isCompleted = step > questions.length;
+  // Total steps: questions + 3 contact sub-steps
+  const totalContactSteps = 3;
+  const totalSteps = questions.length + totalContactSteps;
+  const isContactStep = step >= questions.length && step < questions.length + totalContactSteps;
+  const isCompleted = step >= questions.length + totalContactSteps;
 
   const handleAnswer = (answer: string | number) => {
     setAnswers({ ...answers, [step]: answer });
@@ -1851,7 +1915,13 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
       id: Date.now(),
       date: new Date().toISOString(),
       name: contactName,
+      cargo: contactCargo,
+      empresa: contactEmpresa,
       phone: contactPhone,
+      email: contactEmail,
+      industria: contactIndustria,
+      empleados: contactEmpleados,
+      preferencia_contacto: contactPreferencia,
       answers: questions.map((q, i) => ({
         question: q.title,
         answer: answers[i] ?? ''
@@ -1874,7 +1944,13 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
           body: JSON.stringify({
             id: entry.id,
             name: contactName,
+            cargo: contactCargo,
+            empresa: contactEmpresa,
             phone: contactPhone,
+            email: contactEmail,
+            industria: contactIndustria,
+            empleados: contactEmpleados,
+            preferencia_contacto: contactPreferencia,
             date: entry.date,
             answers: entry.answers,
             answersText,
@@ -1883,6 +1959,8 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
             p3: String(answers[2] ?? ''),
             p4: String(answers[3] ?? ''),
             p5: String(answers[4] ?? ''),
+            p6: String(answers[5] ?? ''),
+            p7: String(answers[6] ?? ''),
           }),
         });
       }
@@ -1923,7 +2001,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
         )}
 
         {/* Brand Logo watermark */}
-        <div className="absolute bottom-8 right-8 w-32 md:w-56 opacity-10 pointer-events-none z-0">
+        <div className="absolute bottom-8 right-8 w-20 md:w-32 opacity-[0.04] pointer-events-none z-0">
           <svg viewBox="0 0 220 360" className="w-full h-auto" fill="#3D7072" xmlns="http://www.w3.org/2000/svg">
             <path d="M0,0 L40,0 L25,180 L40,360 L0,360 L15,180 Z" />
             <path d="M60,0 L100,0 L85,180 L100,360 L60,360 L75,180 Z" />
@@ -1932,7 +2010,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
           </svg>
         </div>
 
-        <button onClick={() => { onClose(); setStep(0); setAnswers({}); setContactName(''); setContactPhone(''); }} className="absolute top-6 right-6 md:top-12 md:right-12 text-forix-blue hover:text-forix-green transition-colors z-10">
+        <button onClick={() => { onClose(); setStep(0); setAnswers({}); setContactName(''); setContactCargo(''); setContactEmpresa(''); setContactPhone(''); setContactEmail(''); setContactIndustria(''); setContactEmpleados(''); setContactPreferencia(''); setContactSubStep(0); }} className="absolute top-6 right-6 md:top-12 md:right-12 text-forix-blue hover:text-forix-green transition-colors z-10">
           <X size={32} strokeWidth={1.5} />
         </button>
 
@@ -1996,57 +2074,139 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
               </motion.div>
             )}
 
-            {/* Contact info step */}
+            {/* Contact info sub-steps */}
             {isContactStep && !isCompleted && (
-              <motion.div
-                key="contact-step"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
-                  ÚLTIMO PASO
-                </p>
-                <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
-                  Para enviarle los resultados, necesitamos sus datos de contacto.
-                </h3>
-                <p className="text-xl text-forix-gray font-light mb-4">
-                  Su información se mantendrá estrictamente confidencial.
-                </p>
-                <p className="text-base md:text-lg text-forix-gray/70 font-light mb-12 max-w-2xl leading-relaxed">
-                  Sus respuestas se guardan localmente en este navegador y, si se configura la URL de Google Sheets, también se envían automáticamente a la hoja.
-                </p>
-
-                <div className="space-y-6 max-w-lg">
-                  <div>
-                    <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Nombre completo</label>
-                    <input
-                      type="text"
-                      value={contactName}
-                      onChange={(e) => setContactName(e.target.value)}
-                      placeholder="Ej: Mauricio Vacaflores"
-                      className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Número de celular</label>
-                    <input
-                      type="tel"
-                      value={contactPhone}
-                      onChange={(e) => setContactPhone(e.target.value)}
-                      placeholder="Ej: +591 70000000"
-                      className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300"
-                    />
-                  </div>
-                  <PrimaryButton
-                    onClick={saveDiagnostic}
-                    className={`text-lg py-5 px-12 w-full mt-4 ${!contactName || !contactPhone || isSubmitting ? 'opacity-40 pointer-events-none' : ''}`}
+              <AnimatePresence mode="wait">
+                {/* Sub-step 1: Datos personales */}
+                {step === questions.length && (
+                  <motion.div
+                    key="contact-step-1"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {isSubmitting ? 'ENVIANDO...' : 'ENVIAR DIAGNÓSTICO'}
-                  </PrimaryButton>
-                </div>
-              </motion.div>
+                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                      PASO 1 DE 3
+                    </p>
+                    <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
+                      Para enviarle los resultados, necesitamos algunos datos.
+                    </h3>
+                    <p className="text-base md:text-lg text-forix-gray/70 font-light mb-10 max-w-2xl leading-relaxed">
+                      Su información se mantendrá estrictamente confidencial.
+                    </p>
+
+                    <div className="space-y-5 max-w-lg">
+                      <div>
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Nombre completo</label>
+                        <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Ej: Mauricio Vacaflores" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Cargo</label>
+                        <input type="text" value={contactCargo} onChange={(e) => setContactCargo(e.target.value)} placeholder="Ej: Director General" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Empresa</label>
+                        <input type="text" value={contactEmpresa} onChange={(e) => setContactEmpresa(e.target.value)} placeholder="Ej: Hotel Boutique Santa Cruz" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Celular</label>
+                        <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Ej: +591 70000000" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Correo electrónico</label>
+                        <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="Ej: nombre@empresa.com" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                      </div>
+                      <PrimaryButton
+                        onClick={() => setStep(step + 1)}
+                        className={`text-lg py-5 px-12 w-full mt-4 ${!contactName || !contactPhone || !contactEmail ? 'opacity-40 pointer-events-none' : ''}`}
+                      >
+                        SIGUIENTE
+                      </PrimaryButton>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Sub-step 2: Empresa */}
+                {step === questions.length + 1 && (
+                  <motion.div
+                    key="contact-step-2"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                      PASO 2 DE 3
+                    </p>
+                    <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
+                      Cuéntenos sobre su organización.
+                    </h3>
+                    <p className="text-base md:text-lg text-forix-gray/70 font-light mb-10 max-w-2xl leading-relaxed">
+                      Esto nos permite personalizar sus resultados.
+                    </p>
+
+                    <div className="space-y-5 max-w-lg">
+                      <div>
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Industria o sector</label>
+                        <input type="text" value={contactIndustria} onChange={(e) => setContactIndustria(e.target.value)} placeholder="Ej: Hotelería, Restauración, Retail..." className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Número de empleados</label>
+                        <input type="text" value={contactEmpleados} onChange={(e) => setContactEmpleados(e.target.value)} placeholder="Ej: 50" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                      </div>
+                      <PrimaryButton
+                        onClick={() => setStep(step + 1)}
+                        className={`text-lg py-5 px-12 w-full mt-4 ${!contactIndustria || !contactEmpleados ? 'opacity-40 pointer-events-none' : ''}`}
+                      >
+                        SIGUIENTE
+                      </PrimaryButton>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Sub-step 3: Preferencia de contacto */}
+                {step === questions.length + 2 && (
+                  <motion.div
+                    key="contact-step-3"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                      ÚLTIMO PASO
+                    </p>
+                    <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-10 max-w-3xl">
+                      ¿Cómo prefieres que te contactemos?
+                    </h3>
+
+                    <div className="space-y-4 max-w-lg">
+                      {["WhatsApp", "Llamada"].map((option) => (
+                        <motion.button
+                          key={option}
+                          whileHover={{ x: 4 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => setContactPreferencia(option)}
+                          className={`w-full text-left p-5 border transition-all duration-300 text-lg font-light ${
+                            contactPreferencia === option
+                              ? 'border-[#3D7072] bg-[#3D7072]/5 text-[#14385C]'
+                              : 'border-black/10 text-[#14385C]/70 hover:border-[#3D7072]/50'
+                          }`}
+                        >
+                          {option}
+                        </motion.button>
+                      ))}
+                      <PrimaryButton
+                        onClick={saveDiagnostic}
+                        className={`text-lg py-5 px-12 w-full mt-6 ${!contactPreferencia || isSubmitting ? 'opacity-40 pointer-events-none' : ''}`}
+                      >
+                        {isSubmitting ? 'ENVIANDO...' : 'ENVIAR DIAGNÓSTICO'}
+                      </PrimaryButton>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             )}
 
             {/* Completion screen with animation */}
@@ -2125,8 +2285,10 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                       onClose();
                       setStep(0);
                       setAnswers({});
-                      setContactName('');
-                      setContactPhone('');
+                      setContactName(''); setContactCargo(''); setContactEmpresa('');
+                      setContactPhone(''); setContactEmail('');
+                      setContactIndustria(''); setContactEmpleados('');
+                      setContactPreferencia(''); setContactSubStep(0);
                     }}
                     className="text-lg py-6 px-12"
                   >
@@ -2587,22 +2749,22 @@ const HorizontalAboutSection = ({ setCurrentView }: { setCurrentView: (view: str
   const features = [
     {
       id: "01",
-      title: "Porque en un mundo que olvida lo que dices, nosotros recordamos lo que haces sentir.",
+      title: "\u201CPorque en un mundo que olvida lo que dices, nosotros recordamos lo que sientes...\u201D",
       desc: ""
     },
     {
       id: "02",
-      title: "Cambiamos la lógica del negocio por la magia de la hospitalidad irracional.",
+      title: "\u201C...cambiamos la lógica del negocio por la magia de la hospitalidad irracional...\u201D",
       desc: ""
     },
     {
       id: "03",
-      title: "Poniendo el corazón en cada detalle para que su equipo y su cliente nunca olviden cómo se sintieron.",
+      title: "\u201C...poniendo el corazón en cada detalle para que su equipo y su cliente...\u201D",
       desc: ""
     },
     {
       id: "04",
-      title: "Nunca dejen de sentir que este es el lugar al que pertenecen.",
+      title: "\u201C...nunca dejen de sentir que este es el lugar al que pertenecen...\u201D",
       desc: ""
     }
   ];
@@ -2754,12 +2916,16 @@ const ForixSymbol = ({ className = "" }: { className?: string }) => (
 );
 
 const DifferentiatingPhraseSection = () => {
-  const phrase = '"La hospitalidad es un placer egoísta, hacer que los demás se sientan bien te hace feliz."';
+  // 3 lines as specified
+  const lines = [
+    { text: '"La Hospitalidad es un placer egoísta,', boldWords: ['HOSPITALIDAD', 'PLACER'] },
+    { text: 'hacer que los demás se sientan bien,', boldWords: [] },
+    { text: 'te hace feliz."', boldWords: ['FELIZ'] },
+  ];
 
-  // Define which words get which style
-  const getWordStyle = (word: string) => {
-    const cleanWord = word.toUpperCase().replace(/[,."]/g, "");
-    if (["HOSPITALIDAD", "PLACER", "FELIZ"].includes(cleanWord)) return "text-forix-white font-semibold tracking-tight font-sans";
+  const getWordStyle = (word: string, boldWords: string[]) => {
+    const cleanWord = word.toUpperCase().replace(/[,.""\u201C\u201D]/g, "");
+    if (boldWords.includes(cleanWord)) return "text-forix-white font-semibold tracking-tight font-sans";
     return "text-forix-white/70 font-light tracking-[0.14em] font-sans";
   };
 
@@ -2767,21 +2933,19 @@ const DifferentiatingPhraseSection = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.03 },
+      transition: { staggerChildren: 0.08 },
     },
   };
 
-  const letterVariants = {
+  const lineVariants = {
     hidden: {
       opacity: 0,
       filter: "blur(10px)",
-      scale: 1.2,
       y: 10
     },
     visible: {
       opacity: 1,
       filter: "blur(0px)",
-      scale: 1,
       y: 0,
       transition: {
         duration: 0.8,
@@ -2789,8 +2953,6 @@ const DifferentiatingPhraseSection = () => {
       },
     },
   };
-
-  const words = phrase.split(" ");
 
   return (
     <section className="py-20 bg-forix-blue relative overflow-hidden flex items-center justify-center min-h-[55vh]">
@@ -2820,16 +2982,23 @@ const DifferentiatingPhraseSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="flex flex-wrap justify-center items-center gap-x-2 md:gap-x-4 gap-y-4 max-w-4xl mx-auto"
+          className="flex flex-col items-center gap-y-3 md:gap-y-5 max-w-4xl mx-auto"
         >
-          {words.map((word, wordIdx) => (
-            <motion.span
-              key={wordIdx}
-              variants={letterVariants}
-              className={`text-lg sm:text-2xl md:text-4xl lg:text-5xl tracking-tight leading-relaxed italic ${getWordStyle(word)}`}
+          {lines.map((line, lineIdx) => (
+            <motion.p
+              key={lineIdx}
+              variants={lineVariants}
+              className="flex flex-wrap justify-center gap-x-2 md:gap-x-4"
             >
-              {word}
-            </motion.span>
+              {line.text.split(" ").map((word, wordIdx) => (
+                <span
+                  key={wordIdx}
+                  className={`text-lg sm:text-2xl md:text-4xl lg:text-5xl tracking-tight leading-relaxed italic ${getWordStyle(word, line.boldWords)}`}
+                >
+                  {word}
+                </span>
+              ))}
+            </motion.p>
           ))}
         </motion.div>
 
@@ -2856,8 +3025,8 @@ const ImmersivePhotoSection = () => {
   const skewX = useTransform(scrollYProgress, [0.1, 0.9], [0, 2]);
   const centerFilter = useTransform(
     scrollYProgress,
-    [0.12, 0.9],
-    ["grayscale(38%) saturate(0.92)", "grayscale(0%) saturate(1)"]
+    [0.0, 0.15, 0.5],
+    ["grayscale(100%) saturate(0)", "grayscale(60%) saturate(0.4)", "grayscale(0%) saturate(1)"]
   );
 
   // Fade and scale side images away
