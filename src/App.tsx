@@ -2121,7 +2121,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                       </div>
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Celular</label>
-                        <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Ej: +591 70000000" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Ej: +591 79570160" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Correo electrónico</label>
@@ -2291,7 +2291,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                 >
                   <PrimaryButton
                     onClick={() => {
-                      window.open('https://wa.me/59170000000?text=Hola, completé el diagnóstico FORIX y me gustaría agendar una sesión estratégica.', '_blank');
+                      window.open('https://wa.me/59179570160?text=Hola, completé el diagnóstico FORIX y me gustaría agendar una sesión estratégica.', '_blank');
                       onClose();
                       setStep(0);
                       setAnswers({});
