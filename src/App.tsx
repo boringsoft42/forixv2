@@ -1074,11 +1074,11 @@ const StackedServiceItem = ({ title, desc, index: _index, icon: Icon }: { title:
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="bg-forix-white border-t border-forix-blue/10 py-12 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-24 sticky top-[200px] sm:top-[200px] md:top-[180px] z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]"
+      className="bg-forix-white border-t border-forix-blue/10 py-12 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-24 z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]"
       style={{ zIndex: 10 + _index }}
     >
       <div className="container-custom grid md:grid-cols-12 gap-8 sm:gap-12 items-start">
-        <div className="md:col-span-5">
+        <div className="md:col-span-5 md:self-stretch">
           <div className="md:sticky md:top-40 lg:top-44 self-start">
             {Icon && (
               <div className="mb-4 sm:mb-6">
@@ -1157,7 +1157,7 @@ const Services = () => {
         {
           title: "Arquitectura de protocolos de servicio",
           icon: BookOpen,
-          desc: "La excelencia en el servicio no puede depender del talento individual de cada colaborador ni de la interpretación libre de lo que buen servicio significa. Sin protocolos precisos, cada cliente recibe una experiencia distinta, y la marca pierde coherencia en su promesa más esencial. Diseñamos el sistema completo de protocolos de servicio y hospitalidad de su organización: desde los rituales de bienvenida y los flujos de atención hasta la gestión de momentos de fricción y los estándares de comunicación verbal y no verbal. Cada protocolo es co-construido con su equipo para garantizar adopción real, y documentado en un formato operativo que permite replicación y escalabilidad sin perder identidad de marca.\n\nPorque la distinción sostenida es siempre resultado de un sistema, nunca de una casualidad."
+          desc: "La excelencia en el servicio no puede depender del talento individual de cada colaborador ni de la interpretación libre de lo que \"buen servicio\" significa. Sin protocolos precisos, cada cliente recibe una experiencia distinta, y la marca pierde coherencia en su promesa más esencial. Diseñamos el sistema completo de protocolos de servicio y hospitalidad de su organización: desde los rituales de bienvenida y los flujos de atención hasta la gestión de momentos de fricción y los estándares de comunicación verbal y no verbal. Cada protocolo es co-construido con su equipo para garantizar adopción real, y documentado en un formato operativo que permite replicación y escalabilidad sin perder identidad de marca.\n\nPorque la distinción sostenida es siempre resultado de un sistema, nunca de una casualidad."
         }
       ]
     },
@@ -1170,7 +1170,7 @@ const Services = () => {
         {
           title: "Certificación en cultura de anfitrión",
           icon: Fingerprint,
-          desc: "El mayor obstáculo para una cultura de servicio excepcional no es la falta de conocimiento: es la mentalidad operativa. Un colaborador que se percibe a sí mismo como ejecutor de tareas entrega transacciones. Un anfitrión que comprende su rol en la experiencia del cliente entrega momentos memorables. Este programa de certificación intensiva trabaja en la reconfiguración de esa mentalidad, desarrollando en el personal de contacto las competencias de lectura del cliente, gestión emocional en el servicio, lenguaje corporal de excelencia y construcción de micro-momentos de alto impacto. Al concluir, cada participante cuenta con un marco propio de actuación que le permite tomar decisiones de servicio con criterio, autonomía y consistencia.\n\nPara empresas que entienden que el servicio de excelencia es la ventaja competitiva más difícil de copiar."
+          desc: "El mayor obstáculo para una cultura de servicio excepcional no es la falta de conocimiento: es la mentalidad operativa. Un colaborador que se percibe a sí mismo como ejecutor de tareas entrega transacciones. Un anfitrión que comprende su rol en la experiencia del cliente entrega momentos memorables. Este programa de certificación intensiva trabaja en la reconfiguración de esa mentalidad, desarrollando en el personal de contacto las competencias de lectura del cliente, gestión emocional en el servicio, lenguaje corporal de excelencia y construcción de micro-momentos de alto impacto. Al concluir el programa, cada participante cuenta con un marco propio de actuación que le permite tomar decisiones de servicio con criterio, autonomía y consistencia.\n\nPara empresas que entienden que el servicio de excelencia es la ventaja competitiva más difícil de copiar."
         },
         {
           title: "Programa de liderazgo en gestión de experiencia",
@@ -1193,12 +1193,12 @@ const Services = () => {
         {
           title: "Sistema de inteligencia de experiencia de cliente",
           icon: Activity,
-          desc: "El 96% de los clientes insatisfechos no presenta quejas: simplemente no vuelve. Esta pérdida silenciosa no aparece en ningún estado financiero, pero erosiona el crecimiento real de manera sistemática. Las organizaciones que miden solo satisfacción inmediata están viendo únicamente la superficie del problema. Diseñamos un sistema integrado de medición de la experiencia que combina métricas cuantitativas de lealtad y comportamiento, indicadores cualitativos y emocionales que capturan lo que los números solos no explican. El sistema incluye el diseño del ecosistema de medición, la definición de indicadores clave por etapa del customer journey y el protocolo de análisis e interpretación para la toma de decisiones ejecutivas.\n\nPorque no es posible gestionar con precisión lo que no se mide con inteligencia."
+          desc: "El 96% de los clientes insatisfechos no presenta quejas: simplemente no vuelve. Esta pérdida silenciosa no aparece en ningún estado financiero, pero erosiona el crecimiento real de manera sistemática. Las organizaciones que miden solo satisfacción inmediata están viendo únicamente la superficie del problema. Diseñamos e implementamos un sistema integrado de medición de la experiencia que combina métricas cuantitativas de lealtad y comportamiento; NPS, CSAT, tasa de retención, valor de vida del cliente, con indicadores cualitativos y emocionales que capturan lo que los números solos no explican. El sistema incluye el diseño del ecosistema de medición, la definición de los indicadores clave por etapa del customer journey y el protocolo de análisis e interpretación para la toma de decisiones ejecutivas.\n\nPorque no es posible gestionar con precisión lo que no se mide con inteligencia."
         },
         {
           title: "Diagnóstico de rentabilidad experiencial",
           icon: BarChart3,
-          desc: "La mayoría de las organizaciones miden la experiencia de cliente con indicadores de satisfacción. Muy pocas la miden con indicadores de crecimiento. Esta brecha representa uno de los mayores errores estratégicos del management moderno: tratar al CX como una función de soporte cuando en realidad es el principal motor de expansión de ingresos que existe en cualquier negocio. Las empresas con programas maduros de experiencia de cliente crecen sus ingresos más rápido que aquellas con CX deficiente. En FORIX Lab traducimos esa evidencia en un análisis aplicado a la realidad financiera y operativa de su organización. Evaluamos el impacto económico de cada etapa del customer journey sobre variables críticas de negocio: tasa de retención, valor de vida del cliente, velocidad de recompra, sensibilidad al precio y potencial de referido. El resultado es un mapa de rentabilidad experiencial que identifica con precisión qué intervenciones en la experiencia generan el mayor retorno sobre la inversión comercial.\n\nPara directivos que ya no quieren saber si su CX es bueno, sino cuánto dinero les está costando que no lo sea."
+          desc: "La mayoría de las organizaciones miden la experiencia de cliente con indicadores de satisfacción. Muy pocas la miden con indicadores de crecimiento. Esta brecha representa uno de los mayores errores estratégicos del management moderno: tratar el CX como una función de soporte cuando en realidad es el principal motor de expansión de ingresos que existe en cualquier negocio. Las empresas con programas maduros de experiencia de cliente crecen sus ingresos 5.1 veces más rápido que aquellas con CX deficiente, y el 84% de las compañías que mejoran activamente su CX reportan un incremento directo en sus ingresos. En FORIX Lab traducimos esa evidencia en un análisis aplicado a la realidad financiera y operativa de su organización. Evaluamos el impacto económico de cada etapa del customer journey sobre variables críticas de negocio: tasa de retención, valor de vida del cliente (CLV), velocidad de recompra, sensibilidad al precio y potencial de referido. El resultado es un mapa de rentabilidad experiencial que identifica con precisión qué intervenciones en la experiencia generan el mayor retorno sobre la inversión comercial.\n\nPara directivos que ya no quieren saber si su CX es bueno, sino cuánto dinero les está costando que no lo sea."
         }
       ]
     }
@@ -1479,7 +1479,7 @@ const About = () => {
                 <img src="/about_mauricio.jpg" alt="Mauricio Vacaflores" className="relative z-10 w-full h-full object-cover grayscale" />
 
                 {/* Signature Box - Bottom, diagonal like reference */}
-                <div className="absolute -bottom-8 left-[30%] sm:left-[25%] z-30 w-[65%] sm:-bottom-10 md:-bottom-12">
+                <div className="absolute bottom-4 left-[30%] sm:left-[25%] z-30 w-[65%] sm:-bottom-10 md:-bottom-12">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -1622,17 +1622,17 @@ const Resources = ({ setCurrentView }: { setCurrentView: (view: string) => void 
   const articles = MARKDOWN_ARTICLES;
   const templates = [
     {
-      title: "Plantilla de Mystery Shopping",
+      title: "Mapa de empatía",
       desc: "Herramienta de perfilamiento psicográfico para decodificar el entorno, aspiraciones y miedos reales de su cliente ideal. Va más allá de la demografía para entender qué ve, oye, piensa y siente su mercado objetivo.",
       href: "/CX TOOLS 1 - Mapa de empatía.pdf"
     },
     {
-      title: "Plantilla de protocolo de servicio",
+      title: "Value Proposition Canvas",
       desc: "Modelo estratégico para encajar sus productos y servicios con las necesidades y deseos específicos del cliente. Conecta el perfil del cliente con su propuesta de valor para crear una oferta donde el precio deja de ser el factor decisivo.",
       href: "/CX TOOLS 2 - Value Proposition Canvas.pdf"
     },
     {
-      title: "Plantilla de rentabilidad experiencial",
+      title: "Customer Journey Map",
       desc: "Mapa de ruta integral que visualiza cada punto de contacto entre el cliente y su empresa. Mide los picos emocionales y las caídas de servicio en cada etapa para maximizar retención y valor de vida del cliente.",
       href: "/CX TOOLS 3 - Customer Journey Map.pdf"
     }
@@ -1812,6 +1812,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
   const [contactSubStep, setContactSubStep] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const modalScrollRef = useRef<HTMLDivElement>(null);
   const googleSheetsUrl = import.meta.env.VITE_GOOGLE_SHEETS_URL?.trim();
   const [particles] = useState(() => Array.from({ length: 40 }, (_, i) => ({
     id: i,
@@ -1821,6 +1822,14 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
     size: 4 + Math.random() * 8,
     color: ['#14385C', '#3D7072', '#D8E1E0', '#2ecc71', '#14385C'][Math.floor(Math.random() * 5)],
   })));
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    requestAnimationFrame(() => {
+      modalScrollRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+    });
+  }, [isOpen, step]);
 
   const questions = [
     {
@@ -1980,10 +1989,11 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
   return (
     <AnimatePresence>
       <motion.div
+        ref={modalScrollRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-[#F4F4F4] flex items-center justify-center p-4 sm:p-6 md:p-24 overflow-y-auto"
+        className="fixed inset-0 z-[100] bg-[#F4F4F4] flex items-start justify-center overflow-y-auto px-4 sm:px-6 md:px-16 lg:px-24 py-8 sm:py-10 md:py-12 lg:py-14"
       >
         {/* Confetti particles */}
         {showConfetti && (
@@ -2010,7 +2020,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
           </svg>
         </div>
 
-        <button onClick={() => { onClose(); setStep(0); setAnswers({}); setContactName(''); setContactCargo(''); setContactEmpresa(''); setContactPhone(''); setContactEmail(''); setContactIndustria(''); setContactEmpleados(''); setContactPreferencia(''); setContactSubStep(0); }} className="absolute top-6 right-6 md:top-12 md:right-12 text-forix-blue hover:text-forix-green transition-colors z-10">
+        <button onClick={() => { onClose(); setStep(0); setAnswers({}); setContactName(''); setContactCargo(''); setContactEmpresa(''); setContactPhone(''); setContactEmail(''); setContactIndustria(''); setContactEmpleados(''); setContactPreferencia(''); setContactSubStep(0); }} className="absolute top-5 right-5 md:top-8 md:right-8 text-forix-blue hover:text-forix-green transition-colors z-10">
           <X size={32} strokeWidth={1.5} />
         </button>
 
@@ -2025,7 +2035,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
           </div>
         )}
 
-        <div className="max-w-4xl w-full relative z-10">
+        <div className="max-w-6xl w-full relative z-10">
           <AnimatePresence mode="wait">
             {/* Questions */}
             {step < questions.length && (
@@ -2036,20 +2046,20 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-4 sm:mb-5">
                   PREGUNTA {step + 1} DE {questions.length}
                 </p>
-                <h3 className="text-xl sm:text-3xl md:text-5xl font-light text-[#14385C] leading-[1.3] mb-8 sm:mb-16 max-w-3xl">
+                <h3 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#14385C] leading-[1.18] mb-6 sm:mb-8 lg:mb-10 max-w-5xl">
                   {questions[step].title}
                 </h3>
 
                 {questions[step].type === 'scale' && (
-                  <div className="flex flex-wrap gap-2 sm:gap-4 md:gap-6">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
                     {questions[step].options.map((opt) => (
                       <button
                         key={opt}
                         onClick={() => handleAnswer(opt)}
-                        className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center border border-black/10 bg-transparent text-base sm:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300"
+                        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[4.5rem] lg:h-[4.5rem] flex items-center justify-center border border-black/10 bg-transparent text-base sm:text-lg md:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300"
                       >
                         {opt}
                       </button>
@@ -2063,7 +2073,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                       <button
                         key={opt}
                         onClick={() => handleAnswer(opt)}
-                        className="w-full text-left p-4 sm:p-6 md:p-8 border border-black/10 bg-transparent text-sm sm:text-lg md:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300 group flex items-center justify-between"
+                        className="w-full text-left p-4 sm:p-5 md:p-6 border border-black/10 bg-transparent text-sm sm:text-lg md:text-xl font-light text-[#14385C] hover:bg-white hover:border-transparent hover:shadow-lg transition-all duration-300 group flex items-center justify-between"
                       >
                         <span>{opt}</span>
                         <ArrowRight size={20} className="opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-[#3D7072]" />
@@ -2086,40 +2096,40 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-4 sm:mb-5">
                       PASO 1 DE 3
                     </p>
-                    <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#14385C] leading-[1.18] mb-4 sm:mb-5 max-w-4xl">
                       Para enviarle los resultados, necesitamos algunos datos.
                     </h3>
-                    <p className="text-base md:text-lg text-forix-gray/70 font-light mb-10 max-w-2xl leading-relaxed">
+                    <p className="text-base md:text-lg text-forix-gray/70 font-light mb-6 sm:mb-8 max-w-2xl leading-relaxed">
                       Su información se mantendrá estrictamente confidencial.
                     </p>
 
-                    <div className="space-y-5 max-w-lg">
+                    <div className="space-y-4 max-w-lg">
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Nombre completo</label>
-                        <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Ej: Mauricio Vacaflores" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Ej: Mauricio Vacaflores" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Cargo</label>
-                        <input type="text" value={contactCargo} onChange={(e) => setContactCargo(e.target.value)} placeholder="Ej: Director General" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="text" value={contactCargo} onChange={(e) => setContactCargo(e.target.value)} placeholder="Ej: Director General" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Empresa</label>
-                        <input type="text" value={contactEmpresa} onChange={(e) => setContactEmpresa(e.target.value)} placeholder="Ej: Hotel Boutique Santa Cruz" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="text" value={contactEmpresa} onChange={(e) => setContactEmpresa(e.target.value)} placeholder="Ej: Hotel Boutique Santa Cruz" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Celular</label>
-                        <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Ej: +591 70000000" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Ej: +591 70000000" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Correo electrónico</label>
-                        <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="Ej: nombre@empresa.com" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="Ej: nombre@empresa.com" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <PrimaryButton
                         onClick={() => setStep(step + 1)}
-                        className={`text-lg py-5 px-12 w-full mt-4 ${!contactName || !contactPhone || !contactEmail ? 'opacity-40 pointer-events-none' : ''}`}
+                        className={`text-base md:text-lg py-4 px-12 w-full mt-3 ${!contactName || !contactPhone || !contactEmail ? 'opacity-40 pointer-events-none' : ''}`}
                       >
                         SIGUIENTE
                       </PrimaryButton>
@@ -2136,28 +2146,28 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-4 sm:mb-5">
                       PASO 2 DE 3
                     </p>
-                    <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-6 max-w-3xl">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#14385C] leading-[1.18] mb-4 sm:mb-5 max-w-4xl">
                       Cuéntenos sobre su organización.
                     </h3>
-                    <p className="text-base md:text-lg text-forix-gray/70 font-light mb-10 max-w-2xl leading-relaxed">
+                    <p className="text-base md:text-lg text-forix-gray/70 font-light mb-6 sm:mb-8 max-w-2xl leading-relaxed">
                       Esto nos permite personalizar sus resultados.
                     </p>
 
-                    <div className="space-y-5 max-w-lg">
+                    <div className="space-y-4 max-w-lg">
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Industria o sector</label>
-                        <input type="text" value={contactIndustria} onChange={(e) => setContactIndustria(e.target.value)} placeholder="Ej: Hotelería, Restauración, Retail..." className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="text" value={contactIndustria} onChange={(e) => setContactIndustria(e.target.value)} placeholder="Ej: Hotelería, Restauración, Retail..." className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#3D7072] mb-2 block">Número de empleados</label>
-                        <input type="text" value={contactEmpleados} onChange={(e) => setContactEmpleados(e.target.value)} placeholder="Ej: 50" className="w-full p-5 border border-black/10 bg-transparent text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
+                        <input type="text" value={contactEmpleados} onChange={(e) => setContactEmpleados(e.target.value)} placeholder="Ej: 50" className="w-full p-4 border border-black/10 bg-transparent text-base md:text-lg font-light text-[#14385C] placeholder:text-black/20 focus:outline-none focus:border-[#3D7072] transition-colors duration-300" />
                       </div>
                       <PrimaryButton
                         onClick={() => setStep(step + 1)}
-                        className={`text-lg py-5 px-12 w-full mt-4 ${!contactIndustria || !contactEmpleados ? 'opacity-40 pointer-events-none' : ''}`}
+                        className={`text-base md:text-lg py-4 px-12 w-full mt-3 ${!contactIndustria || !contactEmpleados ? 'opacity-40 pointer-events-none' : ''}`}
                       >
                         SIGUIENTE
                       </PrimaryButton>
@@ -2174,10 +2184,10 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-8">
+                    <p className="text-[#3D7072] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-4 sm:mb-5">
                       ÚLTIMO PASO
                     </p>
-                    <h3 className="text-2xl sm:text-4xl md:text-5xl font-light text-[#14385C] leading-[1.25] mb-10 max-w-3xl">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#14385C] leading-[1.18] mb-6 sm:mb-8 max-w-4xl">
                       ¿Cómo prefieres que te contactemos?
                     </h3>
 
@@ -2188,7 +2198,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                           whileHover={{ x: 4 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setContactPreferencia(option)}
-                          className={`w-full text-left p-5 border transition-all duration-300 text-lg font-light ${
+                          className={`w-full text-left p-4 border transition-all duration-300 text-base md:text-lg font-light ${
                             contactPreferencia === option
                               ? 'border-[#3D7072] bg-[#3D7072]/5 text-[#14385C]'
                               : 'border-black/10 text-[#14385C]/70 hover:border-[#3D7072]/50'
@@ -2199,7 +2209,7 @@ const DiagnosticModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => 
                       ))}
                       <PrimaryButton
                         onClick={saveDiagnostic}
-                        className={`text-lg py-5 px-12 w-full mt-6 ${!contactPreferencia || isSubmitting ? 'opacity-40 pointer-events-none' : ''}`}
+                        className={`text-base md:text-lg py-4 px-12 w-full mt-5 ${!contactPreferencia || isSubmitting ? 'opacity-40 pointer-events-none' : ''}`}
                       >
                         {isSubmitting ? 'ENVIANDO...' : 'ENVIAR DIAGNÓSTICO'}
                       </PrimaryButton>
