@@ -36,8 +36,7 @@ import {
   Activity,
   BarChart3,
   GraduationCap,
-  Briefcase,
-  ChevronUp
+  Briefcase
 } from 'lucide-react';
 
 type ArticleSection = {
@@ -1067,74 +1066,31 @@ const ServicesHero = ({ title, subtitle, description }: { title: string, subtitl
   );
 };
 
-const StackedServiceItem = ({ title, desc, index: _index, icon: Icon }: { title: string, desc: string, index: number, key?: React.Key, icon?: React.ComponentType<{ size?: number, strokeWidth?: number, className?: string }> }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="bg-forix-white border-t border-forix-blue/10 py-12 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-24 z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]"
-      style={{ zIndex: 10 + _index }}
-    >
-      <div className="container-custom grid md:grid-cols-12 gap-8 sm:gap-12 items-start">
-        <div className="md:col-span-5 md:self-stretch">
-          <div className="md:sticky md:top-40 lg:top-44 self-start">
-            {Icon && (
-              <div className="mb-4 sm:mb-6">
-                <Icon size={28} strokeWidth={1} className="text-forix-blue" />
-              </div>
-            )}
-            <h4 className="max-w-md text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-[0.9] uppercase tracking-tighter text-forix-blue">
-              {title}
-            </h4>
-          </div>
-        </div>
-        <div className="md:col-span-7">
-          <div className="max-w-2xl space-y-6">
-            {desc.split('\n\n').map((block, bIdx, blocks) => {
-              const isClosing = blocks.length > 1 && bIdx === blocks.length - 1;
-              return block.split('. ').map((sentence, i, arr) => (
-                <p
-                  key={`${bIdx}-${i}`}
-                  className={`text-base sm:text-xl md:text-[1.65rem] font-light leading-relaxed text-forix-gray ${isClosing ? 'italic font-normal' : ''}`}
-                >
-                  {sentence}{i < arr.length - 1 ? '.' : ''}
-                </p>
-              ));
-            })}
-          </div>
-          <div className="mt-10">
-            <SecondaryButton
-              onClick={() => {
-                const el = document.getElementById('contacto');
-                el?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="text-sm md:text-base"
-            >
-              Solicitar sesión estratégica
-            </SecondaryButton>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
 const Services = () => {
-  const servicesTopRef = useRef<HTMLDivElement>(null);
-  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [activePillar, setActivePillar] = useState(0);
+  const [activeService, setActiveService] = useState(0);
+  const subtasksRef = useRef<HTMLDivElement>(null);
+  const contentPanelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 800);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handlePillarChange = (idx: number) => {
+    setActivePillar(idx);
+    setActiveService(0);
+    // On mobile, auto-scroll to the subservices section to guide the user
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setTimeout(() => {
+        subtasksRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 120);
+    }
+  };
 
-  const scrollToTop = () => {
-    servicesTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleServiceChange = (idx: number) => {
+    setActiveService(idx);
+    // On mobile, auto-scroll to the content panel to show the selected service
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setTimeout(() => {
+        contentPanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 120);
+    }
   };
 
   const pillars = [
@@ -1203,65 +1159,210 @@ const Services = () => {
       ]
     }
   ];
-  const collageImageClass = "w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700";
+
+  const currentPillar = pillars[activePillar];
+  const currentService = currentPillar.items[activeService];
+  const CurrentIcon = currentService.icon;
 
   return (
     <div className="bg-forix-white relative">
-      <div ref={servicesTopRef} />
       <ServicesHero
         title="Soluciones"
         subtitle="Excelencia Estratégica"
         description="Arquitectura de experiencias boutique."
       />
 
-      <section className="pb-32">
-        {pillars.map((pillar, pIdx) => (
-          <div key={pIdx} className="relative">
-            {/* Pillar Header */}
-            <div className="sticky top-0 z-20 bg-forix-white/90 backdrop-blur-md py-8 sm:py-12 px-4 sm:px-6 md:px-12 lg:px-24">
-              <div className="container-custom">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
-                  <div>
-                    <h2 className="text-forix-green text-[10px] sm:text-xs font-bold tracking-[0.3em] sm:tracking-[0.5em] uppercase mb-3 sm:mb-4">{pillar.subtitle}</h2>
-                    <img src={pillar.logo} className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto mb-2" alt={pillar.name} />
-                  </div>
-                  <p className="font-signature text-2xl sm:text-3xl md:text-4xl italic text-forix-green">"{pillar.lema}"</p>
+      <section id="servicios" className="py-16 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-24">
+        <div className="container-custom">
+          {/* Step 01 indicator */}
+          <div className="flex items-center gap-3 mb-5 sm:mb-6">
+            <span className="text-forix-green text-[9px] sm:text-[10px] font-bold tracking-[0.3em] sm:tracking-[0.4em] uppercase whitespace-nowrap">
+              01 · Elige tu pilar
+            </span>
+            <div className="flex-1 h-[1px] bg-forix-blue/10" />
+          </div>
+
+          {/* Main Pillar Tabs */}
+          <div className="flex flex-col items-center lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 sm:mb-14 border-b border-forix-blue/15 pb-8">
+            <div className="grid grid-cols-3 w-full lg:w-auto lg:flex lg:flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3 lg:gap-4">
+              {pillars.map((pillar, idx) => {
+                const isActive = idx === activePillar;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handlePillarChange(idx)}
+                    className={`relative group flex items-center justify-center px-3 sm:px-5 lg:px-8 py-3 sm:py-4 lg:py-5 transition-all duration-500 border ${
+                      isActive
+                        ? 'border-forix-blue bg-forix-blue/[0.04]'
+                        : 'border-forix-blue/10 hover:border-forix-blue/40'
+                    }`}
+                    aria-pressed={isActive}
+                  >
+                    <img
+                      src={pillar.logo}
+                      alt={pillar.name}
+                      className={`h-6 sm:h-8 md:h-9 lg:h-10 w-auto transition-all duration-500 ${
+                        isActive ? '' : 'opacity-50 grayscale group-hover:opacity-80'
+                      }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`lema-${activePillar}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+                className="flex flex-col items-center text-center lg:items-end lg:text-right"
+              >
+                <span className="text-forix-green text-[10px] sm:text-xs font-bold tracking-[0.3em] sm:tracking-[0.5em] uppercase mb-2">
+                  {currentPillar.subtitle}
+                </span>
+                <p className="font-signature text-2xl sm:text-3xl md:text-4xl italic text-forix-green">
+                  "{currentPillar.lema}"
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Step 02 indicator */}
+          <div ref={subtasksRef} className="flex items-center gap-3 mb-5 sm:mb-6 scroll-mt-20">
+            <span className="text-forix-green text-[9px] sm:text-[10px] font-bold tracking-[0.3em] sm:tracking-[0.4em] uppercase whitespace-nowrap">
+              02 · Explora los servicios
+            </span>
+            <div className="flex-1 h-[1px] bg-forix-blue/10" />
+          </div>
+
+          {/* Subservice Tabs — card grid */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`subtabs-${activePillar}`}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.4 }}
+              className={`grid gap-3 sm:gap-5 lg:gap-6 mb-10 sm:mb-12 pl-4 md:pl-0 border-l border-forix-blue/10 md:border-l-0 ${
+                currentPillar.items.length === 2
+                  ? 'grid-cols-1 md:grid-cols-2'
+                  : 'grid-cols-1 md:grid-cols-3'
+              }`}
+            >
+              {currentPillar.items.map((item, idx) => {
+                const SubIcon = item.icon;
+                const isActive = idx === activeService;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleServiceChange(idx)}
+                    className={`text-left group border-t border-b transition-all duration-500 flex items-center gap-4 md:block px-4 md:px-6 py-4 md:py-8 ${
+                      isActive
+                        ? 'border-forix-blue bg-forix-blue/[0.04]'
+                        : 'border-forix-blue/15 hover:border-forix-blue/40'
+                    }`}
+                    aria-pressed={isActive}
+                  >
+                    <div className="shrink-0 md:mb-5">
+                      <SubIcon
+                        size={22}
+                        strokeWidth={1}
+                        className={`md:hidden transition-colors duration-500 ${
+                          isActive ? 'text-forix-blue' : 'text-forix-gray group-hover:text-forix-blue'
+                        }`}
+                      />
+                      <SubIcon
+                        size={26}
+                        strokeWidth={1}
+                        className={`hidden md:block transition-colors duration-500 ${
+                          isActive ? 'text-forix-blue' : 'text-forix-gray group-hover:text-forix-blue'
+                        }`}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0 md:block">
+                      <h4
+                        className={`text-xs sm:text-sm md:text-lg lg:text-xl font-bold leading-tight uppercase tracking-tight md:mb-4 transition-colors duration-500 ${
+                          isActive ? 'text-forix-blue' : 'text-forix-gray group-hover:text-forix-blue'
+                        }`}
+                      >
+                        {item.title}
+                      </h4>
+                      <div
+                        className={`hidden md:flex items-center gap-2 text-[10px] sm:text-xs uppercase tracking-widest font-bold transition-colors duration-300 ${
+                          isActive ? 'text-forix-green' : 'text-forix-gray/60 group-hover:text-forix-green'
+                        }`}
+                      >
+                        {isActive ? 'Viendo' : 'Descubrir'}
+                        <ArrowRight size={13} strokeWidth={1.5} className="-rotate-45" />
+                      </div>
+                    </div>
+                    <ArrowRight
+                      size={16}
+                      strokeWidth={1.5}
+                      className={`md:hidden shrink-0 -rotate-45 transition-colors duration-300 ${
+                        isActive ? 'text-forix-green' : 'text-forix-gray/60 group-hover:text-forix-green'
+                      }`}
+                    />
+                  </button>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Active subservice content panel */}
+          <div ref={contentPanelRef} className="scroll-mt-20">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`panel-${activePillar}-${activeService}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="border-t border-forix-blue/15 pt-10 sm:pt-12 grid md:grid-cols-12 gap-8 sm:gap-12 items-start"
+            >
+              <div className="md:col-span-5">
+                <div className="mb-4 sm:mb-6">
+                  <CurrentIcon size={30} strokeWidth={1} className="text-forix-blue" />
+                </div>
+                <h4 className="max-w-md text-2xl sm:text-3xl md:text-4xl font-bold leading-[0.9] uppercase tracking-tighter text-forix-blue">
+                  {currentService.title}
+                </h4>
+              </div>
+              <div className="md:col-span-7">
+                <div className="max-w-2xl space-y-4 sm:space-y-5">
+                  {currentService.desc.split('\n\n').map((block, bIdx, blocks) => {
+                    const isClosing = blocks.length > 1 && bIdx === blocks.length - 1;
+                    return block.split('. ').map((sentence, i, arr) => (
+                      <p
+                        key={`${bIdx}-${i}`}
+                        className={`text-sm sm:text-base md:text-lg font-light leading-relaxed text-forix-gray ${
+                          isClosing ? 'italic font-normal' : ''
+                        }`}
+                      >
+                        {sentence}
+                        {i < arr.length - 1 ? '.' : ''}
+                      </p>
+                    ));
+                  })}
+                </div>
+                <div className="mt-8">
+                  <SecondaryButton
+                    onClick={() => {
+                      const el = document.getElementById('contacto');
+                      el?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="text-sm md:text-base"
+                  >
+                    Solicitar sesión estratégica
+                  </SecondaryButton>
                 </div>
               </div>
-            </div>
-
-            {/* Stacked Items */}
-            <div className="relative">
-              {pillar.items.map((item, iIdx) => (
-                <StackedServiceItem
-                  key={iIdx}
-                  title={item.title}
-                  desc={item.desc}
-                  icon={item.icon}
-                  index={iIdx + 1}
-                />
-              ))}
-            </div>
+            </motion.div>
+          </AnimatePresence>
           </div>
-        ))}
+        </div>
       </section>
-
-      {/* Back to Top Button */}
-      <AnimatePresence>
-        {showBackToTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.3 }}
-            onClick={scrollToTop}
-            className="fixed bottom-6 right-4 sm:right-6 z-50 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-forix-blue/80 backdrop-blur-sm border border-forix-blue/20 text-white flex items-center justify-center shadow-lg hover:bg-forix-blue transition-colors duration-300"
-            aria-label="Volver al inicio"
-          >
-            <ChevronUp size={18} strokeWidth={1.5} />
-          </motion.button>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
