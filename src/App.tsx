@@ -745,12 +745,6 @@ const HeroLogo = () => (
       }}
       transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
     />
-    <motion.div
-      aria-hidden="true"
-      className="absolute bottom-2 left-1/2 h-px w-[38%] -translate-x-1/2 bg-gradient-to-r from-transparent via-forix-mint/80 to-transparent"
-      animate={{ opacity: [0.2, 0.75, 0.2], scaleX: [0.88, 1.04, 0.88] }}
-      transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
-    />
   </motion.div>
 );
 
@@ -3133,6 +3127,8 @@ const ImmersivePhotoSection = () => {
 
   // Scale the center image to fully cover the screen
   const scale = useTransform(scrollYProgress, [0.1, 0.9], [1, 3.8]);
+  const mobileScale = useTransform(scrollYProgress, [0.1, 0.9], [1, 2.15]);
+  const mobileSkewX = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
   const skewX = useTransform(scrollYProgress, [0.1, 0.9], [0, 2]);
   const centerFilter = useTransform(
     scrollYProgress,
@@ -3244,14 +3240,8 @@ const ImmersivePhotoSection = () => {
             </motion.div>
           </div>
 
-          <div className="grid md:hidden grid-cols-2 grid-rows-6 gap-[4px] p-[4px] w-full h-screen max-w-full">
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={`${galleryTileClass} row-span-2`}>
-              <img src="/foto 2.png" alt="Forix business" className={collageImageClass} />
-            </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
-              <img src="/gallery/SSS00108_VSCO.JPG" alt="Forix presentation laptop" className={collageImageClass} />
-            </motion.div>
-            <motion.div style={{ scale, skewX }} className="relative row-span-2 group overflow-hidden border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.9)]">
+          <div className="md:hidden w-full h-[100svh] max-w-full px-3 py-4 flex flex-col gap-3">
+            <motion.div style={{ scale: mobileScale, skewX: mobileSkewX }} className="relative z-20 flex-1 min-h-[58svh] group overflow-hidden border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.9)]">
               <motion.img
                 src="/gallery/business.JPG"
                 alt="Forix signature portrait"
@@ -3259,20 +3249,23 @@ const ImmersivePhotoSection = () => {
                 style={{ filter: centerFilter }}
               />
             </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={`${galleryTileClass} row-span-2`}>
-              <img src="/gallery/HERO SERVICIES.JPG" alt="Forix service desk overview" className={collageImageClass} />
-            </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
-              <img src="/gallery/HERO MAIN.JPG" alt="Forix tabletop composition" className={collageImageClass} />
-            </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
-              <img src="/gallery/SSS00146_VSCO.JPG" alt="Forix signed card portrait" className={collageImageClass} />
-            </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
-              <img src="/gallery/FORIX LAB.JPG" alt="Forix phone experience" className={collageImageClass} />
-            </motion.div>
-            <motion.div style={{ opacity: sideOpacity, scale: sideScale, y: sideY }} className={galleryTileClass}>
-              <img src="/metric_300.jpg" alt="Forix metrics" className={collageImageClass} />
+
+            <motion.div
+              style={{ opacity: sideOpacity, y: sideY }}
+              className="flex h-[22svh] min-h-36 gap-3 overflow-x-auto overflow-y-hidden snap-x snap-mandatory pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              <div className={`${galleryTileClass} min-w-[44vw] snap-start`}>
+                <img src="/foto 2.png" alt="Forix business" className={collageImageClass} />
+              </div>
+              <div className={`${galleryTileClass} min-w-[44vw] snap-start`}>
+                <img src="/gallery/HERO SERVICIES.JPG" alt="Forix service desk overview" className={collageImageClass} />
+              </div>
+              <div className={`${galleryTileClass} min-w-[44vw] snap-start`}>
+                <img src="/gallery/HERO MAIN.JPG" alt="Forix tabletop composition" className={collageImageClass} />
+              </div>
+              <div className={`${galleryTileClass} min-w-[44vw] snap-start`}>
+                <img src="/gallery/SSS00146_VSCO.JPG" alt="Forix signed card portrait" className={collageImageClass} />
+              </div>
             </motion.div>
           </div>
         </div>
