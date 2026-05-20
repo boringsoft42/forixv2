@@ -1633,7 +1633,7 @@ const About = () => {
           </div>
 
           {/* Método FORIX - Full width centered */}
-          <div className="py-16 sm:py-24 flex flex-col items-center justify-center min-h-[50vh] sm:min-h-[70vh]">
+          <div className="pt-16 pb-8 sm:pt-24 sm:pb-10 flex flex-col items-center justify-center min-h-[50vh] sm:min-h-[70vh]">
             <div className="text-center mb-10 sm:mb-16">
               <h4 className="text-black text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight mb-3">Método FORIX</h4>
               <p className="text-black font-bold text-xl sm:text-3xl md:text-4xl tracking-widest">4i * X</p>
@@ -2413,7 +2413,7 @@ const Contact = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section id="contacto" className="py-16 sm:py-24 md:py-32 bg-[#F4F4F4] overflow-hidden relative min-h-[50vh] sm:min-h-[60vh] flex items-center justify-center">
+    <section id="contacto" className="pt-8 pb-16 sm:pt-10 sm:pb-24 md:pt-12 md:pb-32 bg-[#F4F4F4] overflow-hidden relative min-h-[50vh] sm:min-h-[60vh] flex items-center justify-center">
       {/* Brand Pattern Background */}
       <div className="absolute inset-0 z-0 opacity-[0.06] pointer-events-none" style={{
         backgroundImage: 'url("/image (1).png")',
@@ -2423,6 +2423,42 @@ const Contact = () => {
       }} />
 
       <div className="container-custom relative z-10 flex flex-col items-center text-center">
+        <motion.div
+          className="mb-16 sm:mb-20 md:mb-24 w-full max-w-5xl"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <p className="text-forix-blue text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase">
+            Entrenados y Certificados por:
+          </p>
+          <div className="mt-5 grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-x-5 gap-y-6 sm:gap-x-8 md:gap-x-12">
+            {[
+              { name: "IBNORCA", src: "/certifications/ibnorca-wb.png", className: "h-14 sm:h-16 md:h-20", maxClass: "max-w-[120px] sm:max-w-[150px] md:max-w-[190px]", offsetClass: "md:ml-12" },
+              { name: "MSPA Europe/Africa", src: "/certifications/mspa-eu-africa.png", className: "h-11 sm:h-12 md:h-14", maxClass: "max-w-[150px] sm:max-w-[180px] md:max-w-[210px]" },
+              { name: "CX Latam Group", src: "/certifications/cx-latam-group-wb.png", className: "h-10 sm:h-12 md:h-14", maxClass: "max-w-[150px] sm:max-w-[180px] md:max-w-[210px]" },
+              { name: "CX Latam Institute", src: "/certifications/cx-latam-institute-wb.png", className: "h-[46px] sm:h-[59px] md:h-[67px]", maxClass: "max-w-[179px] sm:max-w-[215px] md:max-w-[236px]" }
+            ].map((logo, i) => (
+              <motion.img
+                key={logo.name}
+                src={logo.src}
+                alt={logo.name}
+                className={`${logo.className} ${logo.maxClass} ${logo.offsetClass ?? ""} w-auto object-contain cursor-default drop-shadow-[0_8px_18px_rgba(20,56,92,0.08)]`}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -8, scale: 1.08 }}
+                transition={{
+                  opacity: { duration: 0.45, delay: 0.12 * i },
+                  y: { duration: 0.25, ease: "easeOut" },
+                  scale: { duration: 0.25, ease: "easeOut" }
+                }}
+              />
+            ))}
+          </div>
+        </motion.div>
+
         <h2 className="text-forix-blue text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase mb-8">Sesión Estratégica</h2>
 
         <h3 className="text-2xl sm:text-4xl md:text-6xl font-bold text-forix-blue mb-6 leading-tight tracking-tight max-w-4xl">
