@@ -2424,7 +2424,7 @@ const Contact = () => {
 
       <div className="container-custom relative z-10 flex flex-col items-center text-center">
         <motion.div
-          className="mb-16 sm:mb-20 md:mb-24 w-full max-w-5xl"
+          className="mb-14 w-full max-w-5xl"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -2433,7 +2433,7 @@ const Contact = () => {
           <p className="text-forix-blue text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase">
             Entrenados y Certificados por:
           </p>
-          <div className="mt-5 grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-x-5 gap-y-6 sm:gap-x-8 md:gap-x-12">
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-x-5 gap-y-6 sm:gap-x-8 md:gap-x-12">
             {[
               { name: "IBNORCA", src: "/certifications/ibnorca-wb.png", className: "h-14 sm:h-16 md:h-20", maxClass: "max-w-[120px] sm:max-w-[150px] md:max-w-[190px]", offsetClass: "md:ml-12" },
               { name: "MSPA Europe/Africa", src: "/certifications/mspa-eu-africa.png", className: "h-11 sm:h-12 md:h-14", maxClass: "max-w-[150px] sm:max-w-[180px] md:max-w-[210px]" },
